@@ -11,27 +11,29 @@ class Home extends Component {
     super(props);
     this.state = { 
       arcanaArray: [] };
+    this.showArcana = this.showArcana.bind(this);
+      
   }
 
   componentWillMount(){
 
-    // let arcanaRef = firebase.database().ref('arcana');
-    // arcanaRef.orderByKey().limitToLast(1).on('child_added', snapshot => {
-    //   let arcana = snapshot.val();
-    //   this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
-    // })
-    const arcana = {
-      nameKR: '무지카',
-      iconURL: '../../riberaMain.jpg'
-    }
-    this.setState({
-      arcanaArray: [arcana]
+    let arcanaRef = firebase.database().ref('arcana');
+    arcanaRef.orderByKey().limitToLast(2).on('child_added', snapshot => {
+      let arcana = snapshot.val();
+      this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
     })
+    // const arcana = {
+    //   nameKR: '무지카',
+    //   iconURL: '../../riberaMain.jpg'
+    // }
+    // this.setState({
+    //   arcanaArray: [arcana]
+    // })
   }
 
-  showArcana() {
-    this.props.history.push('../Arcana')
-    
+  showArcana(arcanaID) {
+    console.log(arcanaID);
+    this.props.history.push('../Arcana');
   }
 
   render() {
@@ -43,9 +45,10 @@ class Home extends Component {
           <h1 className="App-title">체인크로니클 위키</h1>
         </header> */}
 
-        {/* <div onClick={this.showArcana.bind(this)}>button</div> */}
         {this.state.arcanaArray.map( arcana => 
+
           <ArcanaCell
+          onClick={this.showArcana.bind(null,arcana.uid)}
             key={arcana.uid}
 
             nameKR={arcana.nameKR}
@@ -61,6 +64,7 @@ class Home extends Component {
 
             iconURL={arcana.iconURL}
           />
+        
         )}
       </div>
     );

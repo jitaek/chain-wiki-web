@@ -15,7 +15,7 @@ class ArcanaCell extends React.Component {
       }
     render() {
         return (
-            <div className={styles.container}>
+            <div className={styles.container} onClick={this.props.onClick}>
                 <img className={styles.arcanaIcon} src={logo} alt='not loaded'/>
                 <div>
                     <div className={styles.nameKRContainer}>
@@ -44,16 +44,16 @@ ArcanaCell.propTypes = {
 
     nameKR: PropTypes.string.isRequired,
     nicknameKR: PropTypes.string,
-    nameJP: PropTypes.string.isRequired,
-    nicknameJP: PropTypes.string,
+    // nameJP: PropTypes.string.isRequired,
+    // nicknameJP: PropTypes.string,
 
-    rarity: PropTypes.string.isRequired,
-    class: PropTypes.string.isRequired,
-    weapon: PropTypes.string.isRequired,
-    affiliation: PropTypes.string.isRequired,
-    numberOfViews: PropTypes.number.isRequired,
+    // rarity: PropTypes.string.isRequired,
+    // class: PropTypes.string.isRequired,
+    // weapon: PropTypes.string.isRequired,
+    // affiliation: PropTypes.string.isRequired,
+    // numberOfViews: PropTypes.number.isRequired,
 
-    iconURL: PropTypes.string,
+    // iconURL: PropTypes.string,
 };
 
 export default ArcanaCell;
