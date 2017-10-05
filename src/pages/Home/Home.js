@@ -18,7 +18,7 @@ class Home extends Component {
   componentWillMount() {
 
     let arcanaRef = firebase.database().ref('arcana');
-    arcanaRef.orderByKey().limitToLast(11).on('child_added', snapshot => {
+    arcanaRef.orderByKey().limitToLast(1).on('child_added', snapshot => {
       let arcana = snapshot.val();
       this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
     })

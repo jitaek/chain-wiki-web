@@ -15,7 +15,7 @@ export default class Nav extends React.Component {
             <Link to="/filter">필터</Link>
           </li>
           <li>
-            <Link to="/path3">어빌</Link>
+            <Link to="/ArcanaComposer">+</Link>
           </li>
         </ul>
 

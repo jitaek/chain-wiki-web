@@ -13,6 +13,7 @@ import {
 
 import Home from "./pages/Home/Home";
 import Arcana from "./pages/Arcana/Arcana";
+import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer";
 import Nav from "./components/Nav/Nav"
 import firebase from 'firebase';
 
@@ -34,6 +35,7 @@ ReactDOM.render(
                 <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/arcana" exact component={Arcana} />
+                <Route path="/arcanaComposer" exact component={ArcanaComposer} />
                 </Switch>
                 
             </div>
