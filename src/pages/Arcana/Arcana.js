@@ -165,12 +165,23 @@ class Arcana extends React.Component {
         <div className={styles.placeholderMain}>
           {/* <img className={styles.arcanaImageMain} src={this.state.imageURL}/> */}
         </div> 
+        <div className={styles.container}>
+          <img className={styles.arcanaImageIcon} src={this.state.iconURL}/>
+          <div className={styles.nameContainer}>
+            <div className={styles.nameKRContainer}>
+              <div className={styles.nameKRLabel}>{this.state.nicknameKR + " " + this.state.nameKR}</div>
+            </div>
+            <div className={styles.nameJPContainer}>
+            <div className={styles.nameJPLabel}>{this.state.nicknameJP + " " + this.state.nameJP}</div>
+            </div>
+          </div>
+        </div>
         <table className={styles.arcanaDetailTable}>
           <tbody>
-            <tr>
+            {/* <tr>
                 <th className={styles.headerCell}>이름</th>
                 <td className={styles.bodyCell}>{this.state.nicknameKR + " " + this.state.nameKR} </td>
-            </tr>
+            </tr> */}
             <tr>
                 <th className={styles.headerCell}>레어</th>
                 <td className={styles.bodyCell}>{this.state.rarity + " ★"}</td>
