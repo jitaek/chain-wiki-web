@@ -10,6 +10,16 @@ class ArcanaCell extends React.Component {
         this.state = {
             nameKR: props.nameKR,
             nicknameKR: props.nicknameKR,
+
+            nameJP: props.nameJP,
+            nicknameJP: props.nicknameJP,
+
+            rarity: props.rarity,
+            class: props.class,
+            weapon: props.weapon,
+            affiliation: props.affiliation,
+            numberOfViews: props.numberOfViews,
+
             iconURL: props.iconURL
         };
       }
@@ -20,18 +30,18 @@ class ArcanaCell extends React.Component {
                 <div>
                     <div className={styles.nameKRContainer}>
                         <div className={styles.nameKRLabel}>{this.state.nameKR}</div>
-                        <div className={styles.nicknameKRLabel}>카세</div>
+                        <div className={styles.nicknameKRLabel}>{this.state.nicknameKR}</div>
                     </div>
                     <div className={styles.nameJPContainer}>
-                        <div className={styles.nameJPLabel}>ムジカ</div>
-                        <div className={styles.nicknameJPLabel}>歌聖</div>
+                        <div className={styles.nameJPLabel}>{this.state.nameJP}</div>
+                        <div className={styles.nicknameJPLabel}>{this.state.nicknameJP}</div>
                     </div>
                     <div className={styles.nameKRContainer}>
-                        <div className={styles.detailLabel}>#5성</div>
-                        <div className={styles.detailLabel}>#궁수</div>
-                        <div className={styles.detailLabel}>#궁</div>
-                        <div className={styles.detailLabel}>#호수도시</div>
-                        <div className={styles.detailLabel}>조회 61</div>
+                        <div className={styles.detailLabel}>#{this.state.rarity}성</div>
+                        <div className={styles.detailLabel}>#{this.state.class}</div>
+                        <div className={styles.detailLabel}>#{this.state.weapon}</div>
+                        <div className={styles.detailLabel}>#{this.state.affiliation}</div>
+                        <div className={styles.detailLabel}>조회 {this.state.numberOfViews}</div>
                     </div>
                 </div>
             </div>                
@@ -44,16 +54,16 @@ ArcanaCell.propTypes = {
 
     nameKR: PropTypes.string.isRequired,
     nicknameKR: PropTypes.string,
-    // nameJP: PropTypes.string.isRequired,
-    // nicknameJP: PropTypes.string,
+    nameJP: PropTypes.string.isRequired,
+    nicknameJP: PropTypes.string,
 
-    // rarity: PropTypes.string.isRequired,
-    // class: PropTypes.string.isRequired,
-    // weapon: PropTypes.string.isRequired,
-    // affiliation: PropTypes.string.isRequired,
-    // numberOfViews: PropTypes.number.isRequired,
+    rarity: PropTypes.string.isRequired,
+    class: PropTypes.string.isRequired,
+    weapon: PropTypes.string.isRequired,
+    affiliation: PropTypes.string.isRequired,
+    numberOfViews: PropTypes.number.isRequired,
 
-    // iconURL: PropTypes.string,
+    iconURL: PropTypes.string,
 };
 
 export default ArcanaCell;

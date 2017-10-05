@@ -7,12 +7,13 @@ import {
     HashRouter as Router,
     Route,
     Link,
-    hashHistory
+    hashHistory,
+    Switch
   } from 'react-router-dom'
 
 import Home from "./pages/Home/Home";
-import Arcana from "./pages/Arcana";
-
+import Arcana from "./pages/Arcana/Arcana";
+import Nav from "./components/Nav/Nav"
 import firebase from 'firebase';
 
 var config = {
@@ -26,12 +27,19 @@ var config = {
 var database = firebase.initializeApp(config);
 
 ReactDOM.render(
-    <Router>
-        <div>
-        <Route path="/" exact component={Home} />
-        <Route path="/arcana" exact component={Arcana} />
-        </div>
-    </Router>,
+    <div>
+        <Router>
+            <div >
+                <Nav />
+                <Switch>
+                <Route path="/" exact component={Home} />
+                <Route path="/arcana" exact component={Arcana} />
+                </Switch>
+                
+            </div>
+        </Router>
+    </div>,
+
 document.getElementById('root')
 );
 

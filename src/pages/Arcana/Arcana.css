@@ -1,0 +1,97 @@
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #E1E1E1;
+}
+
+.placeholderMain {
+  width: 320px;
+  height: 480px;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.arcanaImageMain {
+  display: block;
+  width: 100%;
+}
+
+/* Larger than mobile */
+@media (min-width: 400px) {
+  .arcanaImageMain {
+    width: 320px;
+  }
+}
+
+.arcanaDetailTable {
+  border-top: 1px solid #E1E1E1;
+  margin: 0 0 40px 0;
+  width: 100%;
+}
+
+.arcanaSkillTable {
+  margin: 0;
+  width: 100%;
+}
+
+.headerCell {
+  height: 100%;
+  width: 70px;
+  text-align: center;
+  padding-right: 10px;
+}
+
+.bodyCell {
+  height: 100%;
+  text-align: left;
+  padding-left: 10px;
+  min-width: 200px;
+}
+
+.skillNameCell {
+  height: 20px;
+  text-align: left;
+  padding-right: 20px;
+  float: left;
+}
+
+.manaContainer {
+  float: right;
+}
+
+.manaLabelCell, .manaCell {
+  padding: 0 5px 0 10px;
+  float: left;
+}
+
+.manaLabelCell {
+  width: auto;
+  font-weight: 800;
+}
+
+.manaCell {
+  width: 10px;
+}
+
+@media (min-width: 550px) {
+  .manaContainer {
+    float: left
+  }
+  .manaCell, .manaLabelCel {
+    float: left;
+  }
+}
+
+.skillAbilityDescCell {
+  padding: 10px;
+  border-bottom: 1px solid #E1E1E1;
+  display: block;
+  overflow:auto;
+}
+
