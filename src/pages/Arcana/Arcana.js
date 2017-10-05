@@ -4,6 +4,7 @@ import styles from './Arcana.css';
 import firebase from 'firebase';
 import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
 import { HashRouter, Link, withRouter } from "react-router-dom";
+import sampleMain from '../../sampleMainImage.jpg';
 
 function Skill(props) {
   const skillNumber = props.skillNumber;
@@ -85,7 +86,6 @@ class Arcana extends React.Component {
     let arcanaRef = firebase.database().ref('arcana').child(this.state.arcanaID);
     arcanaRef.on('value', snapshot => {
       let arcana = snapshot.val();
-      console.log(arcana)
       this.setState({
         
         nameKR: arcana.nameKR,
@@ -134,15 +134,15 @@ class Arcana extends React.Component {
 
   }
 
+  componentDidMount() {
+    window.scrollTo(0,0)
+  }
+
   componentWillUnmount() {
     let arcanaRef = firebase.database().ref('arcana').child(this.state.arcanaID);
     arcanaRef.off();
-  }
 
-  // showArcana(arcanaID) {
-  //   console.log(arcanaID);
-  //   this.props.history.push('../Arcana');
-  // }
+  }
   
   openJPWiki() {
     
@@ -152,21 +152,21 @@ class Arcana extends React.Component {
     }
     linkJP += this.state.nameJP;
 
-    this.props.history.push({
-      pathname: linkJP
-    });
-    // window.location.href = linkJP;
+    window.open(linkJP, '_blank');
+     
   }
 
   render() {
 
     return (
-      <div>
+      <div ref="homeRoot">
         <div className={styles.placeholderMain}>
           {/* <img className={styles.arcanaImageMain} src={this.state.imageURL}/> */}
+          <img className={styles.arcanaImageMain} src={sampleMain}/>
         </div> 
         <div className={styles.container}>
-          <img className={styles.arcanaImageIcon} src={this.state.iconURL}/>
+          {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
+          <img className={styles.arcanaImageIcon} src={logo}/>
           <div className={styles.nameContainer}>
             <div className={styles.nameKRContainer}>
               <div className={styles.nameKRLabel}>{this.state.nicknameKR + " " + this.state.nameKR}</div>

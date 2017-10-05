@@ -1,26 +1,29 @@
-.nav {
+ul {
     background-color: #68a283;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     overflow: hidden;
-    height: 50px;
 }
 
-.nav li {
-    height: 100%;
+li {
     float: left;
+    width: 60px;
+}
+
+li a {
     display: block;
-    color: white;
     text-align: center;
-    /* padding: 10px 10px; */
     text-decoration: none;
-    font-size: 14px;
+    color: white;
+    padding: 15px;
+}
+
+li a:hover {
+    background-color: #508065;
 }
 
 .logo {
     width: 20px;
     height: 20px;
-}
-
-.listWrapper {
-    margin: 10px;
-    padding: 0;
 }

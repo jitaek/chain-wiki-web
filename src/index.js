@@ -29,7 +29,7 @@ var database = firebase.initializeApp(config);
 ReactDOM.render(
     <div>
         <Router>
-            <div >
+            <div>
                 <Nav />
                 <Switch>
                 <Route path="/" exact component={Home} />

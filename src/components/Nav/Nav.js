@@ -6,27 +6,19 @@ import styles from "./Nav.css"
 export default class Nav extends React.Component {
     render() {    
       return (
-        <nav className={styles.nav}>
-          <div>
-            {/* <Link to="/">
-              <img src={logo} className={styles.logo} />
-            </Link> */}
 
-            {/* <div className="Nav__right"> */}
-              <ul className={styles.listWrapper}>
-                <li className="Nav__item">
-                  <Link className="Nav__link" to="/">Link 1</Link>
-                </li>
-                <li className="Nav__item">
-                  <Link className="Nav__link" to="/arcana">Link 2</Link>
-                </li>
-                <li className="Nav__item">
-                  <Link className="Nav__link" to="/path3">Link 3</Link>
-                </li>
-              </ul>
-            {/* </div> */}
-          </div>
-        </nav>
+        <ul className={styles.listWrapper}>
+          <li>
+            <Link to="/">홈</Link>
+          </li>
+          <li>
+            <Link to="/filter">필터</Link>
+          </li>
+          <li>
+            <Link to="/path3">어빌</Link>
+          </li>
+        </ul>
+
       );
     }
   }
