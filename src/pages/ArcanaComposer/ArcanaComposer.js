@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import { HashRouter, Link, withRouter } from "react-router-dom";
 
 import NameInput from './components/NameInput/NameInput';
+import SelectInput from './components/SelectInput/SelectInput';
 
 class ArcanaComposer extends React.Component {
 
@@ -41,9 +42,8 @@ class ArcanaComposer extends React.Component {
 
   }
 
-  uploadArcana(attribute) {
+  uploadArcana() {
 
-    console.log(attribute)
   }
 
   render() {
@@ -53,6 +53,16 @@ class ArcanaComposer extends React.Component {
         <NameInput isKR={true}
                   onChange={this.updateField}/>
         <NameInput onChange={this.updateField}/>
+        {/* <FullLengthInput onChange={this.updateField}/>
+        <FullLengthInput onChange={this.updateField}/> */}
+        <div className={styles.container}>
+          <SelectInput type='rarity' onChange={this.updateField}/>
+          <SelectInput type='class' onChange={this.updateField}/>
+          <SelectInput type='weapon' onChange={this.updateField}/>
+          <SelectInput type='cost' onChange={this.updateField}/>
+          <SelectInput type='affiliation' onChange={this.updateField}/>
+        </div>
+        
         <input type="submit" value="완료" onClick={this.uploadArcana}/>
       </div>
     );
