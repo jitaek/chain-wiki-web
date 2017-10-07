@@ -42,11 +42,11 @@ class NameInput extends React.Component {
             <div className={styles.container + ' ' + styles.fullWidth}>
                 <div className={styles.half}>
                     <label>{this.state.isKR != undefined ? '한글 호칭' : '일어 호칭'}</label>
-                    <input type='text' className={styles.fullWidth} onChange={this.handleNameChange}/>
+                    <input type='text' className={styles.fullWidth} onChange={this.handleNicknameChange}/>
                 </div>
                 <div className={styles.half}>
                     <label>{this.state.isKR != undefined ? '한글 이름' : '일어 이름'}</label>
-                    <input type='text' className={styles.fullWidth} onChange={this.handleNicknameChange}/>
+                    <input type='text' className={styles.fullWidth} onChange={this.handleNameChange}/>
                 </div>
             </div>
             </form>

@@ -1,6 +1,18 @@
+.fullWidthContainer {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 10px;
+}
+
 .fullWidth {
   width: 100%;
   box-sizing: border-box;
+}
+
+.fullWidth:after {
+  content: '';
+  display: block;
+  clear: both;
 }
 
 table {
@@ -27,12 +39,12 @@ td {
   width: 100%;
 }
 
-.container {
+/* .container {
   height: 90px;
   width: 100%;
   display: flex;
   justify-content: center;
-}
+} */
 
 .nameContainer {
   /* text-align: center; */
