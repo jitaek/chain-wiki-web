@@ -8,6 +8,17 @@ import NameInput from './components/NameInput/NameInput';
 import ImageInput from './components/ImageInput/ImageInput';
 import SelectInput from './components/SelectInput/SelectInput';
 
+// Material UI
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+
+const costArray = [];
+for (let i = 26; i >= 0; i--) {
+  costArray.push(<MenuItem value={`${i}`} key={i} primaryText={`${i}`} />);
+}
 class ArcanaComposer extends React.Component {
 
   constructor(props) {
@@ -25,34 +36,130 @@ class ArcanaComposer extends React.Component {
     };
 
     this.uploadArcana = this.uploadArcana.bind(this);
-    this.updateField = this.updateField.bind(this);
+    this.handleText = this.handleText.bind(this);
+    this.handleClass = this.handleClass.bind(this);
+    this.handleRarity = this.handleRarity.bind(this);
+    this.handleWeapon = this.handleWeapon.bind(this);
+    this.handleAffiliation = this.handleAffiliation.bind(this);
+    this.handleCost = this.handleCost.bind(this);
+    this.handleSkillMana1 = this.handleSkillMana1.bind(this);
+    this.handleSkillMana2 = this.handleSkillMana2.bind(this);
+    this.handleSkillMana3 = this.handleSkillMana3.bind(this);
+    this.handleKizunaCost = this.handleKizunaCost.bind(this);
+    
+    
   }
 
   componentWillMount() {
 
   }
 
-  updateField(key, value) {
+  handleText(event, text) {
+    console.log(event.target.name)
+    console.log(text)
 
-    console.log(key)
+    var input = {}
+    input[event.target.name] = text;
+
+    this.setState(input);
+  }
+
+  handleClass(event, index, value) {
+    console.log(index)
+    console.log(value)
+    
+    // var input = {}
+    // input[] = text;
+
+    this.setState({
+      class: value
+    })
+    // this.setState(input);
+  }
+
+  handleRarity(event, index, value) {
+
     console.log(value)
 
-    var obj = {}
-    obj[key] = value;
-    
-    this.setState(obj)
+    this.setState({
+      rarity: value
+    })
+  }
 
+  handleWeapon(event, index, value) {
+    
+    console.log(value)
+
+    this.setState({
+      weapon: value
+    })
+  }
+
+  handleAffiliation(event, index, value) {
+    
+    console.log(value)
+
+    this.setState({
+      affiliation: value
+    })
+  }
+
+  handleCost(event, index, value) {
+    
+    console.log(value)
+
+    this.setState({
+      cost: value
+    })
+  }
+
+  handleSkillMana1(event, index, value) {
+    
+    console.log(value)
+    
+    this.setState({
+      skillMana1: value
+    })
+  }
+
+  handleSkillMana2(event, index, value) {
+    
+    console.log(value)
+    
+    this.setState({
+      skillMana2: value
+    })
+  }
+
+  handleSkillMana3(event, index, value) {
+    
+    console.log(value)
+    
+    this.setState({
+      skillMana3: value
+    })
+  }
+
+  handleKizunaCost(event, index, value) {
+    
+    console.log(value)
+    
+    this.setState({
+      kizunaCost: value
+    })
   }
 
   uploadArcana() {
 
-    console.log(this.state.nameKR);
-    firebase.database().ref('/test').set({
-      nameKR: this.state.nameKR,
-      nicknameKR: this.state.nicknameKR,
+    console.log(this.state)
+    firebase.database().ref('/test').set(this.state)
+    // firebase.database().ref('/test').set({
+      
+      // nameKR: this.state.nameKR,
+      // nicknameKR: this.state.nicknameKR,
 
-      nameJP: this.state.nameJP,
-      nicknameJP: this.state.nicknameJP,
+      // nameJP: this.state.nameJP,
+      // nicknameJP: this.state.nicknameJP,
 
       // rarity: this.state.rarity,
       // class: this.state.class,
@@ -88,28 +195,146 @@ class ArcanaComposer extends React.Component {
       // iconURL: this.state.iconURL,
       // imageURL: this.state.imageURL,
 
-    });
+    // });
   }
 
   render() {
 
     return (
       <div className={styles.fullWidthContainer}>
-        <NameInput isKR={true}
-                  onChange={this.updateField}/>
-        <NameInput onChange={this.updateField}/>
-        <ImageInput isIcon={true} onChange={this.updateField}/>
-        <ImageInput onChange={this.updateField}/>
-        {/* <FullLengthInput onChange={this.updateField}/>
-        <FullLengthInput onChange={this.updateField}/> */}
-        <div className={styles.fullWidth}>
-          <SelectInput type='rarity' onChange={this.updateField}/>
-          <SelectInput type='class' onChange={this.updateField}/>
-          <SelectInput type='weapon' onChange={this.updateField}/>
-          <SelectInput type='cost' onChange={this.updateField}/>
-          <SelectInput type='affiliation' onChange={this.updateField}/>
+
+      <MuiThemeProvider>
+        
+        <TextField
+          name="nicknameKR"
+          floatingLabelText="한글 호칭"
+          onChange={this.handleText}
+          /><br/>
+        <TextField
+          name="nameKR"
+          floatingLabelText="한글 이름"
+          errorText={this.state.errorText}
+          onChange={this.handleText}/><br/>
+        <TextField name="nicknameJP" floatingLabelText="일어 호칭" onChange={this.handleText}/><br/>
+        <TextField name="nameJP" floatingLabelText="일어 이름" onChange={this.handleText}/><br/>
+        <TextField name="imageURL" floatingLabelText="이미지 주소" fullWidth={true} onChange={this.handleText}/><br/>
+        <TextField name="iconURL" floatingLabelText="아이콘 주소" fullWidth={true} onChange={this.handleText}/><br/>
+
+        <SelectField floatingLabelText="레어" value={this.state.rarity} onChange={this.handleRarity}>
+          <MenuItem value="5" primaryText="5" />
+          <MenuItem value="4" primaryText="4" />
+          <MenuItem value="3" primaryText="3" />
+          <MenuItem value="2" primaryText="2" />
+          <MenuItem value="1" primaryText="1" />
+        </SelectField>
+        
+        <SelectField floatingLabelText="직업" value={this.state.class} onChange={this.handleClass}>
+          <MenuItem value="전사" primaryText="전사" />
+          <MenuItem value="기사" primaryText="기사" />
+          <MenuItem value="궁수" primaryText="궁수" />
+          <MenuItem value="법사" primaryText="법사" />
+          <MenuItem value="승려" primaryText="승려" />
+        </SelectField>
+        
+        <SelectField floatingLabelText="무기" value={this.state.weapon} onChange={this.handleWeapon}>
+          <MenuItem value="검" primaryText="검" />
+          <MenuItem value="봉" primaryText="봉" />
+          <MenuItem value="창" primaryText="창" />
+          <MenuItem value="궁" primaryText="궁" />
+          <MenuItem value="성" primaryText="성" />
+          <MenuItem value="권" primaryText="권" />
+          <MenuItem value="총" primaryText="총" />
+          <MenuItem value="저" primaryText="저" />
+        </SelectField>
+
+        <SelectField floatingLabelText="소속" value={this.state.affiliation} onChange={this.handleAffiliation}>
+          <MenuItem value="마신" primaryText="마신" />
+          <MenuItem value="부도" primaryText="부도" />
+          <MenuItem value="성도" primaryText="성도" />
+          <MenuItem value="현탑" primaryText="현탑" />
+          <MenuItem value="미궁산맥" primaryText="미궁" />
+          <MenuItem value="호수도시" primaryText="호도" />
+          <MenuItem value="정령섬" primaryText="정령섬" />
+          <MenuItem value="화염구령" primaryText="구령" />
+          <MenuItem value="대해" primaryText="대해" />
+          <MenuItem value="수인의대륙" primaryText="수인" />
+          <MenuItem value="죄의대륙" primaryText="죄" />
+          <MenuItem value="박명의대륙" primaryText="박명" />
+          <MenuItem value="철연의대륙" primaryText="철연" />
+          <MenuItem value="연대기대륙" primaryText="연대기" />
+          <MenuItem value="레무레스섬" primaryText="레무레스" />
+          <MenuItem value="의용군" primaryText="의용군" />
+          <MenuItem value="화격단" primaryText="화격단" />
+        </SelectField>
+
+        <SelectField floatingLabelText="코스트" value={this.state.cost} onChange={this.handleCost}>
+          <MenuItem value="40" primaryText="40" />
+          {costArray}
+        </SelectField>
+        <br/>
+
+        <div style={{display: 'flex'}}>
+          <TextField name="skillName1" floatingLabelText="스킬 1 이름" onChange={this.handleText}/>
+          <SelectField floatingLabelText="스킬 1 마나" value={this.state.skillMana1} onChange={this.handleSkillMana1}>
+            <MenuItem value="1" primaryText="1" />
+            <MenuItem value="2" primaryText="2" />
+            <MenuItem value="3" primaryText="3" />
+          </SelectField>
         </div>
-        <input type="submit" value="완료" onClick={this.uploadArcana}/>
+        <TextField name="skillDesc1" floatingLabelText="스킬 1 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/>
+
+        <div>
+          <div style={{display: 'flex'}}>
+          <TextField name="skillName2" floatingLabelText="스킬 2 이름" onChange={this.handleText}/>
+          <SelectField floatingLabelText="스킬 2 마나" value={this.state.skillMana2} onChange={this.handleSkillMana2}>
+            <MenuItem value="1" primaryText="1" />
+            <MenuItem value="2" primaryText="2" />
+            <MenuItem value="3" primaryText="3" />
+          </SelectField>
+          </div>
+          <TextField name="skillDesc2" floatingLabelText="스킬 2 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/>
+        </div>
+
+        <div>
+          <div style={{display: 'flex'}}>
+          <TextField name="skillName3" floatingLabelText="스킬 3 이름" onChange={this.handleText}/>
+          <SelectField floatingLabelText="스킬 3 마나" value={this.state.skillMana3} onChange={this.handleSkillMana3}>
+            <MenuItem value="1" primaryText="1" />
+            <MenuItem value="2" primaryText="2" />
+            <MenuItem value="3" primaryText="3" />
+          </SelectField>
+          </div>
+          <TextField name="skillDesc3" floatingLabelText="스킬 3 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/>
+        </div>
+
+        <div>
+          <div style={{display: 'flex'}}>
+          <TextField name="kizunaName" floatingLabelText="인연 이름" onChange={this.handleText}/>
+          <SelectField floatingLabelText="인연 코스트" value={this.state.kizunaCost} onChange={this.handleKizunaCost}>
+            <MenuItem value="8" primaryText="8" />
+            <MenuItem value="4" primaryText="4" />
+            <MenuItem value="3" primaryText="3" />
+            <MenuItem value="2" primaryText="2" />
+            <MenuItem value="1" primaryText="1" />
+            <MenuItem value="0" primaryText="0" />
+          </SelectField>
+          </div>
+          <TextField name="kizunaDesc" floatingLabelText="인연 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/>
+        </div>
+        
+        <TextField name="abilityName1" floatingLabelText="어빌 1 이름" onChange={this.handleText}/><br/>
+        <TextField name="abilityDesc1" floatingLabelText="어빌 1 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/><br/>
+
+        <TextField name="abilityName2" floatingLabelText="어빌 2 이름" onChange={this.handleText}/><br/>
+        <TextField name="abilityDesc2" floatingLabelText="어빌 2 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/><br/>
+
+        <TextField name="partyAbility" floatingLabelText="파티 어빌" onChange={this.handleText}/><br/>
+
+
+        <RaisedButton label="완료" onClick={this.uploadArcana}/>
+
+      </MuiThemeProvider>
+
 
       </div>
     );

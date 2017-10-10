@@ -147,6 +147,10 @@ td {
   overflow:auto;
 }
 
+/* input[type="text"] {
+  margin: 10px;
+}
+
 input[type="submit"] {
   display: inline-block;
   height: 38px;
@@ -154,7 +158,6 @@ input[type="submit"] {
   color: #555;
   text-align: center;
   font-size: 13px;
-  /*font-weight: 600;*/
   line-height: 38px;
   letter-spacing: .1rem;
   text-transform: uppercase;
@@ -169,4 +172,4 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #68a283;  
-}
+} */
