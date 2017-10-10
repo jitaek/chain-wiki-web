@@ -1,7 +1,11 @@
 .fullWidthContainer {
   width: 100%;
   box-sizing: border-box;
-  margin: 10px;
+  margin: 20px;
+}
+
+.fullWidthContainer * {
+  margin-right: 10px;
 }
 
 .fullWidth {

@@ -14,6 +14,8 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
+import { ValidatorForm } from 'react-form-validator-core';
+import { TextValidator} from 'react-material-ui-form-validator';
 
 const costArray = [];
 for (let i = 26; i >= 0; i--) {
@@ -35,6 +37,7 @@ class ArcanaComposer extends React.Component {
       // nicknameKR: '카세',
     };
 
+    this.validateInput = this.validateInput.bind(this);    
     this.uploadArcana = this.uploadArcana.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleClass = this.handleClass.bind(this);
@@ -149,9 +152,15 @@ class ArcanaComposer extends React.Component {
     })
   }
 
+  validateInput() {
+
+    console.log('submitted')
+  }
+
   uploadArcana() {
 
     console.log(this.state)
+
     firebase.database().ref('/test').set(this.state)
     // firebase.database().ref('/test').set({
       
@@ -205,20 +214,55 @@ class ArcanaComposer extends React.Component {
 
       <MuiThemeProvider>
         
-        <TextField
+      <ValidatorForm
+                ref="form"
+                onSubmit={this.validateInput}
+                onError={errors => console.log(errors)}
+            >
+        <TextValidator
           name="nicknameKR"
           floatingLabelText="한글 호칭"
+          value={this.state.nicknameKR}
           onChange={this.handleText}
           /><br/>
-        <TextField
+
+        <TextValidator
           name="nameKR"
           floatingLabelText="한글 이름"
-          errorText={this.state.errorText}
+          /* errorText={this.state.errorText} */
+          value={this.state.nameKR}
+          validators={['required']}
+          errorMessages={[`한글 이름이 필요합니다.`]}
           onChange={this.handleText}/><br/>
-        <TextField name="nicknameJP" floatingLabelText="일어 호칭" onChange={this.handleText}/><br/>
-        <TextField name="nameJP" floatingLabelText="일어 이름" onChange={this.handleText}/><br/>
-        <TextField name="imageURL" floatingLabelText="이미지 주소" fullWidth={true} onChange={this.handleText}/><br/>
-        <TextField name="iconURL" floatingLabelText="아이콘 주소" fullWidth={true} onChange={this.handleText}/><br/>
+
+        <TextValidator
+        name="nicknameJP" 
+        floatingLabelText="일어 호칭"
+        value={this.state.nicknameJP}
+        onChange={this.handleText}/><br/>
+
+        <TextValidator 
+        name="nameJP" 
+        floatingLabelText="일어 이름" 
+        value={this.state.nameJP}
+        validators={['required']}
+        errorMessages={[`일어 이름이 필요합니다.`]}
+        onChange={this.handleText}/><br/>
+
+        <TextValidator
+        name="imageURL"
+        floatingLabelText="이미지 주소 (선택)" 
+        value={this.state.imageURL}
+        fullWidth={true} 
+        onChange={this.handleText}
+        /><br/>
+
+        <TextValidator
+        name="iconURL"
+        floatingLabelText="아이콘 주소"
+        fullWidth={true}
+        onChange={this.handleText}
+        /><br/>
 
         <SelectField floatingLabelText="레어" value={this.state.rarity} onChange={this.handleRarity}>
           <MenuItem value="5" primaryText="5" />
@@ -331,8 +375,8 @@ class ArcanaComposer extends React.Component {
         <TextField name="partyAbility" floatingLabelText="파티 어빌" onChange={this.handleText}/><br/>
 
 
-        <RaisedButton label="완료" onClick={this.uploadArcana}/>
-
+        <RaisedButton label="완료" type="submit"/>
+        </ValidatorForm>
       </MuiThemeProvider>
 
 
