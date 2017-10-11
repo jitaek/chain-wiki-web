@@ -15,7 +15,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import { ValidatorForm } from 'react-form-validator-core';
-import { TextValidator} from 'react-material-ui-form-validator';
+import { TextValidator, SelectValidator } from 'react-material-ui-form-validator';
 
 const costArray = [];
 for (let i = 26; i >= 0; i--) {
@@ -55,6 +55,20 @@ class ArcanaComposer extends React.Component {
 
   componentWillMount() {
 
+    ValidatorForm.addValidationRule('validAbility1', (value) => {
+      if (value == undefined && this.state.rarity >= "3") {
+          return false;
+      }
+      return true;
+    });
+
+    ValidatorForm.addValidationRule('validAbility2', (value) => {
+      if (value === undefined && this.state.rarity >= "4") {
+          return false;
+      }
+      return true;
+    });
+
   }
 
   handleText(event, text) {
@@ -91,6 +105,7 @@ class ArcanaComposer extends React.Component {
 
   handleWeapon(event, index, value) {
     
+    console.log(event.target.name)
     console.log(value)
 
     this.setState({
@@ -221,7 +236,7 @@ class ArcanaComposer extends React.Component {
             >
         <TextValidator
           name="nicknameKR"
-          floatingLabelText="한글 호칭"
+          floatingLabelText="한글 호칭 (선택)"
           value={this.state.nicknameKR}
           onChange={this.handleText}
           /><br/>
@@ -237,7 +252,7 @@ class ArcanaComposer extends React.Component {
 
         <TextValidator
         name="nicknameJP" 
-        floatingLabelText="일어 호칭"
+        floatingLabelText="일어 호칭 (선택)"
         value={this.state.nicknameJP}
         onChange={this.handleText}/><br/>
 
@@ -259,28 +274,48 @@ class ArcanaComposer extends React.Component {
 
         <TextValidator
         name="iconURL"
-        floatingLabelText="아이콘 주소"
+        floatingLabelText="아이콘 주소 (선택)"
         fullWidth={true}
         onChange={this.handleText}
         /><br/>
 
-        <SelectField floatingLabelText="레어" value={this.state.rarity} onChange={this.handleRarity}>
+        <div style={{display: 'flex'}}>
+
+        <SelectValidator
+          name="rarity"
+          floatingLabelText="레어도"
+          value={this.state.rarity}
+          validators={['required']}
+          errorMessages={[`레어도가 필요합니다.`]}
+          onChange={this.handleRarity}>
           <MenuItem value="5" primaryText="5" />
           <MenuItem value="4" primaryText="4" />
           <MenuItem value="3" primaryText="3" />
           <MenuItem value="2" primaryText="2" />
           <MenuItem value="1" primaryText="1" />
-        </SelectField>
+        </SelectValidator>
         
-        <SelectField floatingLabelText="직업" value={this.state.class} onChange={this.handleClass}>
+        <SelectValidator
+          name="class"
+          floatingLabelText="직업"
+          value={this.state.class}
+          validators={['required']}
+          errorMessages={[`직업이 필요합니다.`]}
+          onChange={this.handleClass}>
           <MenuItem value="전사" primaryText="전사" />
           <MenuItem value="기사" primaryText="기사" />
           <MenuItem value="궁수" primaryText="궁수" />
           <MenuItem value="법사" primaryText="법사" />
           <MenuItem value="승려" primaryText="승려" />
-        </SelectField>
+        </SelectValidator>
         
-        <SelectField floatingLabelText="무기" value={this.state.weapon} onChange={this.handleWeapon}>
+        <SelectValidator
+          name={"weapon"}
+          floatingLabelText="무기"
+          value={this.state.weapon}
+          validators={['required']}
+          errorMessages={[`무기가 필요합니다.`]}
+          onChange={this.handleWeapon}>
           <MenuItem value="검" primaryText="검" />
           <MenuItem value="봉" primaryText="봉" />
           <MenuItem value="창" primaryText="창" />
@@ -289,9 +324,15 @@ class ArcanaComposer extends React.Component {
           <MenuItem value="권" primaryText="권" />
           <MenuItem value="총" primaryText="총" />
           <MenuItem value="저" primaryText="저" />
-        </SelectField>
+        </SelectValidator>
 
-        <SelectField floatingLabelText="소속" value={this.state.affiliation} onChange={this.handleAffiliation}>
+        <SelectValidator
+          name="affiliation"
+          floatingLabelText="소속"
+          value={this.state.affiliation}
+          validators={['required']}
+          errorMessages={[`소속이 필요합니다.`]}
+          onChange={this.handleAffiliation}>
           <MenuItem value="마신" primaryText="마신" />
           <MenuItem value="부도" primaryText="부도" />
           <MenuItem value="성도" primaryText="성도" />
@@ -309,23 +350,48 @@ class ArcanaComposer extends React.Component {
           <MenuItem value="레무레스섬" primaryText="레무레스" />
           <MenuItem value="의용군" primaryText="의용군" />
           <MenuItem value="화격단" primaryText="화격단" />
-        </SelectField>
+        </SelectValidator>
 
-        <SelectField floatingLabelText="코스트" value={this.state.cost} onChange={this.handleCost}>
+        <SelectValidator
+          name="cost"
+          floatingLabelText="코스트"
+          value={this.state.cost}
+          validators={['required']}
+          errorMessages={[`코스트가 필요합니다.`]}
+          onChange={this.handleCost}>
           <MenuItem value="40" primaryText="40" />
           {costArray}
-        </SelectField>
+        </SelectValidator>
         <br/>
+
+        </div>
 
         <div style={{display: 'flex'}}>
           <TextField name="skillName1" floatingLabelText="스킬 1 이름" onChange={this.handleText}/>
-          <SelectField floatingLabelText="스킬 1 마나" value={this.state.skillMana1} onChange={this.handleSkillMana1}>
+          <SelectValidator
+            name="skillMana1"
+            floatingLabelText="스킬 1 마나"
+            value={this.state.skillMana1}
+            validators={['required']}
+            errorMessages={[`스킬 1 마나가 필요합니다.`]}
+            onChange={this.handleSkillMana1}>
+            
             <MenuItem value="1" primaryText="1" />
             <MenuItem value="2" primaryText="2" />
             <MenuItem value="3" primaryText="3" />
-          </SelectField>
+          </SelectValidator>
         </div>
-        <TextField name="skillDesc1" floatingLabelText="스킬 1 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/>
+
+        <TextValidator
+          name="skillDesc1"
+          floatingLabelText="스킬 1 설명"
+          fullWidth={true}
+          multiLine={true}
+          rows={2}
+          rowsMax={5}
+          validators={['required']}
+          errorMessages={[`스킬 정보가 필요합니다.`]}
+        />
 
         <div>
           <div style={{display: 'flex'}}>
@@ -336,7 +402,13 @@ class ArcanaComposer extends React.Component {
             <MenuItem value="3" primaryText="3" />
           </SelectField>
           </div>
-          <TextField name="skillDesc2" floatingLabelText="스킬 2 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/>
+          <TextField name="skillDesc2"
+          floatingLabelText="스킬 2 설명"
+          fullWidth={true}
+          multiLine={true}
+          rows={2}
+          rowsMax={5}
+          onChange={this.handleText}/>
         </div>
 
         <div>
@@ -354,23 +426,59 @@ class ArcanaComposer extends React.Component {
         <div>
           <div style={{display: 'flex'}}>
           <TextField name="kizunaName" floatingLabelText="인연 이름" onChange={this.handleText}/>
-          <SelectField floatingLabelText="인연 코스트" value={this.state.kizunaCost} onChange={this.handleKizunaCost}>
+          <SelectValidator
+            name="kizunaCost"
+            floatingLabelText="인연 코스트"
+            value={this.state.kizunaCost}
+            validators={['required']}
+            errorMessages={[`인연 코스트가 필요합니다.`]}
+            onChange={this.handleKizunaCost}>
             <MenuItem value="8" primaryText="8" />
             <MenuItem value="4" primaryText="4" />
             <MenuItem value="3" primaryText="3" />
             <MenuItem value="2" primaryText="2" />
             <MenuItem value="1" primaryText="1" />
             <MenuItem value="0" primaryText="0" />
-          </SelectField>
+          </SelectValidator>
           </div>
-          <TextField name="kizunaDesc" floatingLabelText="인연 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/>
+          <TextValidator
+            name="kizunaDesc"
+            value={this.state.kizunaDesc}
+            floatingLabelText="인연 설명"
+            fullWidth={true}
+            multiLine={true}
+            rows={2}
+            rowsMax={5}
+            validators={['required']}
+            errorMessages={[`인연 어빌이 필요합니다.`]}
+            onChange={this.handleText}/>
         </div>
         
         <TextField name="abilityName1" floatingLabelText="어빌 1 이름" onChange={this.handleText}/><br/>
-        <TextField name="abilityDesc1" floatingLabelText="어빌 1 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/><br/>
+        <TextValidator
+          name="abilityDesc1"
+          value={this.state.abilityDesc1}
+          floatingLabelText="어빌 1 설명"
+          fullWidth={true}
+          multiLine={true}
+          rows={2}
+          rowsMax={5}
+          validators={['validAbility1']}
+          errorMessages={[`3성 이상 아르카나는 어빌이 필요합니다.`]}
+          onChange={this.handleText}/><br/>
 
         <TextField name="abilityName2" floatingLabelText="어빌 2 이름" onChange={this.handleText}/><br/>
-        <TextField name="abilityDesc2" floatingLabelText="어빌 2 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/><br/>
+        <TextValidator
+          name="abilityDesc2"
+          value={this.state.abilityDesc2}
+          floatingLabelText="어빌 2 설명"
+          fullWidth={true}
+          multiLine={true}
+          rows={2}
+          rowsMax={5}
+          validators={['validAbility2']}
+          errorMessages={[`4성 이상 아르카나는 두번째 어빌이 필요합니다.`]}
+          onChange={this.handleText}/><br/>
 
         <TextField name="partyAbility" floatingLabelText="파티 어빌" onChange={this.handleText}/><br/>
 
