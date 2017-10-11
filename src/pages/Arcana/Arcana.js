@@ -3,8 +3,26 @@ import logo from '../../logo.png';
 import styles from './Arcana.css';
 import firebase from 'firebase';
 import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
-import { HashRouter, Link, withRouter } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Route,
+  Link,
+  hashHistory,
+  Switch,
+  Redirect
+} from 'react-router-dom'
 import sampleMain from '../../sampleMainImage.jpg';
+
+function PrivateRoute ({component: Component, authed, ...rest}) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => authed === true
+        ? <Component {...props} />
+        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+    />
+  )
+}
 
 function Skill(props) {
   const skillNumber = props.skillNumber;
@@ -79,11 +97,14 @@ class Arcana extends React.Component {
       arcanaID: arcanaID
     };
     this.openJPWiki = this.openJPWiki.bind(this);
+    this.editArcana = this.editArcana.bind(this);
   }
 
   componentWillMount(){
-
-    let arcanaRef = firebase.database().ref('arcana').child(this.state.arcanaID);
+    // var input = {}
+    // input[event.target.name] = text;
+    // let arcanaRef = firebase.database().ref('arcana').child(this.state.arcanaID);
+    let arcanaRef = firebase.database().ref('arcana').child('-KTSwVKi_VohxllkEIiZ');
     arcanaRef.on('value', snapshot => {
       let arcana = snapshot.val();
       this.setState({
@@ -102,31 +123,35 @@ class Arcana extends React.Component {
         tavern: arcana.tavern,
         numberOfViews: arcana.numberOfViews,
         
-        skillName1: arcana.skillName1,
+        skillName1: arcana.skillName1 || null,
         skillMana1: arcana.skillMana1,
         skillDesc1: arcana.skillDesc1,
         
-        skillName2: arcana.skillName2,
-        skillMana2: arcana.skillMana2,
-        skillDesc2: arcana.skillDesc2,
+        skillName2: arcana.skillName2 || null,
+        skillMana2: arcana.skillMana2 || null,
+        skillDesc2: arcana.skillDesc2 || null,
 
-        abilityName1: arcana.abilityName1,
-        abilityDesc1: arcana.abilityDesc1,
+        skillName3: arcana.skillName3 || null,
+        skillMana3: arcana.skillMana3 || null,
+        skillDesc3: arcana.skillDesc3 || null,
 
-        abilityName2: arcana.abilityName2,
-        abilityDesc2: arcana.abilityDesc2,
+        abilityName1: arcana.abilityName1 || null,
+        abilityDesc1: arcana.abilityDesc1 || null,
 
-        abilityName3: arcana.abilityName3,
-        abilityDesc3: arcana.abilityDesc3,
+        abilityName2: arcana.abilityName2 || null,
+        abilityDesc2: arcana.abilityDesc2 || null,
 
-        partyAbility: arcana.partyAbility,
+        abilityName3: arcana.abilityName3 || null,
+        abilityDesc3: arcana.abilityDesc3 || null,
 
-        kizunaName: arcana.kizunaName,
+        partyAbility: arcana.partyAbility || null,
+
+        kizunaName: arcana.kizunaName || null,
         kizunaCost: arcana.kizunaCost,
         kizunaDesc: arcana.kizunaDesc, 
 
-        iconURL: arcana.iconURL,
-        imageURL: arcana.imageURL,
+        iconURL: arcana.iconURL || null,
+        imageURL: arcana.imageURL || null,
 
       });
       // this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
@@ -154,6 +179,14 @@ class Arcana extends React.Component {
 
     window.open(linkJP, '_blank');
      
+  }
+
+  editArcana() {
+
+    // this.props.history.push({
+    //   pathname: '/login',
+    //   state: {this.state}
+    // })
   }
 
   render() {
@@ -222,6 +255,13 @@ class Arcana extends React.Component {
       <Skill isKizuna={true} skillName={this.state.kizunaName} skillMana={this.state.kizunaCost} skillDesc={this.state.kizunaDesc} />
 
       <div className={styles.skillAbilityDescCell} onClick={this.openJPWiki}>일첸 위키 가기</div>
+      <Link
+        to={{
+          pathname: '/arcanaComposer',
+          state: this.state
+        }}
+      >아르카나 수정</Link>
+      {/* <div className={styles.skillAbilityDescCell} onClick={this.editArcana}>아르카나 수정</div> */}
 
       </div>
     );

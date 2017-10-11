@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from '../../logo.png';
 import styles from './ArcanaComposer.css';
 import firebase from 'firebase';
+import { ref } from '../../helpers/constants'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 
 import NameInput from './components/NameInput/NameInput';
@@ -26,16 +27,21 @@ class ArcanaComposer extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log('constructer for composer loaded')
+    console.log(props.location.state)
     this.showArcana = this.getParameterByName.bind(this);
     
     const query = this.props.location.search;
     const arcanaID = this.getParameterByName('arcana');
 
-    this.state = { 
-      // arcanaID: arcanaID
-      // nameKR: '무지카',
-      // nicknameKR: '카세',
-    };
+    if (props.location.state != undefined) {
+      this.state = props.location.state;      
+    }
+    else {
+      this.state = { 
+        
+      };
+    }
 
     this.validateInput = this.validateInput.bind(this);    
     this.uploadArcana = this.uploadArcana.bind(this);
@@ -55,6 +61,7 @@ class ArcanaComposer extends React.Component {
 
   componentWillMount() {
 
+    console.log('will mount')
     ValidatorForm.addValidationRule('validAbility1', (value) => {
       if (value == undefined && this.state.rarity >= "3") {
           return false;
@@ -169,14 +176,18 @@ class ArcanaComposer extends React.Component {
 
   validateInput() {
 
-    console.log('submitted')
+    console.log('uploading arcana')
+    console.log(this.state)
+
+    ref.child('/test').set(this.state)
   }
 
   uploadArcana() {
-
+    console.log('uploading arcana')
     console.log(this.state)
 
-    firebase.database().ref('/test').set(this.state)
+    ref.child('/test').update(this.state)
+    // ref.child('/test').set(this.state)
     // firebase.database().ref('/test').set({
       
       // nameKR: this.state.nameKR,
@@ -231,7 +242,7 @@ class ArcanaComposer extends React.Component {
         
       <ValidatorForm
                 ref="form"
-                onSubmit={this.validateInput}
+                onSubmit={this.uploadArcana}
                 onError={errors => console.log(errors)}
             >
         <TextValidator
@@ -274,6 +285,7 @@ class ArcanaComposer extends React.Component {
 
         <TextValidator
         name="iconURL"
+        value={this.state.iconURL}
         floatingLabelText="아이콘 주소 (선택)"
         fullWidth={true}
         onChange={this.handleText}
@@ -367,7 +379,11 @@ class ArcanaComposer extends React.Component {
         </div>
 
         <div style={{display: 'flex'}}>
-          <TextField name="skillName1" floatingLabelText="스킬 1 이름" onChange={this.handleText}/>
+          <TextField
+            name="skillName1"
+            value={this.state.skillName1}
+            floatingLabelText="스킬 1 이름"
+            onChange={this.handleText}/>
           <SelectValidator
             name="skillMana1"
             floatingLabelText="스킬 1 마나"
@@ -384,10 +400,11 @@ class ArcanaComposer extends React.Component {
 
         <TextValidator
           name="skillDesc1"
+          value={this.state.skillDesc1}
           floatingLabelText="스킬 1 설명"
           fullWidth={true}
           multiLine={true}
-          rows={2}
+          rows={1}
           rowsMax={5}
           validators={['required']}
           errorMessages={[`스킬 정보가 필요합니다.`]}
@@ -395,7 +412,11 @@ class ArcanaComposer extends React.Component {
 
         <div>
           <div style={{display: 'flex'}}>
-          <TextField name="skillName2" floatingLabelText="스킬 2 이름" onChange={this.handleText}/>
+          <TextField
+            name="skillName2"
+            value={this.state.skillName2}
+            floatingLabelText="스킬 2 이름"
+            onChange={this.handleText}/>
           <SelectField floatingLabelText="스킬 2 마나" value={this.state.skillMana2} onChange={this.handleSkillMana2}>
             <MenuItem value="1" primaryText="1" />
             <MenuItem value="2" primaryText="2" />
@@ -403,29 +424,46 @@ class ArcanaComposer extends React.Component {
           </SelectField>
           </div>
           <TextField name="skillDesc2"
-          floatingLabelText="스킬 2 설명"
-          fullWidth={true}
-          multiLine={true}
-          rows={2}
-          rowsMax={5}
-          onChange={this.handleText}/>
+            value={this.state.skillDesc2}
+            floatingLabelText="스킬 2 설명"
+            fullWidth={true}
+            multiLine={true}
+            rows={1}
+            rowsMax={5}
+            onChange={this.handleText}/>
         </div>
 
         <div>
           <div style={{display: 'flex'}}>
-          <TextField name="skillName3" floatingLabelText="스킬 3 이름" onChange={this.handleText}/>
+          <TextField
+            name="skillName3"
+            value={this.state.skillName3}
+            floatingLabelText="스킬 3 이름"
+            onChange={this.handleText}/>
           <SelectField floatingLabelText="스킬 3 마나" value={this.state.skillMana3} onChange={this.handleSkillMana3}>
             <MenuItem value="1" primaryText="1" />
             <MenuItem value="2" primaryText="2" />
             <MenuItem value="3" primaryText="3" />
           </SelectField>
           </div>
-          <TextField name="skillDesc3" floatingLabelText="스킬 3 설명" fullWidth={true} multiLine={true} rows={2} rowsMax={5} onChange={this.handleText}/>
+          <TextField
+            name="skillDesc3"
+            value={this.state.skillDesc3}
+            floatingLabelText="스킬 3 설명"
+            fullWidth={true}
+            multiLine={true}
+            rows={1}
+            rowsMax={5}
+            onChange={this.handleText}/>
         </div>
 
         <div>
           <div style={{display: 'flex'}}>
-          <TextField name="kizunaName" floatingLabelText="인연 이름" onChange={this.handleText}/>
+          <TextField
+            name="kizunaName"
+            value={this.state.kizunaName}
+            floatingLabelText="인연 이름"
+            onChange={this.handleText}/>
           <SelectValidator
             name="kizunaCost"
             floatingLabelText="인연 코스트"
@@ -447,40 +485,53 @@ class ArcanaComposer extends React.Component {
             floatingLabelText="인연 설명"
             fullWidth={true}
             multiLine={true}
-            rows={2}
+            rows={1}
             rowsMax={5}
             validators={['required']}
             errorMessages={[`인연 어빌이 필요합니다.`]}
             onChange={this.handleText}/>
         </div>
         
-        <TextField name="abilityName1" floatingLabelText="어빌 1 이름" onChange={this.handleText}/><br/>
+        <TextField
+          name="abilityName1"
+          value={this.state.abilityName1}
+          floatingLabelText="어빌 1 이름"
+          onChange={this.handleText}/><br/>
         <TextValidator
           name="abilityDesc1"
           value={this.state.abilityDesc1}
           floatingLabelText="어빌 1 설명"
           fullWidth={true}
           multiLine={true}
-          rows={2}
+          rows={1}
           rowsMax={5}
           validators={['validAbility1']}
           errorMessages={[`3성 이상 아르카나는 어빌이 필요합니다.`]}
           onChange={this.handleText}/><br/>
 
-        <TextField name="abilityName2" floatingLabelText="어빌 2 이름" onChange={this.handleText}/><br/>
+        <TextField
+          name="abilityName2"
+          value={this.state.abilityName2}
+          floatingLabelText="어빌 2 이름"
+          onChange={this.handleText}/><br/>
         <TextValidator
           name="abilityDesc2"
           value={this.state.abilityDesc2}
           floatingLabelText="어빌 2 설명"
           fullWidth={true}
           multiLine={true}
-          rows={2}
+          rows={1}
           rowsMax={5}
           validators={['validAbility2']}
           errorMessages={[`4성 이상 아르카나는 두번째 어빌이 필요합니다.`]}
           onChange={this.handleText}/><br/>
 
-        <TextField name="partyAbility" floatingLabelText="파티 어빌" onChange={this.handleText}/><br/>
+        <TextField
+          name="partyAbility"
+          value={this.state.partyAbility}
+          floatingLabelText="파티 어빌"
+          fullWidth={true}
+          onChange={this.handleText}/><br/>
 
 
         <RaisedButton label="완료" type="submit"/>
