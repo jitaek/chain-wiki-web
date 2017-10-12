@@ -1,6 +1,6 @@
 .fullWidthContainer {
-  width: 100%;
-  box-sizing: border-box;
+  width: calc(100% - 40px);
+  /* box-sizing: border-box; */
   margin: 20px;
 }
 
@@ -176,4 +176,4 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #68a283;  
-} */
+}  */

@@ -4,11 +4,7 @@ import styles from './ArcanaComposer.css';
 import firebase from 'firebase';
 import { ref } from '../../helpers/constants'
 import { HashRouter, Link, withRouter } from "react-router-dom";
-
-import NameInput from './components/NameInput/NameInput';
-import ImageInput from './components/ImageInput/ImageInput';
-import SelectInput from './components/SelectInput/SelectInput';
-
+import Dropzone from "react-dropzone"
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import TextField from 'material-ui/TextField';
@@ -22,6 +18,11 @@ const costArray = [];
 for (let i = 26; i >= 0; i--) {
   costArray.push(<MenuItem value={`${i}`} key={i} primaryText={`${i}`} />);
 }
+
+const buttonStyle = {
+  margin: 12,
+}
+
 class ArcanaComposer extends React.Component {
 
   constructor(props) {
@@ -43,6 +44,7 @@ class ArcanaComposer extends React.Component {
       };
     }
 
+    this.onDrop = this.onDrop.bind(this);        
     this.validateInput = this.validateInput.bind(this);    
     this.uploadArcana = this.uploadArcana.bind(this);
     this.handleText = this.handleText.bind(this);
@@ -77,6 +79,15 @@ class ArcanaComposer extends React.Component {
     });
 
   }
+
+
+onDrop(acceptedFiles, rejectedFiles) {
+  // do stuff
+  console.log('something dropped')
+  console.log(acceptedFiles)
+  console.log(rejectedFiles)
+
+}
 
   handleText(event, text) {
     console.log(event.target.name)
@@ -183,10 +194,35 @@ class ArcanaComposer extends React.Component {
   }
 
   uploadArcana() {
-    console.log('uploading arcana')
     console.log(this.state)
 
-    ref.child('/test').update(this.state)
+    // check if uploading new, or editing.
+    
+    if (this.state.uid) {
+      // editing. TODO: move previous data to /arcanaEdit, using firebase functions.
+      console.log('editing arcana')
+      let arcanaID = this.state.uid
+      // ref.child('arcana').child(arcanaID).once('value', snapshot => {
+
+      //   let previousArcana = snapshot.val()
+      //   console.log('previous arcana is ')
+      //   console.log(previousArcana)
+      //   let newEditRef = ref.child('arcanaEdit').child(arcanaID).push()
+      //   newEditRef.set(previousArcana)
+      // });
+    }
+    else {
+      // uploading new.
+      console.log('uploading new arcana')
+      const newArcanaRef = ref.child('arcana').push();
+
+      if (this.state.imageURL) {
+
+      }
+      newArcanaRef.set(this.state)
+    }
+    // ref.child('arcana').child(this.state.uid)
+    // ref.child('/test').update(this.state)
     // ref.child('/test').set(this.state)
     // firebase.database().ref('/test').set({
       
@@ -237,6 +273,8 @@ class ArcanaComposer extends React.Component {
 
     return (
       <div className={styles.fullWidthContainer}>
+      {<Dropzone
+        onDrop={this.onDrop}>drop here</Dropzone>}
 
       <MuiThemeProvider>
         
@@ -332,6 +370,7 @@ class ArcanaComposer extends React.Component {
           <MenuItem value="봉" primaryText="봉" />
           <MenuItem value="창" primaryText="창" />
           <MenuItem value="궁" primaryText="궁" />
+          <MenuItem value="마" primaryText="마" />
           <MenuItem value="성" primaryText="성" />
           <MenuItem value="권" primaryText="권" />
           <MenuItem value="총" primaryText="총" />
@@ -346,6 +385,7 @@ class ArcanaComposer extends React.Component {
           errorMessages={[`소속이 필요합니다.`]}
           onChange={this.handleAffiliation}>
           <MenuItem value="마신" primaryText="마신" />
+          <MenuItem value="여행자" primaryText="여행자" />
           <MenuItem value="부도" primaryText="부도" />
           <MenuItem value="성도" primaryText="성도" />
           <MenuItem value="현탑" primaryText="현탑" />
@@ -534,7 +574,7 @@ class ArcanaComposer extends React.Component {
           onChange={this.handleText}/><br/>
 
 
-        <RaisedButton label="완료" type="submit"/>
+          <RaisedButton label="완료" style={buttonStyle} type="submit"/>
         </ValidatorForm>
       </MuiThemeProvider>
 

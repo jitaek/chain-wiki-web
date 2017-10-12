@@ -18,6 +18,7 @@ import Home from "./pages/Home/Home"
 import Arcana from "./pages/Arcana/Arcana"
 import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
 import Login from './pages/Login/Login'
+import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
@@ -68,8 +69,10 @@ class App extends Component {
               <Switch>
               <Route path="/" exact component={Home} />
               <Route path="/arcana" exact component={Arcana} />
-              <Route path="/Login" exact component={Login} />
-              <PrivateRoute authed={this.state.authed} path="/arcanaComposer" exact component={ArcanaComposer} />
+              <Route path="/login" exact component={Login} />
+              <Route path="/arcanaComposer" exact component={ArcanaComposer} />
+              <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
+              /* <PrivateRoute authed={this.state.authed} path="/arcanaComposer" exact component={ArcanaComposer} /> */
               </Switch>
             </div>
         </Router>

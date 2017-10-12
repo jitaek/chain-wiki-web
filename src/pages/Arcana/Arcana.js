@@ -13,6 +13,8 @@ import {
 } from 'react-router-dom'
 import sampleMain from '../../sampleMainImage.jpg';
 
+var arcanaID
+
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
     <Route
@@ -91,20 +93,22 @@ class Arcana extends React.Component {
     this.showArcana = this.getParameterByName.bind(this);
     
     const query = this.props.location.search;
-    const arcanaID = this.getParameterByName('arcana');
+    arcanaID = this.getParameterByName('arcana');
 
+    // this.state = {
+
+    // }
     this.state = { 
-      arcanaID: arcanaID
+      uid: arcanaID
     };
     this.openJPWiki = this.openJPWiki.bind(this);
     this.editArcana = this.editArcana.bind(this);
   }
 
   componentWillMount(){
-    // var input = {}
-    // input[event.target.name] = text;
-    // let arcanaRef = firebase.database().ref('arcana').child(this.state.arcanaID);
-    let arcanaRef = firebase.database().ref('arcana').child('-KTSwVKi_VohxllkEIiZ');
+
+    let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
+    // let arcanaRef = firebase.database().ref('arcana').child('-KTSwVKi_VohxllkEIiZ');
     arcanaRef.on('value', snapshot => {
       let arcana = snapshot.val();
       this.setState({
@@ -164,7 +168,7 @@ class Arcana extends React.Component {
   }
 
   componentWillUnmount() {
-    let arcanaRef = firebase.database().ref('arcana').child(this.state.arcanaID);
+    let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
     arcanaRef.off();
 
   }
