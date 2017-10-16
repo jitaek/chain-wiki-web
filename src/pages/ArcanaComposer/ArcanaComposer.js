@@ -35,7 +35,7 @@ class ArcanaComposer extends React.Component {
     const query = this.props.location.search;
     const arcanaID = this.getParameterByName('arcana');
 
-    if (props.location.state != undefined) {
+    if (props.location.state !== undefined) {
       this.state = props.location.state;      
     }
     else {
@@ -65,7 +65,7 @@ class ArcanaComposer extends React.Component {
 
     console.log('will mount')
     ValidatorForm.addValidationRule('validAbility1', (value) => {
-      if (value == undefined && this.state.rarity >= "3") {
+      if (value === undefined && this.state.rarity >= "3") {
           return false;
       }
       return true;

@@ -332,7 +332,7 @@ class UpdateArcanaRefs extends React.Component {
     return (
         <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-        <div>
+        <div style={{margin:'10px'}}>
           아르카나 목록 선택
           <div>
             <RadioButtonGroup name="shipSpeed" style={{display:'flex'}} defaultSelected="not_light" onChange={this.selectList}>

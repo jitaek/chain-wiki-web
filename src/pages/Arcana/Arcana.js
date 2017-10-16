@@ -4,11 +4,8 @@ import styles from './Arcana.css';
 import firebase from 'firebase';
 import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
 import {
-  HashRouter as Router,
   Route,
   Link,
-  hashHistory,
-  Switch,
   Redirect
 } from 'react-router-dom'
 import sampleMain from '../../sampleMainImage.jpg';
@@ -39,12 +36,12 @@ function Skill(props) {
         <table className={styles.arcanaSkillTable}>
         <tbody>
           <tr>
-            <th className={styles.headerCell}>{isKizuna == undefined ? "스킬 "  + skillNumber : "인연"}</th>
+            <th className={styles.headerCell}>{isKizuna === undefined ? "스킬 "  + skillNumber : "인연"}</th>
               <td className={styles.bodyCell}>
                   <div>
                       <div className={styles.skillNameCell}>{skillName}</div>
                       <div className={styles.manaContainer}>
-                          <div className={styles.manaLabelCell}>{isKizuna == undefined ? "마나" : "코스트"}</div>
+                          <div className={styles.manaLabelCell}>{isKizuna === undefined ? "마나" : "코스트"}</div>
                           <div className={styles.manaCell}>{skillMana}</div>
                       </div>
                   </div>
@@ -71,8 +68,8 @@ function Ability(props) {
         <table className={styles.arcanaSkillTable}>
         <tbody>
           <tr>
-            <th className={styles.headerCell}>{abilityNumber != 4 ? "어빌 " + abilityNumber : "파티 어빌"}</th>
-            <td className={styles.bodyCell}>{abilityNumber != 4 ? abilityName : ""}</td>
+            <th className={styles.headerCell}>{abilityNumber !== 4 ? "어빌 " + abilityNumber : "파티 어빌"}</th>
+            <td className={styles.bodyCell}>{abilityNumber !== 4 ? abilityName : ""}</td>
           </tr>
         </tbody>
         </table>
