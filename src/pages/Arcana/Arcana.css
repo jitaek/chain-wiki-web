@@ -3,12 +3,12 @@ table {
   border-spacing: 0;
 }
 
-th,
+/* th,
 td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #E1E1E1;
-}
+} */
 
 .placeholderMain {
   width: 320px;

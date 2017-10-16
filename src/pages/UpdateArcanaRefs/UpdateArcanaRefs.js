@@ -10,11 +10,54 @@ import ReactDragList from 'react-drag-list';
 
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton'
+import {
+  Table,
+  TableBody,
+  TableFooter,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
+
+const muiTheme = getMuiTheme({
+  tableRow: {
+    selectedColor: 'white',
+    height: '30px',
+  },
+  tableRowColumn: {
+    height: '30px',
+    padding: '0px'
+  }
+});
 
 const CheckBoxStyle = {
   margin: '20px',
+}
+
+const CheckBoxLabelStyle = {
+  fontSize: '13px',
+}
+
+const RowStyle = {
+  padding: '0px',
+}
+
+const TableStyle = {
+  float: 'left',
+  width: '40%',
+}
+
+const CurrentListStyle = {
+  width: '40%',
+  float: 'left',
+}
+
+const HeaderStyle = {
+  marginLeft: '20px',
 }
 
 class UpdateArcanaRefs extends React.Component {
@@ -29,6 +72,7 @@ class UpdateArcanaRefs extends React.Component {
     };
     
     this.updateCheck = this.updateCheck.bind(this)
+    this.removeArcana = this.removeArcana.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -59,7 +103,7 @@ class UpdateArcanaRefs extends React.Component {
       })
 
 
-      ref.child('name').limitToLast(5).once('value', snapshot => {
+      ref.child('name').limitToLast(10).once('value', snapshot => {
         
         var array = [];
         
@@ -84,8 +128,14 @@ class UpdateArcanaRefs extends React.Component {
     
   }
 
-  updateCheck(arcana) {
+  updateCheck(row, column, event) {
 
+    console.log(`row is ${row}`)
+    if (row >= this.state.nameArray.length) {
+      return
+    }
+
+    let arcana = this.state.nameArray[row]
     let arcanaID = arcana.arcanaID
 
     var currentArcanaDict = this.state.arcanaDictionary
@@ -128,6 +178,32 @@ class UpdateArcanaRefs extends React.Component {
     // update firebase on each check/uncheck????
   }
 
+  removeArcana(arcana) {
+
+    let arcanaID = arcana.arcanaID
+    
+    var newFestivalArray = this.state.festivalArray.slice()
+    var currentArcanaDict = this.state.arcanaDictionary
+    
+    var index = -1
+    for(var i = 0, len = newFestivalArray.length; i < len; i++) {
+      if (newFestivalArray[i].arcanaID === arcanaID) {
+          index = i;
+          break;
+      }
+    }
+
+    if (index > -1) {
+      newFestivalArray.splice(index, 1)
+    }
+
+    currentArcanaDict[arcanaID] = undefined
+    this.setState({
+      festivalArray: newFestivalArray,
+      arcanaDictionary: currentArcanaDict
+    })
+  }
+
   handleSubmit() {
     // ref.child('festival').set(this.state.festivalIDs)
   }
@@ -135,42 +211,68 @@ class UpdateArcanaRefs extends React.Component {
   render() {
 
     return (
-      <div>
-        <MuiThemeProvider>
+        <MuiThemeProvider muiTheme={muiTheme}>
 
+        <div
+        style={TableStyle}
+        >
+        <h4 style={HeaderStyle}>
+          아르카나 목록
+        </h4>
+        <Table
+          height={'100%'}
+          selectable={this.state.selectable}
+          multiSelectable={true}
+          onCellClick={this.updateCheck}
+        >
+
+          <TableBody
+            displayRowCheckbox={this.state.showCheckboxes}
+            showRowHover={this.state.showRowHover}
+            stripedRows={this.state.stripedRows}
+            deselectOnClickaway={false}
+          >
+            {this.state.nameArray.map( (row, index) => (
+              <TableRow key={index}
+              style={RowStyle}
+              selected={this.state.arcanaDictionary[row.arcanaID]}>
+                <TableRowColumn style={RowStyle}>{row.name}</TableRowColumn>
+              </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+        </div>
+          
+        <div
+        style={CurrentListStyle}
+        > 
+        <h4 style={HeaderStyle}>
+          페스티벌 목록
+        </h4>
+        <div style={{marginLeft: '20px',fontSize:'12px'}}>(위아래로 드래그하면 순서 바뀜)</div>
           <ReactDragList
-          style={{float:'left'}}
-          dataSource={this.state.nameArray}
-          handles={false}
-          row={(arcana, index) => (
-            <Checkbox
-              key={arcana.arcanaID}
-              label={arcana.name}
-              style={CheckBoxStyle}
-              checked={this.state.arcanaDictionary[arcana.arcanaID]}
-              onCheck={() => this.updateCheck(arcana)}
-            />
-          )}/>
-
-        <ReactDragList
-        style={{float:'left'}}
-          dataSource={this.state.festivalArray}
-          handles={false}
-          row={(arcana, index) => (
-            <Checkbox
-              key={arcana.arcanaID}
-              label={arcana.name}
-              style={CheckBoxStyle}
-              checked={this.state.arcanaDictionary[arcana.arcanaID]}
-              onCheck={() => this.updateCheck(arcana)}
-            />
-          )}/>
-          {/*this.state.nameArray.map( arcana =>
-            
-          )*/}
-          <RaisedButton label="완료" onClick={this.handleSubmit}/>
+            dataSource={this.state.festivalArray}
+            handles={false}
+            row={(arcana, index) => (
+              <Checkbox
+                key={arcana.arcanaID}
+                label={arcana.name}
+                style={CheckBoxStyle}
+                labelStyle={CheckBoxLabelStyle}
+                checked={this.state.arcanaDictionary[arcana.arcanaID]}
+                onCheck={() => this.removeArcana(arcana)}
+              />
+            )}/>
+            {/*this.state.nameArray.map( arcana =>
+              
+            )*/}
+          <RaisedButton
+            label="완료"
+            style={{margin:'20px'}}
+            onClick={this.handleSubmit}/>
+        </div>
+        
         </MuiThemeProvider>
-      </div>
     );
   }
 

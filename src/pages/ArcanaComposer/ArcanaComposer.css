@@ -43,17 +43,6 @@ td {
   width: 100%;
 }
 
-/* .container {
-  height: 90px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-} */
-
-.nameContainer {
-  /* text-align: center; */
-}
-
 .nameKRLabel {
   font-size: 1rem;
   font-weight: bold;
@@ -150,30 +139,3 @@ td {
   display: block;
   overflow:auto;
 }
-
-/* input[type="text"] {
-  margin: 10px;
-}
-
-input[type="submit"] {
-  display: inline-block;
-  height: 38px;
-  padding: 0 30px;
-  color: #555;
-  text-align: center;
-  font-size: 13px;
-  line-height: 38px;
-  letter-spacing: .1rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  background-color: transparent;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-input[type="submit"]:hover {
-  background-color: #68a283;  
-}  */
