@@ -11,7 +11,7 @@ import {
 
 import { firebaseAuth } from './helpers/constants'
 
-import Drawer from "./components/Drawer/Drawer"
+import NavBar from './components/NavBar/NavBar'
 // import Nav from "./components/Nav/Nav"
 
 import Home from "./pages/Home/Home"
@@ -65,7 +65,7 @@ class App extends Component {
       <div>
         <Router>
             <div>
-              <Drawer/>
+              <NavBar/>
               <Switch>
               <Route path="/" exact component={Home} />
               <Route path="/arcana" exact component={Arcana} />

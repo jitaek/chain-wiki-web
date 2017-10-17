@@ -6,21 +6,28 @@
   display:block;
   width: 100%;
   height: auto;
-  background-Color: black;
   margin-bottom: 10px;
 }
 
 .gridContainer {
   width: 100%;
 }
-
 @media (min-width: 550px) {
   .arcanaMainImage {
     border: 1px hidden;
     border-radius: 3px;
     box-shadow: 2px 2px 2px 2px #888888;
+    margin: 10px;
+    width: calc(100% - 20px); 
+  }
+  .gridContainer {
+    width: calc(100%/2);
+  }
+}
+
+@media (min-width: 800px) {
+  .arcanaMainImage {
     width: calc(100% - 20px);
-    margin: 10px;    
   }
   .gridContainer {
     width: calc(100%/3);
