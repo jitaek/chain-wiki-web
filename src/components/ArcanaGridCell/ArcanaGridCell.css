@@ -1,0 +1,91 @@
+.flex {
+  display: flex;
+}
+
+.arcanaMainImage {
+  display:block;
+  width: 100%;
+  height: auto;
+  background-Color: black;
+  margin-bottom: 10px;
+}
+
+.gridContainer {
+  width: 100%;
+}
+
+@media (min-width: 550px) {
+  .arcanaMainImage {
+    border: 1px hidden;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px 2px #888888;
+    width: calc(100% - 20px);
+    margin: 10px;    
+  }
+  .gridContainer {
+    width: calc(100%/3);
+  }
+}
+
+@media (min-width: 1000px) {
+  .arcanaMainImage {
+    width: calc(100% - 20px);
+  }
+  .gridContainer {
+    width: calc(25%);
+  }
+}
+
+.container {
+  height: 90px;
+  display: flex;
+}
+
+.arcanaIcon {
+  margin: 10px;
+  height: 66px;
+  width: 66px;
+  float: left;
+}
+
+.nameKRContainer, .nameJPContainer {
+  /* text-align: center;
+  vertical-align: middle; */
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.nameKRLabel {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 10px 5px 0px 0px; 
+  /* display: inline-block; */
+  /* white-space: nowrap;
+  overflow: hidden;
+  vertical-align: top; */
+}
+
+.nicknameKRLabel {
+  font-size: 0.8rem;
+  margin: 10px 10px 0px 5px;
+  /* display: inline-block; */
+  /* white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle; */
+}
+
+.nameJPLabel, .nicknameJPLabel {
+  font-size: 0.8rem;
+  margin: 0px 10px 0px 0px;
+  /* white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle; */
+  color: silver;
+}
+
+.detailLabel {
+  font-size: 0.8rem;
+  padding-right: 10px;
+  color: #68a283;
+}

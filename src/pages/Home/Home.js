@@ -3,6 +3,7 @@ import logo from '../../logo.png';
 import styles from './Home.css';
 import firebase from 'firebase';
 import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
+import ArcanaGridCell from '../../components/ArcanaGridCell/ArcanaGridCell'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
 
@@ -18,7 +19,7 @@ class Home extends Component {
   componentWillMount() {
   
     let arcanaRef = firebase.database().ref('arcana');
-    arcanaRef.orderByKey().limitToLast(1).on('child_added', snapshot => {
+    arcanaRef.orderByKey().limitToLast(10).on('child_added', snapshot => {
       let arcana = snapshot.val();
       console.log(arcana)
       this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
@@ -69,7 +70,7 @@ class Home extends Component {
   render() {
 
     return (
-      <div className="App" ref="homeRoot">
+      <div style={{display: 'flex', flexWrap:'wrap'}} ref="homeRoot">
         {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">체인크로니클 위키</h1>
@@ -77,7 +78,7 @@ class Home extends Component {
 
         {this.state.arcanaArray.map( arcana => 
 
-          <ArcanaCell
+          <ArcanaGridCell className={styles.arcanaGridContainer}
           onClick={this.showArcana.bind(null,arcana.uid)}
             key={arcana.uid}
 
