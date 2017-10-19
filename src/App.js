@@ -38,6 +38,7 @@ export const history = createHashHistory()
 class App extends Component {
 
   state = {
+    user: null,
     authed: false,
     loading: true,
   }
@@ -46,8 +47,8 @@ class App extends Component {
 
     this.removeListener = firebaseAuth().onAuthStateChanged((user) => {
       if (user) {
-        console.log("user successfully logged in.")
         this.setState({
+          user: user.uid,
           authed: true,
           loading: false,
         })
@@ -71,7 +72,9 @@ class App extends Component {
             <div>
               <NavBar/>
               <Switch>
-              <Route path="/" exact component={Home} />
+              <Route exact path='/' render={(props) => (
+                <Home {...props} user={this.state.user} />
+              )}/>
               <Route path="/arcana" exact component={Arcana} />
               <Route path="/login" exact component={Login} />
               <Route path="/arcanaComposer" exact component={ArcanaComposer} />

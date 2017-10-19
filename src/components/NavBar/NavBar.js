@@ -8,12 +8,12 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
-import Menu from 'material-ui/svg-icons/navigation/menu'
 import TextField from 'material-ui/TextField'
 import AppBar from 'material-ui/AppBar'
 import greenColor from '../../helpers/constants'
 import logo from '../../logo.png';
 import AutoComplete from 'material-ui/AutoComplete';
+import Menu from 'material-ui/svg-icons/navigation/menu'
 
 const NavBarStyle = {
   backgroundColor: 'white',
@@ -138,7 +138,7 @@ export default class NavBar extends React.Component {
             <Link to="/" 
               onClick={this.handleToggle}
               style={{fontSize:'13px',textDecoration: 'none'}}
-            ><span><img src={logo} style={{width:'40px', paddingTop:'12px'}}/>아르카나</span></Link>
+            ><span><img src={logo} style={{width:'40px', paddingTop:'12px'}}/></span></Link>
           }
 
           ></AppBar>
