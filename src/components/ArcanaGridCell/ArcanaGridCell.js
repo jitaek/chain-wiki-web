@@ -21,13 +21,16 @@ class ArcanaGridCell extends React.Component {
             affiliation: props.affiliation,
             numberOfViews: props.numberOfViews,
 
+            imageURL: props.imageURL,
             iconURL: props.iconURL
+
         };
+        console.log(props.imageURL)
       }
     render() {
         return (
             <div className={styles.gridContainer} onClick={this.props.onClick}>
-                <img className={styles.arcanaMainImage} src={SampleMain} alt='not loaded'/>
+            <img className={styles.arcanaMainImage} src={SampleMain} alt={this.state.nameKR}/>
                 {/* <div className={styles.container}>
                     <img className={styles.arcanaIcon} src={logo} alt='not loaded'/>
                     <div>

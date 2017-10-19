@@ -10,6 +10,7 @@ import Menu from 'material-ui/svg-icons/navigation/menu'
 import TextField from 'material-ui/TextField'
 import AppBar from 'material-ui/AppBar'
 import greenColor from '../../helpers/constants'
+import logo from '../../logo.png';
 
 const NavBarStyle = {
   backgroundColor: 'white',
@@ -63,11 +64,26 @@ export default class NavBar extends React.Component {
           open={this.state.open}
           onRequestChange={(open) => this.setState({open})}
         >
-          <MenuItem
-            primaryText="홈"
-            containerElement={<Link to='/'/>}
-            onClick={this.handleClose}
-          />
+
+        <AppBar
+          style={NavBarStyle}
+          iconElementLeft={
+            <IconButton
+              tooltip="홈"
+              onClick={this.handleToggle}
+            >
+              <Menu color={'#68a283'}/>
+            </IconButton>
+          }
+
+          title={
+            <Link to="/" 
+              onClick={this.handleToggle}
+              style={{fontSize:'13px',textDecoration: 'none'}}
+            ><span><img src={logo} style={{width:'40px', paddingTop:'12px'}}/>아르카나</span></Link>
+          }
+
+          ></AppBar>
           <MenuItem
             primaryText="필터"
             containerElement={<Link to='/filter'/>}

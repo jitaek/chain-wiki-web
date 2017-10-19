@@ -40,6 +40,7 @@
     "react-dom": "^16.0.0",
     "react-drag-list": "^1.0.2",
     "react-dropzone": "^4.2.0",
+    "react-fade-in": "^0.1.5",
     "react-form-validator-core": "^0.1.1",
     "react-inline-grid": "^0.5.3",
     "react-lazyload": "^2.2.7",

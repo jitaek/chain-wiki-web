@@ -6,24 +6,56 @@ import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
 import ArcanaGridCell from '../../components/ArcanaGridCell/ArcanaGridCell'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
+import FadeIn from 'react-fade-in'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+const arcanaArray = [
+  {
+    uid: '1',
+    nameKR: '무지카',
+  },
+  {
+    uid: '1',
+    nameKR: '무지카',
+  },
+  {
+    uid: '1',
+    nameKR: '무지카',
+  },
+  {
+    uid: '1',
+    nameKR: '무지카',
+  },
+  {
+    uid: '1',
+    nameKR: '무지카',
+  },
+  {
+    uid: '1',
+    nameKR: '무지카',
+  },
+  {
+    uid: '1',
+    nameKR: '무지카',
+  },
+]
 
 class Home extends Component {
 
   constructor(props) {
     super(props);
     this.state = { 
-      arcanaArray: [] };
-      this.showArcana = this.showArcana.bind(this);
+      arcanaArray: [],
+      loadedImages: []
+    };
+    this.observeArcana = this.observeArcana.bind(this);
+    this.showArcana = this.showArcana.bind(this);
   }
 
   componentWillMount() {
   
-    let arcanaRef = firebase.database().ref('arcana');
-    arcanaRef.orderByKey().limitToLast(10).on('child_added', snapshot => {
-      let arcana = snapshot.val();
-      console.log(arcana)
-      this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
-    })
+    this.observeArcana()
+
     // const arcana = {
     //   uid: '-KvIZ3wuQW3E6JPIjGe9',
     //   nameKR: '무지카',
@@ -60,6 +92,22 @@ class Home extends Component {
     
   }
 
+  observeArcana() {
+    let arcanaRef = firebase.database().ref('arcana');
+    arcanaRef.orderByKey().limitToLast(10).on('child_added', snapshot => {
+      let arcana = snapshot.val();
+      console.log(arcana)
+      this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
+    })
+  }
+
+  onLoad(arcana) {
+    console.log(arcana.uid)
+    this.setState(({ loadedImages }) => {
+      return { loadedImages: loadedImages.concat(arcana) }
+    })
+  }
+
   showArcana(arcanaID) {
     this.props.history.push({
       pathname: '../Arcana',
@@ -70,7 +118,9 @@ class Home extends Component {
   render() {
 
     return (
-      <div style={{display: 'flex', flexWrap:'wrap'}} ref="homeRoot">
+
+      <div className={styles.grid} ref="homeRoot">
+      
         {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">체인크로니클 위키</h1>
@@ -78,25 +128,34 @@ class Home extends Component {
 
         {this.state.arcanaArray.map( arcana => 
 
-          <ArcanaGridCell className={styles.arcanaGridContainer}
-          onClick={this.showArcana.bind(null,arcana.uid)}
-            key={arcana.uid}
+            <ArcanaGridCell
+              onClick={this.showArcana.bind(null,arcana.uid)}
+              key={arcana.uid}
 
-            nameKR={arcana.nameKR}
-            nicknameKR={arcana.nicknameKR}
-            nameJP={arcana.nameJP}
-            nicknameJP={arcana.nicknameJP}
+              nameKR={arcana.nameKR}
+              nicknameKR={arcana.nicknameKR}
+              nameJP={arcana.nameJP}
+              nicknameJP={arcana.nicknameJP}
 
-            rarity={arcana.rarity}
-            class={arcana.class}
-            weapon={arcana.weapon}
-            affiliation={arcana.affiliation}
-            numberOfViews={arcana.numberOfViews}
+              rarity={arcana.rarity}
+              class={arcana.class}
+              weapon={arcana.weapon}
+              affiliation={arcana.affiliation}
+              numberOfViews={arcana.numberOfViews}
 
-            iconURL={arcana.iconURL}
-          />
+              imageURL={arcana.imageURL}
+              iconURL={arcana.iconURL}
+            />          
         
         )}
+        {/* <div style={{display:'none'}}>
+          {this.state.arcanaArray.map((arcana, i) =>
+            <img 
+              src={arcana.imageURL}
+              onLoad={this.onLoad.bind(this, arcana)} 
+              key={i} />
+          )}
+        </div> */}
       </div>
     );
   }

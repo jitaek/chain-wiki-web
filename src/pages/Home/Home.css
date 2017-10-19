@@ -27,6 +27,35 @@
   to { transform: rotate(360deg); }
 }
 
-.arcanaGridContainer {
-  width: 20%;
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 550px) {
+  .grid {
+    justify-content: center;
+    
+    margin-top: 20px;
+
+    grid-template-columns: repeat(auto-fill, 200px);
+    grid-template-rows: repeat(5, 300px);
+
+    grid-column-gap: 10px;
+    grid-row-gap: 20px;
+  }
+}
+
+.arcanaGrid {
+
+  width: 100%;
+  display: grid;
+  grid-auto-rows: max-content;;
+  grid-auto-columns: max-content;;
+  /* grid-template-columns: repeat(auto-fill, 1fr); */
+  grid-gap: 10px;
+
+  /* display: flex;
+  justify-content: center;
+  flex-wrap: wrap; */
 }

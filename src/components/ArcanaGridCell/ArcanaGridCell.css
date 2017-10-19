@@ -1,45 +1,73 @@
-.flex {
-  display: flex;
+@keyframes fadein {
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-moz-keyframes fadein { /* Firefox */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-o-keyframes fadein { /* Opera */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity: 1;
+  }
 }
 
-.arcanaMainImage {
-  display:block;
-  width: 100%;
-  height: auto;
-  margin-bottom: 10px;
-}
 
 .gridContainer {
   width: 100%;
 }
+
+.arcanaMainImage:hover {
+  -moz-transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
 @media (min-width: 550px) {
-  .arcanaMainImage {
+  
+  .gridContainer {
     border: 1px hidden;
     border-radius: 3px;
-    box-shadow: 2px 2px 2px 2px #888888;
-    margin: 10px;
-    width: calc(100% - 20px); 
-  }
-  .gridContainer {
-    width: calc(100%/2);
+    box-shadow: 1px 1px 1px 1px #888888;
+    overflow:hidden;
   }
 }
 
-@media (min-width: 800px) {
-  .arcanaMainImage {
-    width: calc(100% - 20px);
-  }
-  .gridContainer {
-    width: calc(100%/3);
-  }
+.arcanaMainImage {
+  animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
+  -moz-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  width: 100%;
+  height: auto;
 }
 
-@media (min-width: 1000px) {
-  .arcanaMainImage {
-    width: calc(100% - 20px);
-  }
-  .gridContainer {
-    width: calc(25%);
+@supports(object-fit: cover){
+  .gridContainer .arcanaMainImage {
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
   }
 }
 
