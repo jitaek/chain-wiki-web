@@ -9,6 +9,8 @@ import {
   Redirect
 } from 'react-router-dom'
 
+import { createHashHistory } from 'history'
+
 import { firebaseAuth } from './helpers/constants'
 
 import NavBar from './components/NavBar/NavBar'
@@ -30,6 +32,8 @@ function PrivateRoute ({component: Component, authed, ...rest}) {
     />
   )
 }
+
+export const history = createHashHistory()
 
 class App extends Component {
 

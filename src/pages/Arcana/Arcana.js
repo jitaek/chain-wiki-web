@@ -196,7 +196,7 @@ class Arcana extends React.Component {
       <div ref="homeRoot">
         <div className={styles.placeholderMain}>
           {/* <img className={styles.arcanaImageMain} src={this.state.imageURL}/> */}
-          <img className={styles.arcanaImageMain} src={sampleMain}/>
+          <img className={styles.arcanaMainImage} src={sampleMain}/>
         </div> 
         <div className={styles.container}>
           {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}

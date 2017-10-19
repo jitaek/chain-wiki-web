@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import logo from '../../logo.png';
 import styles from './Home.css';
 import firebase from 'firebase';
+import {ref} from '../../helpers/constants'
 import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
 import ArcanaGridCell from '../../components/ArcanaGridCell/ArcanaGridCell'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import FadeIn from 'react-fade-in'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+let arcanaRef = ref.child('arcana')
 
 const arcanaArray = [
   {
@@ -73,7 +76,6 @@ class Home extends Component {
 
 
   componentWillUnmount() {
-    let arcanaRef = firebase.database().ref('arcana');
     arcanaRef.off();
 
     console.log(window.pageYOffset);
@@ -93,7 +95,6 @@ class Home extends Component {
   }
 
   observeArcana() {
-    let arcanaRef = firebase.database().ref('arcana');
     arcanaRef.orderByKey().limitToLast(10).on('child_added', snapshot => {
       let arcana = snapshot.val();
       console.log(arcana)

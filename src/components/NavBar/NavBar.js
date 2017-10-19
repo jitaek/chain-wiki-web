@@ -1,5 +1,7 @@
 import React from 'react';
-import { Link, hashHistory, Router } from 'react-router-dom';
+import { HashRouter, Link, withRouter } from "react-router-dom";
+import { ref } from '../../helpers/constants'
+import { history } from '../../App'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Drawer from 'material-ui/Drawer';
@@ -11,19 +13,68 @@ import TextField from 'material-ui/TextField'
 import AppBar from 'material-ui/AppBar'
 import greenColor from '../../helpers/constants'
 import logo from '../../logo.png';
+import AutoComplete from 'material-ui/AutoComplete';
 
 const NavBarStyle = {
   backgroundColor: 'white',
   display: 'flex'
 }
 
+const nameRef = ref.child('name')
+
 export default class NavBar extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props)
-    console.log(props.history)
-    this.state = {open: false};
+
+    this.state = {
+      open: false,
+      nameArray: [],
+    };
+  }
+
+  componentWillUnmount() {
+    nameRef.off()
+  }
+
+  observeNames() {
+
+    console.log('observing names')
+
+    nameRef.on('value', snapshot => {
+
+      var array = [];
+      
+      snapshot.forEach(child => {
+
+        let arcanaID = child.key
+        let nameKR = child.val()
+
+        let arcana = {
+          text: nameKR,          
+          value: arcanaID,          
+        }
+        array.push(arcana)
+
+      })
+
+      this.setState({
+        nameArray: array,
+      })
+
+    })
+  }
+
+  showArcana(string, index) {
+    
+    if (index > 0) {
+      let arcanaID = this.state.nameArray[index].value
+      history.push({
+        pathname: '../Arcana',
+        search: '?arcana=' + arcanaID
+      });
+    }
+    
   }
 
   handleToggle = () => this.setState({open: !this.state.open});
@@ -50,10 +101,17 @@ export default class NavBar extends React.Component {
           }
 
           title={
-            <TextField
-              hintText="검색"
-              style={{width:'100%'}}
+            <AutoComplete
+              hintText="이름 검색"
+              fullWidth={true}
               underlineFocusStyle={{borderBottomColor:'#68a283'}}
+
+              filter={AutoComplete.fuzzyFilter}
+              dataSource={this.state.nameArray}
+              maxSearchResults={5}
+
+              onClick={this.observeNames.bind(this)}
+              onNewRequest={this.showArcana.bind(this)}
             />
           }
         >
