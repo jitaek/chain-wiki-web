@@ -193,7 +193,7 @@ class Arcana extends React.Component {
   render() {
 
     return (
-      <div ref="homeRoot">
+      <div ref="homeRoot" style={{marginTop:'20px'}}>
         <div className={styles.placeholderMain}>
           {/* <img className={styles.arcanaImageMain} src={this.state.imageURL}/> */}
           <img className={styles.arcanaMainImage} src={sampleMain}/>
