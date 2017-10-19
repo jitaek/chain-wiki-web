@@ -18,6 +18,7 @@ import NavBar from './components/NavBar/NavBar'
 
 import Home from "./pages/Home/Home"
 import Arcana from "./pages/Arcana/Arcana"
+import Filter from "./pages/Filter/Filter"
 import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
 import Login from './pages/Login/Login'
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
@@ -76,6 +77,7 @@ class App extends Component {
                 <Home {...props} user={this.state.user} />
               )}/>
               <Route path="/arcana" exact component={Arcana} />
+              <Route path="/filter" exact component={Filter} />
               <Route path="/login" exact component={Login} />
               <Route path="/arcanaComposer" exact component={ArcanaComposer} />
               <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />

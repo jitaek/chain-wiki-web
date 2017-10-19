@@ -31,24 +31,18 @@
   }
 }
 
-
 .gridContainer {
   width: 100%;
+  border: 1px hidden;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px 1px #888888;
+  overflow:hidden;  
 }
 
 .arcanaMainImage:hover {
   -moz-transform: scale(1.1);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-}
-@media (min-width: 550px) {
-  
-  .gridContainer {
-    border: 1px hidden;
-    border-radius: 3px;
-    box-shadow: 1px 1px 1px 1px #888888;
-    overflow:hidden;
-  }
 }
 
 .arcanaMainImage {
@@ -61,6 +55,7 @@
   transition: all 0.2s;
   width: 100%;
   height: auto;
+  display:block;
 }
 
 @supports(object-fit: cover){

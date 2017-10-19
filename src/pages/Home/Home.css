@@ -1,61 +1,23 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  /* animation: App-logo-spin infinite 20s linear; */
-  height: 80px;
-}
-
-.App-header {
-  background-color: #F7F7F7;
-  height: 150px;
-  padding: 20px;
-  color: #68a283;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 .grid {
   display: grid;
-  grid-template-columns: 1fr;
+  justify-content: center;
+
+  margin: 10px;
+  
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(auto-fill, 1fr);
+
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
 }
 
 @media (min-width: 550px) {
-  .grid {
-    justify-content: center;
+  .grid {    
     
-    margin-top: 20px;
-
     grid-template-columns: repeat(auto-fill, 200px);
-    grid-template-rows: repeat(5, 300px);
+    grid-template-rows: 1.5fr;
 
     grid-column-gap: 10px;
     grid-row-gap: 20px;
   }
-}
-
-.arcanaGrid {
-
-  width: 100%;
-  display: grid;
-  grid-auto-rows: max-content;;
-  grid-auto-columns: max-content;;
-  /* grid-template-columns: repeat(auto-fill, 1fr); */
-  grid-gap: 10px;
-
-  /* display: flex;
-  justify-content: center;
-  flex-wrap: wrap; */
 }

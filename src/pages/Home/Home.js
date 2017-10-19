@@ -147,6 +147,7 @@ class Home extends Component {
 
     return (
       <MuiThemeProvider>
+        <div>
         <IconMenu
         style={{float:'right'}}
           iconButtonElement={<IconButton>
@@ -159,7 +160,7 @@ class Home extends Component {
           <MenuItem primaryText="카드 뷰" value="grid"/>
           <MenuItem primaryText="리스트 뷰" value="list"/>
         </IconMenu>
-      
+      <br style={{clear:'both'}}/>
       {this.state.viewType === 'grid' ? (
         <div className={styles.grid} ref="homeRoot">
         
@@ -223,7 +224,7 @@ class Home extends Component {
           )}
         </div>
       )}
-        
+        </div>
       </MuiThemeProvider>
 
     );
