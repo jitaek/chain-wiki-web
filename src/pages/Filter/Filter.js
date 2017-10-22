@@ -119,6 +119,7 @@ class Filter extends Component {
   }
 
   updateFilter(event, key, value) {
+
     console.log(`${key}: ${value}`)
     if (key === 'rarity') {
       var raritySet = this.state.rarityTypes;
@@ -183,6 +184,12 @@ class Filter extends Component {
     let groupTypes = this.state.groupTypes
     let weaponTypes = this.state.weaponTypes
     let affiliationTypes = this.state.affiliationTypes
+
+    
+    if (_.isEmpty(rarityTypes) && _.isEmpty(groupTypes) && _.isEmpty(weaponTypes) && _.isEmpty(affiliationTypes)) {
+      this.clearFilter()
+      return
+    }
 
     for (var rarity in rarityTypes) {
       console.log(`finding arcana with rarity ${rarity}`)
