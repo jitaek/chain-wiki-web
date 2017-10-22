@@ -13,8 +13,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import FilterIcon from 'material-ui/svg-icons/content/filter-list';
-
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Dashboard from 'material-ui/svg-icons/action/dashboard';
 import FilterButton from '../../components/FilterButton/FilterButton'
+import { getViewType, setViewType } from '../../helpers/ArcanaViewType'
 
 var _ = require('lodash');
 
@@ -30,6 +33,7 @@ class Filter extends Component {
 
     this.state = {
       showFilter: true,
+      viewType: 'list',
       rarityTypes: {},
       groupTypes: {},
       weaponTypes: {},
@@ -43,10 +47,18 @@ class Filter extends Component {
     this.filterArcana = this.filterArcana.bind(this)
     this.toggleFilterView = this.toggleFilterView.bind(this);
     this.observeArcana = this.observeArcana.bind(this)
+    this.setViewType = this.setViewType.bind(this)
+    
   }
 
   componentWillMount() {
   
+    let viewType = getViewType()
+    if (viewType !== undefined) {
+      this.setState({
+        viewType: viewType
+      })
+    }
     // let array = [
     //   {
     //     nameKR: '무지카',
@@ -72,6 +84,7 @@ class Filter extends Component {
   componentDidMount() {
 
     this.observeArcana()
+
 
   }
 
@@ -102,6 +115,18 @@ class Filter extends Component {
       })
 
     })
+  }
+  
+  setViewType(event, child) {
+    
+    setViewType(event, child)
+    
+    let viewType = child.props.value
+    if (viewType !== undefined) {
+      this.setState({
+        viewType: viewType
+      })
+    }
   }
 
   showArcana(arcanaID) {
@@ -280,6 +305,20 @@ class Filter extends Component {
 
     return (
       <MuiThemeProvider>
+        <div>
+            <IconMenu
+            style={{float:'right'}}
+              iconButtonElement={<IconButton>
+                <Dashboard color={'d3d3d3'}/>
+              </IconButton>}
+              onItemTouchTap={this.setViewType}
+              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+              targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            >
+              <MenuItem primaryText="카드 뷰" value="grid"/>
+              <MenuItem primaryText="리스트 뷰" value="list"/>
+            </IconMenu>
+        <br style={{clear:'both'}}/>
         <div style={{display:'flex'}}>
         <div className={styles.arcanaGrid} ref="homeRoot">
 
@@ -372,14 +411,15 @@ class Filter extends Component {
 
         </div>
         }
-        <Toolbar className={styles.toolbar}>
+        {/* <Toolbar className={styles.toolbar}>
           <ToolbarGroup lastChild={true}>
             <ToolbarTitle text="필터" />
             <IconButton onClick={this.toggleFilterView}>
               <FilterIcon />
             </IconButton>
           </ToolbarGroup>
-        </Toolbar>
+        </Toolbar> */}
+        </div>
         </div>
       </MuiThemeProvider>
 

@@ -24,6 +24,8 @@ import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
 import Login from './pages/Login/Login'
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
     <Route
@@ -70,23 +72,25 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Router>
-            <div>
-              <NavBar/>
-              <Switch>
-              <Route exact path='/' render={(props) => (
-                <Home {...props} user={this.state.user} />
-              )}/>
-              <Route path="/arcana" exact component={Arcana} />
-              <Route path="/filter" exact component={Filter} />
-              <Route path="/ability" exact component={Ability} />
-              <Route path="/login" exact component={Login} />
-              <Route path="/arcanaComposer" exact component={ArcanaComposer} />
-              <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
-              {/* <PrivateRoute authed={this.state.authed} path="/arcanaComposer" exact component={ArcanaComposer} /> */}
-              </Switch>
-            </div>
-        </Router>
+        <MuiThemeProvider>
+          <Router>
+              <div>
+                <NavBar/>
+                <Switch>
+                <Route exact path='/' render={(props) => (
+                  <Home {...props} user={this.state.user} />
+                )}/>
+                <Route path="/arcana" exact component={Arcana} />
+                <Route path="/filter" exact component={Filter} />
+                <Route path="/ability" exact component={Ability} />
+                <Route path="/login" exact component={Login} />
+                <Route path="/arcanaComposer" exact component={ArcanaComposer} />
+                <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
+                {/* <PrivateRoute authed={this.state.authed} path="/arcanaComposer" exact component={ArcanaComposer} /> */}
+                </Switch>
+              </div>
+          </Router>
+        </MuiThemeProvider>
       </div>
     );
   }

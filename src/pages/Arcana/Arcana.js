@@ -103,6 +103,7 @@ class Arcana extends React.Component {
     let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
     // let arcanaRef = firebase.database().ref('arcana').child('-KTSwVKi_VohxllkEIiZ');
     arcanaRef.on('value', snapshot => {
+
       let arcana = snapshot.val();
       this.setState({
         

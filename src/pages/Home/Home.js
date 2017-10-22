@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import logo from '../../logo.png';
-import styles from './Home.css';
 import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
-import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
-import ArcanaGridCell from '../../components/ArcanaGridCell/ArcanaGridCell'
+import ArcanaList from '../../components/ArcanaList/ArcanaList'
+
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import FadeIn from 'react-fade-in'
@@ -15,6 +14,8 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Dashboard from 'material-ui/svg-icons/action/dashboard';
 import List from 'material-ui/svg-icons/action/list'
+
+import { getViewType, setViewType } from '../../helpers/ArcanaViewType'
 
 var _ = require('lodash');
 
@@ -83,35 +84,41 @@ class Home extends Component {
       user: null,
     };
 
-    this.getViewType = this.getViewType.bind(this);
     this.observeArcana = this.observeArcana.bind(this);
     this.fetchArcana = this.fetchArcana.bind(this)
     this.showArcana = this.showArcana.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.mergeArcanaArrayWith = _.debounce(this.mergeArcanaArrayWith.bind(this), 100)
-    
+    this.setViewType = this.setViewType.bind(this)
   }
 
   componentWillMount() {
-    
+
     fetchedArcanaCount = getCookie('fetchedArcanaCount')
-
     
-  }
-
-  componentDidMount() {
-
     if (placeArray.length > 0) {
       this.setState({
         arcanaArray: placeArray,
       })
     }
     else {
-      // this.observeArcana()      
+      this.observeArcana()      
     }
+  }
+
+  componentDidMount() {
+
+    const offset = localStorage.getItem('scroll')
+    window.scrollTo(0, offset)
+
     window.addEventListener("scroll", this.handleScroll);
     
-    this.getViewType()
+    let viewType = getViewType()
+    if (viewType !== undefined) {
+      this.setState({
+        viewType: viewType,
+      })
+    }
   }
 
 
@@ -135,28 +142,6 @@ class Home extends Component {
     // console.log(percent);
     // console.log(this.refs.homeRoot.scrollTop);
     
-  }
-
-  getViewType() {
-    let viewType = localStorage.getItem('viewType')
-
-    if (viewType !== undefined) {
-      // this.setState({
-      //   viewType: viewType,
-      // })
-    }
-  }
-
-  setViewType(event, child) {
-
-    let viewType = child.props.value
-
-    if (viewType !== undefined) {
-      localStorage.setItem('viewType', child.props.value)      
-      this.setState({
-        viewType: viewType,
-      })
-    }
   }
 
   observeArcana() {
@@ -209,10 +194,22 @@ class Home extends Component {
     // pages = arcanaArray.length;
   }
 
+  setViewType(event, child) {
+    
+    setViewType(event, child)
+    
+    let viewType = child.props.value
+    if (viewType !== undefined) {
+      this.setState({
+        viewType: viewType
+      })
+    }
+  }
+
   mergeArcanaArrayWith(fetchedArcanaArray) {
     console.log('merging arrays')
-    // placeArray = []
-    // placeArray = this.state.arcanaArray.concat(fetchedArcanaArray)
+    placeArray = []
+    placeArray = this.state.arcanaArray.concat(fetchedArcanaArray)
     placeArray.splice(0, placeArray.length, ...this.state.arcanaArray.concat(fetchedArcanaArray))
     console.log(`placearray length is ${placeArray.length}`)
     this.setState({
@@ -227,10 +224,15 @@ class Home extends Component {
     })
   }
 
-  showArcana(arcanaID) {
+  showArcana(event, arcanaID) {
+
+    const offset = window.pageYOffset
+    console.log(offset)
+    localStorage.setItem('scroll', offset)
+
     this.props.history.push({
       pathname: '../Arcana',
-      search: '?arcana=' + arcanaID
+      search: '?arcana=' + arcanaID,
     });
   }
 
@@ -250,79 +252,26 @@ class Home extends Component {
     return (
       <MuiThemeProvider>
         <div>
-        <IconMenu
-        style={{float:'right'}}
-          iconButtonElement={<IconButton>
-            <Dashboard color={'d3d3d3'}/>
-          </IconButton>}
-          onItemTouchTap={this.setViewType.bind(this)}
-          anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-          targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        >
-          <MenuItem primaryText="카드 뷰" value="grid"/>
-          <MenuItem primaryText="리스트 뷰" value="list"/>
-        </IconMenu>
-      <br style={{clear:'both'}}/>
+          <IconMenu
+          style={{float:'right'}}
+            iconButtonElement={<IconButton>
+              <Dashboard color={'d3d3d3'}/>
+            </IconButton>}
+            onItemTouchTap={this.setViewType}
+            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          >
+            <MenuItem primaryText="카드 뷰" value="grid"/>
+            <MenuItem primaryText="리스트 뷰" value="list"/>
+          </IconMenu>
+          <br style={{clear:'both'}}/>
+        
+          <ArcanaList
+            arcanaArray={this.state.arcanaArray}
+            viewType={this.state.viewType}
+            onClick={this.showArcana}
+          />
 
-
-      {this.state.viewType === 'grid' ? (
-
-          <div className={styles.grid} ref="homeRoot">
-
-          {arcanaArray.map( arcana => 
-
-              <ArcanaGridCell
-                onClick={this.showArcana.bind(null,arcana.uid)}
-                key={arcana.uid}
-
-                nameKR={arcana.nameKR}
-                nicknameKR={arcana.nicknameKR}
-                nameJP={arcana.nameJP}
-                nicknameJP={arcana.nicknameJP}
-
-                rarity={arcana.rarity}
-                class={arcana.class}
-                weapon={arcana.weapon}
-                affiliation={arcana.affiliation}
-                numberOfViews={arcana.numberOfViews}
-
-                imageURL={arcana.imageURL}
-                iconURL={arcana.iconURL}
-              />          
-          
-          )}
-          {/* <div style={{display:'none'}}>
-            {this.state.arcanaArray.map((arcana, i) =>
-              <img 
-                src={arcana.imageURL}
-                onLoad={this.onLoad.bind(this, arcana)} 
-                key={i} />
-            )}
-          </div> */}
-        </div>
-      ) : (
-        <div ref="homeRoot">
-        {arcanaArray.map( arcana => 
-            <ArcanaCell
-            onClick={this.showArcana.bind(null,arcana.uid)}
-            key={arcana.uid}
-
-            nameKR={arcana.nameKR}
-            nicknameKR={arcana.nicknameKR}
-            nameJP={arcana.nameJP}
-            nicknameJP={arcana.nicknameJP}
-
-            rarity={arcana.rarity}
-            class={arcana.class}
-            weapon={arcana.weapon}
-            affiliation={arcana.affiliation}
-            numberOfViews={arcana.numberOfViews}
-
-            iconURL={arcana.iconURL}
-          />   
-          )}
-        </div>
-      )}
         </div>
       </MuiThemeProvider>
 
