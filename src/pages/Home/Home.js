@@ -219,13 +219,6 @@ class Home extends Component {
     })
   }
 
-  onLoad(arcana) {
-    console.log(arcana.uid)
-    this.setState(({ loadedImages }) => {
-      return { loadedImages: loadedImages.concat(arcana) }
-    })
-  }
-
   showArcana(arcanaID) {
 
     this.props.history.push({
