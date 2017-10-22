@@ -32,7 +32,9 @@
 }
 
 .gridContainer {
-  width: 100%;
+  /* width: 100%; */
+  width: 200px;
+  height: 300px;
   border: 1px hidden;
   border-radius: 3px;
   box-shadow: 1px 1px 1px 1px #888888;
@@ -55,7 +57,7 @@
   transition: all 0.2s;
   width: 100%;
   height: auto;
-  display:block;
+  display: block;
 }
 
 @supports(object-fit: cover){

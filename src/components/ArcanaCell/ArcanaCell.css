@@ -1,10 +1,11 @@
-.flex {
-  display: flex;
-}
-
 .container {
   height: 90px;
   display: flex;
+  align-items: center;  
+}
+
+.container:hover {
+  background-color: #F7F7F7;
 }
 
 .arcanaIcon {
@@ -15,38 +16,30 @@
 }
 
 .nameKRContainer, .nameJPContainer {
-  /* text-align: center;
-  vertical-align: middle; */
   display: flex;
-  margin-bottom: 5px;
+  align-items: center;
 }
 
 .nameKRLabel {
   font-size: 1rem;
   font-weight: bold;
-  margin: 10px 5px 0px 0px; 
-  /* display: inline-block; */
-  /* white-space: nowrap;
+  margin: 0px 5px 0px 0px;
+  white-space: nowrap;
   overflow: hidden;
-  vertical-align: top; */
 }
 
 .nicknameKRLabel {
   font-size: 0.8rem;
-  margin: 10px 10px 0px 5px;
-  /* display: inline-block; */
-  /* white-space: nowrap;
+  margin: 0px 10px 0px 5px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: middle; */
+  vertical-align: middle; 
 }
 
 .nameJPLabel, .nicknameJPLabel {
   font-size: 0.8rem;
   margin: 0px 10px 0px 0px;
-  /* white-space: nowrap;
-  overflow: hidden;
-  vertical-align: middle; */
   color: silver;
 }
 

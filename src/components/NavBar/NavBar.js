@@ -148,6 +148,11 @@ export default class NavBar extends React.Component {
             onClick={this.handleClose}
           />
           <MenuItem
+            primaryText="어빌리티"
+            containerElement={<Link to='/ability'/>}
+            onClick={this.handleClose}
+          />
+          <MenuItem
             primaryText="아르카나 추가"
             containerElement={<Link to='/arcanaComposer'/>}
             onClick={this.handleClose}

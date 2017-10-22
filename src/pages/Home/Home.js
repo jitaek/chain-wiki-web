@@ -13,10 +13,30 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import Dashboard from 'material-ui/svg-icons/action/dashboard';
 import List from 'material-ui/svg-icons/action/list'
 
+var _ = require('lodash');
+
 let arcanaRef = ref.child('arcana')
+var lastArcanaIDKey
+var fetchedArcanaCount
+
+const setCookie = (name, value, days = 7, path = '/') => {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString()
+  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path
+}
+
+const getCookie = (name) => {
+  return document.cookie.split('; ').reduce((r, v) => {
+    const parts = v.split('=')
+    return parts[0] === name ? decodeURIComponent(parts[1]) : r
+  }, '')
+}
+
+const deleteCookie = (name, path) => {
+  setCookie(name, '', -1, path)
+}
 
 const arcanaArray = [
   {
@@ -49,6 +69,8 @@ const arcanaArray = [
   },
 ]
 
+var placeArray = []
+
 class Home extends Component {
 
   constructor(props) {
@@ -63,28 +85,44 @@ class Home extends Component {
 
     this.getViewType = this.getViewType.bind(this);
     this.observeArcana = this.observeArcana.bind(this);
+    this.fetchArcana = this.fetchArcana.bind(this)
     this.showArcana = this.showArcana.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+    this.mergeArcanaArrayWith = _.debounce(this.mergeArcanaArrayWith.bind(this), 100)
+    
   }
 
   componentWillMount() {
-  
-    // this.observeArcana()
+    
+    fetchedArcanaCount = getCookie('fetchedArcanaCount')
+
+    
   }
 
   componentDidMount() {
 
+    if (placeArray.length > 0) {
+      this.setState({
+        arcanaArray: placeArray,
+      })
+    }
+    else {
+      // this.observeArcana()      
+    }
+    window.addEventListener("scroll", this.handleScroll);
+    
     this.getViewType()
-
-    const offset = localStorage.getItem('scrollHome');
-    window.pageYOffset = offset;
   }
 
 
   componentWillUnmount() {
+
+    console.log('unmounting')
+    let fetchedArcanaCount = this.state.arcanaArray.length
+    document.cookie = (`fetchedArcanaCount=${fetchedArcanaCount}`)
+    window.removeEventListener("scroll", this.handleScroll);    
     arcanaRef.off();
 
-    console.log(window.pageYOffset);
-    localStorage.setItem('scrollHome', window.pageYOffset);
     // console.log(this.refs['homeRoot'].offsetTop);
     // var el = this.refs['homeRoot'];
     // var minPixel = el.offsetTop;
@@ -103,9 +141,9 @@ class Home extends Component {
     let viewType = localStorage.getItem('viewType')
 
     if (viewType !== undefined) {
-      this.setState({
-        viewType: viewType,
-      })
+      // this.setState({
+      //   viewType: viewType,
+      // })
     }
   }
 
@@ -122,10 +160,63 @@ class Home extends Component {
   }
 
   observeArcana() {
+
+    var initialKey = true;
+    // var count = Number(Math.max(fetchedArcanaCount, 10))
+    // console.log(`fetching ${count} arcana`)
+
+    var fetchedArcanaArray = []
     arcanaRef.orderByKey().limitToLast(10).on('child_added', snapshot => {
+
+      let arcanaID = snapshot.key
       let arcana = snapshot.val();
-      console.log(arcana)
-      this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
+
+      if (initialKey) {
+        lastArcanaIDKey = arcanaID
+        initialKey = false
+      }
+      
+      fetchedArcanaArray.unshift(arcana)
+      this.mergeArcanaArrayWith(fetchedArcanaArray)
+      // this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
+    })
+  }
+
+  fetchArcana() {
+
+    console.log('fetching arcana')
+
+    var count = 0
+    var fetchedArcanaArray = []
+
+    arcanaRef.orderByKey().endAt(lastArcanaIDKey).limitToLast(11).on('child_added', snapshot => {
+
+      let arcanaID = snapshot.key
+      let arcana = snapshot.val()
+
+      if (count == 0) {
+        lastArcanaIDKey = arcanaID
+      }
+      if (count < 10) {
+        fetchedArcanaArray.unshift(arcana)
+        this.mergeArcanaArrayWith(fetchedArcanaArray)
+
+      }
+      count++;
+
+    });   
+
+    // pages = arcanaArray.length;
+  }
+
+  mergeArcanaArrayWith(fetchedArcanaArray) {
+    console.log('merging arrays')
+    // placeArray = []
+    // placeArray = this.state.arcanaArray.concat(fetchedArcanaArray)
+    placeArray.splice(0, placeArray.length, ...this.state.arcanaArray.concat(fetchedArcanaArray))
+    console.log(`placearray length is ${placeArray.length}`)
+    this.setState({
+      arcanaArray: placeArray
     })
   }
 
@@ -143,6 +234,17 @@ class Home extends Component {
     });
   }
 
+  handleScroll() {
+    var d = document.documentElement;
+    var offset = d.scrollTop + window.innerHeight;
+    var height = d.offsetHeight;
+
+    if (offset === height) {
+      console.log('At the bottom');
+      this.fetchArcana()
+    }
+  }
+
   render() {
 
     return (
@@ -151,7 +253,7 @@ class Home extends Component {
         <IconMenu
         style={{float:'right'}}
           iconButtonElement={<IconButton>
-            <MoreVertIcon />
+            <Dashboard color={'d3d3d3'}/>
           </IconButton>}
           onItemTouchTap={this.setViewType.bind(this)}
           anchorOrigin={{horizontal: 'right', vertical: 'top'}}
@@ -161,13 +263,11 @@ class Home extends Component {
           <MenuItem primaryText="리스트 뷰" value="list"/>
         </IconMenu>
       <br style={{clear:'both'}}/>
+
+
       {this.state.viewType === 'grid' ? (
-        <div className={styles.grid} ref="homeRoot">
-        
-          {/* <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">체인크로니클 위키</h1>
-          </header> */}
+
+          <div className={styles.grid} ref="homeRoot">
 
           {arcanaArray.map( arcana => 
 
@@ -202,7 +302,7 @@ class Home extends Component {
         </div>
       ) : (
         <div ref="homeRoot">
-          {arcanaArray.map( arcana => 
+        {arcanaArray.map( arcana => 
             <ArcanaCell
             onClick={this.showArcana.bind(null,arcana.uid)}
             key={arcana.uid}
@@ -218,7 +318,6 @@ class Home extends Component {
             affiliation={arcana.affiliation}
             numberOfViews={arcana.numberOfViews}
 
-            imageURL={arcana.imageURL}
             iconURL={arcana.iconURL}
           />   
           )}

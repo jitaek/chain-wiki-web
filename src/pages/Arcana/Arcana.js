@@ -9,6 +9,7 @@ import {
   Redirect
 } from 'react-router-dom'
 import sampleMain from '../../sampleMainImage.jpg';
+import { getParameterByName } from '../../helpers/QueryParameter'
 
 var arcanaID
 
@@ -86,15 +87,10 @@ class Arcana extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.showArcana = this.getParameterByName.bind(this);
     
     const query = this.props.location.search;
-    arcanaID = this.getParameterByName('arcana');
+    arcanaID = getParameterByName('arcana');
 
-    // this.state = {
-
-    // }
     this.state = { 
       uid: arcanaID
     };
@@ -102,7 +98,7 @@ class Arcana extends React.Component {
     this.editArcana = this.editArcana.bind(this);
   }
 
-  componentWillMount(){
+  componentWillMount() {
 
     let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
     // let arcanaRef = firebase.database().ref('arcana').child('-KTSwVKi_VohxllkEIiZ');
@@ -266,18 +262,6 @@ class Arcana extends React.Component {
 
       </div>
     );
-  }
-
-  getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 
 }

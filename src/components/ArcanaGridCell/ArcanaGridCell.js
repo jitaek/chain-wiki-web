@@ -30,7 +30,7 @@ class ArcanaGridCell extends React.Component {
     render() {
         return (
             <div className={styles.gridContainer} onClick={this.props.onClick}>
-            <img className={styles.arcanaMainImage} src={SampleMain} alt={this.state.nameKR}/>
+            <img className={styles.arcanaMainImage} src={this.state.imageURL} alt={this.state.nameKR}/>
                 {/* <div className={styles.container}>
                     <img className={styles.arcanaIcon} src={logo} alt='not loaded'/>
                     <div>

@@ -26,7 +26,7 @@ class ArcanaCell extends React.Component {
     render() {
         return (
             <div className={styles.container} onClick={this.props.onClick}>
-                <img className={styles.arcanaIcon} src={logo} alt='not loaded'/>
+                <img className={styles.arcanaIcon} src={this.state.iconURL} alt='not loaded'/>
                 <div>
                     <div className={styles.nameKRContainer}>
                         <div className={styles.nameKRLabel}>{this.state.nameKR}</div>
