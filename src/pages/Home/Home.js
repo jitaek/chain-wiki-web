@@ -95,7 +95,7 @@ class Home extends Component {
   componentWillMount() {
 
     fetchedArcanaCount = getCookie('fetchedArcanaCount')
-    
+
     if (placeArray.length > 0) {
       this.setState({
         arcanaArray: placeArray,
@@ -108,7 +108,7 @@ class Home extends Component {
 
   componentDidMount() {
 
-    const offset = localStorage.getItem('scroll')
+    const offset = sessionStorage.getItem('scroll')
     window.scrollTo(0, offset)
 
     window.addEventListener("scroll", this.handleScroll);
@@ -147,11 +147,11 @@ class Home extends Component {
   observeArcana() {
 
     var initialKey = true;
-    // var count = Number(Math.max(fetchedArcanaCount, 10))
-    // console.log(`fetching ${count} arcana`)
+    var count = Number(Math.max(fetchedArcanaCount, 10))
+    console.log(`fetching ${count} arcana`)
 
     var fetchedArcanaArray = []
-    arcanaRef.orderByKey().limitToLast(10).on('child_added', snapshot => {
+    arcanaRef.orderByKey().limitToLast(count).on('child_added', snapshot => {
 
       let arcanaID = snapshot.key
       let arcana = snapshot.val();
@@ -210,10 +210,12 @@ class Home extends Component {
     console.log('merging arrays')
     placeArray = []
     placeArray = this.state.arcanaArray.concat(fetchedArcanaArray)
-    placeArray.splice(0, placeArray.length, ...this.state.arcanaArray.concat(fetchedArcanaArray))
     console.log(`placearray length is ${placeArray.length}`)
     this.setState({
       arcanaArray: placeArray
+    }, () => {
+      const offset = sessionStorage.getItem('scroll')
+      window.scrollTo(0, offset)
     })
   }
 
@@ -224,11 +226,7 @@ class Home extends Component {
     })
   }
 
-  showArcana(event, arcanaID) {
-
-    const offset = window.pageYOffset
-    console.log(offset)
-    localStorage.setItem('scroll', offset)
+  showArcana(arcanaID) {
 
     this.props.history.push({
       pathname: '../Arcana',
@@ -241,6 +239,8 @@ class Home extends Component {
     var offset = d.scrollTop + window.innerHeight;
     var height = d.offsetHeight;
 
+    const offsetY = window.pageYOffset    
+    sessionStorage.setItem('scroll', offsetY)
     if (offset === height) {
       console.log('At the bottom');
       this.fetchArcana()

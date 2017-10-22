@@ -18,7 +18,7 @@ export default class ArcanaList extends React.Component {
         
                         <ArcanaGridCell
 
-                        onClick={() => this.props.onClick(this, arcana.uid)}
+                        onClick={() => this.props.onClick(arcana.uid)}
                         key={arcana.uid}
         
                         nameKR={arcana.nameKR}
