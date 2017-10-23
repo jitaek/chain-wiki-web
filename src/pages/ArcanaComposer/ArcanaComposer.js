@@ -4,7 +4,6 @@ import styles from './ArcanaComposer.css';
 import firebase from 'firebase';
 import { ref } from '../../helpers/constants'
 import { HashRouter, Link, withRouter } from "react-router-dom";
-import Dropzone from "react-dropzone"
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import TextField from 'material-ui/TextField';
@@ -44,7 +43,6 @@ class ArcanaComposer extends React.Component {
       };
     }
 
-    this.onDrop = this.onDrop.bind(this);        
     this.validateInput = this.validateInput.bind(this);    
     this.uploadArcana = this.uploadArcana.bind(this);
     this.handleText = this.handleText.bind(this);
@@ -79,15 +77,6 @@ class ArcanaComposer extends React.Component {
     });
 
   }
-
-
-onDrop(acceptedFiles, rejectedFiles) {
-  // do stuff
-  console.log('something dropped')
-  console.log(acceptedFiles)
-  console.log(rejectedFiles)
-
-}
 
   handleText(event, text) {
     console.log(event.target.name)
@@ -273,9 +262,6 @@ onDrop(acceptedFiles, rejectedFiles) {
 
     return (
       <div className={styles.fullWidthContainer}>
-      {<Dropzone
-        onDrop={this.onDrop}>drop here</Dropzone>}
-
       <MuiThemeProvider>
         
       <ValidatorForm

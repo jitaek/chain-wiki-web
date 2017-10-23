@@ -138,21 +138,24 @@ class NavBar extends React.Component {
           style={NavBarStyle}
           iconElementLeft={
             <IconButton
-              tooltip="홈"
               onClick={this.handleToggle}
             >
               <Menu color={'#68a283'}/>
             </IconButton>
           }
-
-          title={
-            <Link to="/" 
-              onClick={this.handleToggle}
-              style={{fontSize:'13px',textDecoration: 'none'}}
-            ><span><img src={logo} style={{width:'40px', paddingTop:'12px'}}/></span></Link>
-          }
+          // title={
+          //   <Link to="/" 
+          //     onClick={this.handleToggle}
+          //     style={{fontSize:'13px',textDecoration: 'none'}}
+          //   ><span><img src={logo} style={{width:'40px', paddingTop:'12px'}}/></span></Link>
+          // }
 
           ></AppBar>
+          <MenuItem
+            primaryText="아르카나"
+            containerElement={<Link to='/'/>}
+            onClick={this.handleClose}
+          />
           <MenuItem
             primaryText="필터"
             containerElement={<Link to='/filter'/>}
