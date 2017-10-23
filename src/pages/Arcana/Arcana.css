@@ -31,6 +31,14 @@
   }
 }
 
+refreshContainer {
+  position: relative;
+}
+
+refresh {
+  margin-left: 50%;
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;

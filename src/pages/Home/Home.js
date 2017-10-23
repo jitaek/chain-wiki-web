@@ -88,17 +88,21 @@ class Home extends Component {
     this.fetchArcana = this.fetchArcana.bind(this)
     this.showArcana = this.showArcana.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
-    this.mergeArcanaArrayWith = _.debounce(this.mergeArcanaArrayWith.bind(this), 100)
+    this.mergeArcanaArrayWith = _.debounce(this.mergeArcanaArrayWith.bind(this), 200)
     this.setViewType = this.setViewType.bind(this)
   }
 
   componentWillMount() {
 
-    fetchedArcanaCount = getCookie('fetchedArcanaCount')
+    fetchedArcanaCount = sessionStorage.getItem('fetchedArcanaCount')
 
     if (placeArray.length > 0) {
       this.setState({
         arcanaArray: placeArray,
+      }, () => {
+        const offset = sessionStorage.getItem('scroll')
+        window.scrollTo(0, offset)
+        console.log(`didMount. offset is ${offset}`)
       })
     }
     else {
@@ -108,8 +112,11 @@ class Home extends Component {
 
   componentDidMount() {
 
-    const offset = sessionStorage.getItem('scroll')
-    window.scrollTo(0, offset)
+    // if (placeArray.length > 0) {
+      // const offset = sessionStorage.getItem('scroll')
+      // window.scrollTo(0, offset)
+      // console.log(`didMount. offset is ${offset}`)
+    // }
 
     window.addEventListener("scroll", this.handleScroll);
     
@@ -126,21 +133,9 @@ class Home extends Component {
 
     console.log('unmounting')
     let fetchedArcanaCount = this.state.arcanaArray.length
-    document.cookie = (`fetchedArcanaCount=${fetchedArcanaCount}`)
+    sessionStorage.setItem('fetchedArcanaCount', fetchedArcanaCount)
     window.removeEventListener("scroll", this.handleScroll);    
     arcanaRef.off();
-
-    // console.log(this.refs['homeRoot'].offsetTop);
-    // var el = this.refs['homeRoot'];
-    // var minPixel = el.offsetTop;
-    // var maxPixel = minPixel + el.scrollHeight;
-    // var value = el.scrollTop;
-    // console.log(value);
-    // // respect bounds of element
-    // var percent = (value - minPixel)/(maxPixel - minPixel);
-    // percent = Math.min(1,Math.max(percent, 0))*100;
-    // console.log(percent);
-    // console.log(this.refs.homeRoot.scrollTop);
     
   }
 
@@ -170,7 +165,6 @@ class Home extends Component {
   fetchArcana() {
 
     console.log('fetching arcana')
-
     var count = 0
     var fetchedArcanaArray = []
 
@@ -207,15 +201,16 @@ class Home extends Component {
   }
 
   mergeArcanaArrayWith(fetchedArcanaArray) {
-    console.log('merging arrays')
+
     placeArray = []
     placeArray = this.state.arcanaArray.concat(fetchedArcanaArray)
-    console.log(`placearray length is ${placeArray.length}`)
+
     this.setState({
       arcanaArray: placeArray
     }, () => {
-      const offset = sessionStorage.getItem('scroll')
-      window.scrollTo(0, offset)
+      // const offset = sessionStorage.getItem('scroll')
+      // console.log(`offset after merge is ${offset}`)
+      // window.scrollTo(0, offset)
     })
   }
 
@@ -235,7 +230,6 @@ class Home extends Component {
     const offsetY = window.pageYOffset    
     sessionStorage.setItem('scroll', offsetY)
     if (offset === height) {
-      console.log('At the bottom');
       this.fetchArcana()
     }
   }

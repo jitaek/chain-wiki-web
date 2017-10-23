@@ -9,6 +9,8 @@ class ArcanaGridCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+
+            loaded: false,
             nameKR: props.nameKR,
             nicknameKR: props.nicknameKR,
 
@@ -25,12 +27,25 @@ class ArcanaGridCell extends React.Component {
             iconURL: props.iconURL
 
         };
-        console.log(props.imageURL)
       }
     render() {
+
+        var classNames
+        if (!this.state.loaded) {
+            classNames = styles.gridContainerPlaceholder
+        }
+        else {
+            classNames = styles.gridContainer
+        }
+        
         return (
-            <div className={styles.gridContainer} onClick={this.props.onClick}>
-            <img className={styles.arcanaMainImage} src={this.state.imageURL} alt={this.state.nameKR}/>
+            <div className={classNames}
+                onClick={this.props.onClick}>
+
+                <img className={styles.arcanaMainImage}
+                    src={SampleMain}
+                    onLoad={() => this.setState({loaded: true})}
+                    alt={this.state.nameKR}/>
                 {/* <div className={styles.container}>
                     <img className={styles.arcanaIcon} src={logo} alt='not loaded'/>
                     <div>

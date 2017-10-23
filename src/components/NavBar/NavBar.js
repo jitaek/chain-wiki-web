@@ -22,7 +22,7 @@ const NavBarStyle = {
 
 const nameRef = ref.child('name')
 
-export default class NavBar extends React.Component {
+class NavBar extends React.Component {
 
   constructor(props) {
     super(props);
@@ -58,6 +58,8 @@ export default class NavBar extends React.Component {
 
       })
 
+      sessionStorage.setItem('nameArray', JSON.stringify(array))
+      console.log(array.length)
       this.setState({
         nameArray: array,
       })
@@ -66,12 +68,21 @@ export default class NavBar extends React.Component {
   }
 
   showArcana(string, index) {
-    
-    if (index > 0) {
+
+    if (index > 0 && index < this.state.nameArray.length) {
       let arcanaID = this.state.nameArray[index].value
       history.push({
-        pathname: '../Arcana',
+        pathname: '../arcana',
         search: '?arcana=' + arcanaID
+      });
+    }
+    else if (index === -1) {
+      console.log(`user pressed enter and searched for ${string}`)
+      let searchText = string
+      this.props.history.push({
+        pathname: '../search',
+        search: '?search=' + searchText,
+        state: { nameArray: this.state.nameArray }
       });
     }
     
@@ -169,3 +180,5 @@ export default class NavBar extends React.Component {
     );
   }
 }
+
+export default withRouter(NavBar)

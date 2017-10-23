@@ -1,7 +1,14 @@
+.filterContainer {
+  /* display: none; */
+  width: 100%;
+}
+
 @media (min-width: 500px) {
   .filterContainer {
+    display: block;
     float: right;
     width: 400px;
+    background-color: white;
   }
   .arcanaGrid {
     float: left;
@@ -20,30 +27,6 @@
 
   grid-column-gap: 10px;
   grid-row-gap: 10px ;
-}
-
-.arcanaGrid {
-  display: grid;
-  justify-content: center;
-  
-  margin: 10px;
-  
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(auto-fill, 1fr);
-
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
-}
-
-@media (min-width: 550px) {
-  .arcanaGrid {    
-    
-    grid-template-columns: repeat(auto-fill, 200px);
-    grid-template-rows: 300px;
-
-    grid-column-gap: 10px;
-    grid-row-gap: 20px;
-  }
 }
 
 .toolbar {

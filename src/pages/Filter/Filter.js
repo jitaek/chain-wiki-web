@@ -3,8 +3,8 @@ import logo from '../../logo.png';
 import styles from './Filter.css';
 import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
-import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
-import ArcanaGridCell from '../../components/ArcanaGridCell/ArcanaGridCell'
+import ArcanaList from '../../components/ArcanaList/ArcanaList'
+
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import LazyLoad from 'react-lazyload';
 
@@ -85,12 +85,10 @@ class Filter extends Component {
 
     this.observeArcana()
 
-
   }
 
 
   componentWillUnmount() {
-
     arcanaRef.off()
   }
 
@@ -306,56 +304,35 @@ class Filter extends Component {
     return (
       <MuiThemeProvider>
         <div>
+            <IconButton
+              style={{float:'right'}}
+              onClick={this.toggleFilterView}
+            >
+              <FilterIcon color={'d3d3d3'}/>
+            </IconButton>
             <IconMenu
-            style={{float:'right'}}
+              style={{float:'right'}}
               iconButtonElement={<IconButton>
                 <Dashboard color={'d3d3d3'}/>
               </IconButton>}
               onItemTouchTap={this.setViewType}
               anchorOrigin={{horizontal: 'right', vertical: 'top'}}
               targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            >
-              <MenuItem primaryText="카드 뷰" value="grid"/>
-              <MenuItem primaryText="리스트 뷰" value="list"/>
+              >
+                <MenuItem primaryText="카드 뷰" value="grid"/>
+                <MenuItem primaryText="리스트 뷰" value="list"/>
             </IconMenu>
+
+
         <br style={{clear:'both'}}/>
         <div style={{display:'flex'}}>
-        <div className={styles.arcanaGrid} ref="homeRoot">
-
-          {this.state.arcanaArray.map( arcana => 
-
-            <LazyLoad height={200}>
-              <ArcanaGridCell
-                onClick={this.showArcana.bind(null,arcana.uid)}
-                key={arcana.uid}
-
-                nameKR={arcana.nameKR}
-                nicknameKR={arcana.nicknameKR}
-                nameJP={arcana.nameJP}
-                nicknameJP={arcana.nicknameJP}
-
-                rarity={arcana.rarity}
-                class={arcana.class}
-                weapon={arcana.weapon}
-                affiliation={arcana.affiliation}
-                numberOfViews={arcana.numberOfViews}
-
-                imageURL={arcana.imageURL}
-                iconURL={arcana.iconURL}
-              />       
-              </LazyLoad>   
-          
-          )}
-          {/* <div style={{display:'none'}}>
-            {this.state.arcanaArray.map((arcana, i) =>
-              <img 
-                src={arcana.imageURL}
-                onLoad={this.onLoad.bind(this, arcana)} 
-                key={i} />
-            )}
-          </div> */}
+        <div className={styles.arcanaGrid}>
+        <ArcanaList
+          arcanaArray={this.state.arcanaArray}
+          viewType={this.state.viewType}
+          onClick={this.showArcana}
+        />
         </div>
-
         {this.state.showFilter &&
         <div className={styles.filterContainer}>
 

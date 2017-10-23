@@ -18,6 +18,7 @@ import NavBar from './components/NavBar/NavBar'
 
 import Home from "./pages/Home/Home"
 import Arcana from "./pages/Arcana/Arcana"
+import Search from "./pages/Search/Search"
 import Filter from "./pages/Filter/Filter"
 import Ability from './pages/Ability/Ability'
 import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
@@ -75,12 +76,13 @@ class App extends Component {
         <MuiThemeProvider>
           <Router>
               <div>
-                <NavBar/>
+                <NavBar location={this.props.location}/>
                 <Switch>
                 <Route exact path='/' render={(props) => (
                   <Home {...props} user={this.state.user} />
                 )}/>
                 <Route path="/arcana" exact component={Arcana} />
+                <Route path="/search" exact component={Search} />
                 <Route path="/filter" exact component={Filter} />
                 <Route path="/ability" exact component={Ability} />
                 <Route path="/login" exact component={Login} />

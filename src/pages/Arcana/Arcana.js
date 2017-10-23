@@ -11,6 +11,9 @@ import {
 import sampleMain from '../../sampleMainImage.jpg';
 import { getParameterByName } from '../../helpers/QueryParameter'
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
+
 var arcanaID
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
@@ -83,6 +86,7 @@ function Ability(props) {
   } 
 }
 
+
 class Arcana extends React.Component {
 
   constructor(props) {
@@ -96,22 +100,53 @@ class Arcana extends React.Component {
     };
     this.openJPWiki = this.openJPWiki.bind(this);
     this.editArcana = this.editArcana.bind(this);
+    this.observeArcana = this.observeArcana.bind(this);
+    this.createJPLink = this.createJPLink.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    
+    const nextArcanaID = getParameterByName('arcana')
+
+    if (nextArcanaID !== undefined && this.state.uid !== nextArcanaID) {
+      this.setState({
+        uid: nextArcanaID
+      }, function() {
+        this.observeArcana()        
+      })
+    }
   }
 
   componentWillMount() {
 
-    let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
-    // let arcanaRef = firebase.database().ref('arcana').child('-KTSwVKi_VohxllkEIiZ');
+  }
+
+  componentDidMount() {
+    this.observeArcana()    
+  }
+
+  componentWillUnmount() {
+    let arcanaRef = firebase.database().ref('arcana').child(this.state.uid);
+    arcanaRef.off();
+  }
+  
+  observeArcana() {
+
+    let arcanaRef = firebase.database().ref('arcana').child(this.state.uid);
+
     arcanaRef.on('value', snapshot => {
 
       let arcana = snapshot.val();
+
+      this.createJPLink(arcana.nicknameJP, arcana.nameJP)
+
       this.setState({
         
         nameKR: arcana.nameKR,
-        nicknameKR: arcana.nicknameKR,
+        nicknameKR: arcana.nicknameKR || "",
 
         nameJP: arcana.nameJP,
-        nicknameJP: arcana.nicknameJP,
+        nicknameJP: arcana.nicknameJP || "",
 
         rarity: arcana.rarity,
         class: arcana.class,
@@ -152,21 +187,22 @@ class Arcana extends React.Component {
         imageURL: arcana.imageURL || null,
 
       });
-      // this.setState({ arcanaArray: [arcana].concat(this.state.arcanaArray) });
     })
-
   }
 
-  componentDidMount() {
-    window.scrollTo(0,0)
-  }
-
-  componentWillUnmount() {
-    let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
-    arcanaRef.off();
-
-  }
+  createJPLink(nicknameJP, nameJP) {
+    var linkJP = 'https://チェインクロニクル.gamerch.com/';
+    if (nicknameJP) {
+      linkJP += nicknameJP
+    }
+    linkJP += nameJP;
   
+    const obj = {}
+    obj['linkJP'] = linkJP
+  
+    this.setState(obj)
+  }
+
   openJPWiki() {
     
     var linkJP = 'https://チェインクロニクル.gamerch.com/';
@@ -189,82 +225,117 @@ class Arcana extends React.Component {
 
   render() {
 
-    return (
-      <div ref="homeRoot" style={{marginTop:'20px'}}>
-        <div className={styles.placeholderMain}>
-          {/* <img className={styles.arcanaImageMain} src={this.state.imageURL}/> */}
-          <img className={styles.arcanaMainImage} src={sampleMain}/>
-        </div> 
-        <div className={styles.container}>
-          {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
-          <img className={styles.arcanaImageIcon} src={logo}/>
-          <div className={styles.nameContainer}>
-            <div className={styles.nameKRContainer}>
-              <div className={styles.nameKRLabel}>{this.state.nicknameKR + " " + this.state.nameKR}</div>
-            </div>
-            <div className={styles.nameJPContainer}>
-            <div className={styles.nameJPLabel}>{this.state.nicknameJP + " " + this.state.nameJP}</div>
+    if (this.state.nameKR !== undefined) {
+      return (
+
+        <div ref="homeRoot" style={{marginTop:'20px'}}>
+          <div className={styles.placeholderMain}>
+            {/* <img className={styles.arcanaImageMain} src={this.state.imageURL}/> */}
+            <img className={styles.arcanaMainImage} src={sampleMain}/>
+          </div> 
+          <div className={styles.container}>
+            {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
+            <img className={styles.arcanaImageIcon} src={logo}/>
+            <div className={styles.nameContainer}>
+              <div className={styles.nameKRContainer}>
+                <div className={styles.nameKRLabel}>{this.state.nicknameKR + " " + this.state.nameKR}</div>
+              </div>
+              <div className={styles.nameJPContainer}>
+              <div className={styles.nameJPLabel}>{this.state.nicknameJP + " " + this.state.nameJP}</div>
+              </div>
             </div>
           </div>
+          <table className={styles.arcanaDetailTable}>
+            <tbody>
+              {/* <tr>
+                  <th className={styles.headerCell}>이름</th>
+                  <td className={styles.bodyCell}>{this.state.nicknameKR + " " + this.state.nameKR} </td>
+              </tr> */}
+              <tr>
+                  <th className={styles.headerCell}>레어</th>
+                  <td className={styles.bodyCell}>{this.state.rarity + " ★"}</td>
+              </tr>
+              <tr>
+                  <th className={styles.headerCell}>직업</th>
+                  <td className={styles.bodyCell}>{this.state.class}</td>
+              </tr>
+              <tr>
+                  <th className={styles.headerCell}>소속</th>
+                  <td className={styles.bodyCell}>{this.state.affiliation}</td>
+              </tr>
+              <tr>
+                  <th className={styles.headerCell}>코스트</th>
+                  <td className={styles.bodyCell}>{this.state.cost}</td>
+              </tr>
+              <tr>
+                  <th className={styles.headerCell}>무기</th>
+                  <td className={styles.bodyCell}>{this.state.weapon}</td>
+              </tr>
+              <tr>
+                  <th className={styles.headerCell}>출현 장소</th>
+                  <td className={styles.bodyCell}>{this.state.tavern}</td>
+              </tr>
+            </tbody>
+        </table>
+
+        <Skill skillNumber={1} skillName={this.state.skillName1} skillMana={this.state.skillMana1} skillDesc={this.state.skillDesc1} />
+        <Skill skillNumber={2} skillName={this.state.skillName2} skillMana={this.state.skillMana2} skillDesc={this.state.skillDesc2} />
+        <Skill skillNumber={3} skillName={this.state.skillName3} skillMana={this.state.skillMana3} skillDesc={this.state.skillDesc3} />
+        
+        <Ability abilityNumber={1} abilityName={this.state.abilityName1} abilityDesc={this.state.abilityDesc1}/>
+        <Ability abilityNumber={2} abilityName={this.state.abilityName2} abilityDesc={this.state.abilityDesc2}/>
+        <Ability abilityNumber={3} abilityName={this.state.abilityName3} abilityDesc={this.state.abilityDesc3}/>
+
+        <Ability abilityNumber={4} abilityName={this.state.partyAbility} abilityDesc={this.state.partyAbility}/>
+
+        <Skill isKizuna={true} skillName={this.state.kizunaName} skillMana={this.state.kizunaCost} skillDesc={this.state.kizunaDesc} />
+
+        <div className={styles.skillAbilityDescCell}>
+          <a href={this.state.linkJP}
+            target="_blank"
+            >일첸 위키 가기</a>
         </div>
-        <table className={styles.arcanaDetailTable}>
-          <tbody>
-            {/* <tr>
-                <th className={styles.headerCell}>이름</th>
-                <td className={styles.bodyCell}>{this.state.nicknameKR + " " + this.state.nameKR} </td>
-            </tr> */}
-            <tr>
-                <th className={styles.headerCell}>레어</th>
-                <td className={styles.bodyCell}>{this.state.rarity + " ★"}</td>
-            </tr>
-            <tr>
-                <th className={styles.headerCell}>직업</th>
-                <td className={styles.bodyCell}>{this.state.class}</td>
-            </tr>
-            <tr>
-                <th className={styles.headerCell}>소속</th>
-                <td className={styles.bodyCell}>{this.state.affiliation}</td>
-            </tr>
-            <tr>
-                <th className={styles.headerCell}>코스트</th>
-                <td className={styles.bodyCell}>{this.state.cost}</td>
-            </tr>
-            <tr>
-                <th className={styles.headerCell}>무기</th>
-                <td className={styles.bodyCell}>{this.state.weapon}</td>
-            </tr>
-            <tr>
-                <th className={styles.headerCell}>출현 장소</th>
-                <td className={styles.bodyCell}>{this.state.tavern}</td>
-            </tr>
-          </tbody>
-      </table>
+        <div style={{margin:'10px'}}>
+          <Link 
+            to={{
+              pathname: '/arcanaComposer',
+              state: this.state
+            }}
+          >아르카나 수정</Link>
+        </div>
+        
+        {/* <div className={styles.skillAbilityDescCell} onClick={this.editArcana}>아르카나 수정</div> */}
 
-      <Skill skillNumber={1} skillName={this.state.skillName1} skillMana={this.state.skillMana1} skillDesc={this.state.skillDesc1} />
-      <Skill skillNumber={2} skillName={this.state.skillName2} skillMana={this.state.skillMana2} skillDesc={this.state.skillDesc2} />
-      <Skill skillNumber={3} skillName={this.state.skillName3} skillMana={this.state.skillMana3} skillDesc={this.state.skillDesc3} />
-      
-      <Ability abilityNumber={1} abilityName={this.state.abilityName1} abilityDesc={this.state.abilityDesc1}/>
-      <Ability abilityNumber={2} abilityName={this.state.abilityName2} abilityDesc={this.state.abilityDesc2}/>
-      <Ability abilityNumber={3} abilityName={this.state.abilityName3} abilityDesc={this.state.abilityDesc3}/>
+        </div>
+      );
+    }
 
-      <Ability abilityNumber={4} abilityName={this.state.partyAbility} abilityDesc={this.state.partyAbility}/>
-
-      <Skill isKizuna={true} skillName={this.state.kizunaName} skillMana={this.state.kizunaCost} skillDesc={this.state.kizunaDesc} />
-
-      <div className={styles.skillAbilityDescCell} onClick={this.openJPWiki}>일첸 위키 가기</div>
-      <Link
-        to={{
-          pathname: '/arcanaComposer',
-          state: this.state
-        }}
-      >아르카나 수정</Link>
-      {/* <div className={styles.skillAbilityDescCell} onClick={this.editArcana}>아르카나 수정</div> */}
-
+    else {
+      return <div className={styles.refreshContainer}>
+        <MuiThemeProvider>
+          <RefreshIndicator
+            size={40}
+            left={-20}
+            top={-20}
+            loadingColor={'#68a283'}
+            status="loading"
+            style={style.refresh}
+          />
+        </MuiThemeProvider>
       </div>
-    );
+    }
   }
 
 }
+
+const style = {
+  container: {
+    position: 'relative',
+  },
+  refresh: {
+    marginLeft: '50%',
+    marginTop: '10%'
+  },
+};
 
 export default Arcana;

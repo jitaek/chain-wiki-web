@@ -4,28 +4,9 @@ import ArcanaGridCell from '../../components/ArcanaGridCell/ArcanaGridCell'
 import styles from './ArcanaList.css';
 import LazyLoad from 'react-lazyload';
 
+var _ = require('lodash');
+
 export default class ArcanaList extends React.Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            loadedMainImages: [],
-            loadedIconImages: [],
-        }
-    }
-
-    onLoad(arcana, imageType) {
-        if (imageType === "main") {
-            this.setState(({ loadedMainImages }) => {
-                return { loadedMainImages: loadedMainImages.concat(arcana) }
-            })
-        }
-        else {
-            this.setState(({ loadedIconImages }) => {
-                return { loadedIconImages: loadedIconImages.concat(arcana) }
-            })
-        }
-    }
 
     render () {
 
@@ -37,14 +18,14 @@ export default class ArcanaList extends React.Component {
 
                 <div className={styles.grid} ref="homeRoot">
                 
-                    {this.state.loadedMainImages.map( arcana => 
+                    {this.props.arcanaArray.map(arcana => 
         
-                        <LazyLoad height={200}>
+                        <LazyLoad height={300} offset={[200,200]} unmountIfInvisible={true} key={arcana.uid}>
                             <ArcanaGridCell
 
                             onClick={() => this.props.onClick(arcana.uid)}
                             key={arcana.uid}
-            
+        
                             nameKR={arcana.nameKR}
                             nicknameKR={arcana.nicknameKR}
                             nameJP={arcana.nameJP}
@@ -60,20 +41,8 @@ export default class ArcanaList extends React.Component {
                             iconURL={arcana.iconURL}
                             /> 
                         </LazyLoad>   
-            
                     
                     )}
-                    <div style={{display:'none'}}>
-                    {this.props.arcanaArray.map((arcana, i) =>
-
-                        <LazyLoad height={200}>
-                            <img 
-                            src={arcana.imageURL}
-                            onLoad={this.onLoad.bind(this, arcana, 'main')} 
-                            key={i} />
-                        </LazyLoad>
-                    )}
-                    </div>
                 </div>
             );
         }
@@ -82,9 +51,9 @@ export default class ArcanaList extends React.Component {
 
             <div ref="homeRoot">
 
-                {this.state.loadedIconImages.map( arcana => 
+                {this.props.arcanaArray.map(arcana => 
 
-                    <LazyLoad height={200}>
+                    <LazyLoad height={90} offset={[200,200]} unmountIfInvisible={true} key={arcana.uid}>
                         <ArcanaCell
 
                         onClick={() => this.props.onClick(arcana.uid)}
@@ -105,18 +74,6 @@ export default class ArcanaList extends React.Component {
                         />
                     </LazyLoad>
                 )}
-                <div style={{display:'none'}}>
-                    {this.props.arcanaArray.map((arcana, i) =>
-
-                        <LazyLoad height={200}>
-                            <img 
-                            src={arcana.iconURL}
-                            onLoad={this.onLoad.bind(this, arcana, 'icon')} 
-                            key={i}
-                            />
-                        </LazyLoad>
-                    )}
-                </div>
             </div>
         );
     }
