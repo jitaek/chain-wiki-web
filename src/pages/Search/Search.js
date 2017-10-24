@@ -71,6 +71,11 @@ class Search extends Component {
       searchText = nextSearchText
       this.observeNames()
     }
+    else {
+      // const nameArray = JSON.parse(sessionStorage.getItem('nameArray'))
+      arcanaArray = []
+      this.searchArcana()
+    }
     window.addEventListener("scroll", this.handleScroll);
 
   }

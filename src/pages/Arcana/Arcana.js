@@ -122,10 +122,10 @@ class Arcana extends React.Component {
     let params = new URLSearchParams(search.slice(1));
     const nextArcanaID = params.get('arcana');
 
-    if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
+    // if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
       arcanaID = nextArcanaID
       this.observeArcana()        
-    }
+
   }
 
   componentWillUnmount() {
