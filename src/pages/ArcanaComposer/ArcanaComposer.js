@@ -39,7 +39,9 @@ class ArcanaComposer extends React.Component {
     }
     else {
       this.state = { 
-        
+        tavern: "",
+        numberOfViews: 0,
+        numberOfLikes: 0,
       };
     }
 
@@ -79,8 +81,6 @@ class ArcanaComposer extends React.Component {
   }
 
   handleText(event, text) {
-    console.log(event.target.name)
-    console.log(text)
 
     var input = {}
     input[event.target.name] = text;
@@ -152,7 +152,8 @@ class ArcanaComposer extends React.Component {
     console.log(value)
     
     this.setState({
-      skillMana2: value
+      skillMana2: value,
+
     })
   }
 
@@ -203,59 +204,18 @@ class ArcanaComposer extends React.Component {
     else {
       // uploading new.
       console.log('uploading new arcana')
-      const newArcanaRef = ref.child('arcana').push();
 
-      if (this.state.imageURL) {
+      const arcanaID = ref.child('arcana').push().key
 
-      }
-      newArcanaRef.set(this.state)
+      this.setState({
+        uid: arcanaID
+      }, () => {
+        const newArcanaRef = ref.child('arcana').child(arcanaID);
+        newArcanaRef.set(this.state)
+      })
+      
     }
-    // ref.child('arcana').child(this.state.uid)
-    // ref.child('/test').update(this.state)
-    // ref.child('/test').set(this.state)
-    // firebase.database().ref('/test').set({
-      
-      // nameKR: this.state.nameKR,
-      // nicknameKR: this.state.nicknameKR,
 
-      // nameJP: this.state.nameJP,
-      // nicknameJP: this.state.nicknameJP,
-
-      // rarity: this.state.rarity,
-      // class: this.state.class,
-      // weapon: this.state.weapon,
-      // affiliation: this.state.affiliation,
-      // cost: this.state.cost,
-      // tavern: this.state.tavern,
-      // numberOfViews: this.state.numberOfViews,
-      
-      // skillName1: this.state.skillName1,
-      // skillMana1: this.state.skillMana1,
-      // skillDesc1: this.state.skillDesc1,
-      
-      // skillName2: this.state.skillName2,
-      // skillMana2: this.state.skillMana2,
-      // skillDesc2: this.state.skillDesc2,
-
-      // abilityName1: this.state.abilityName1,
-      // abilityDesc1: this.state.abilityDesc1,
-
-      // abilityName2: this.state.abilityName2,
-      // abilityDesc2: this.state.abilityDesc2,
-
-      // abilityName3: this.state.abilityName3,
-      // abilityDesc3: this.state.abilityDesc3,
-
-      // partyAbility: this.state.partyAbility,
-
-      // kizunaName: this.state.kizunaName,
-      // kizunaCost: this.state.kizunaCost,
-      // kizunaDesc: this.state.kizunaDesc, 
-
-      // iconURL: this.state.iconURL,
-      // imageURL: this.state.imageURL,
-
-    // });
   }
 
   render() {
@@ -434,6 +394,7 @@ class ArcanaComposer extends React.Component {
           rowsMax={5}
           validators={['required']}
           errorMessages={[`스킬 정보가 필요합니다.`]}
+          onChange={this.handleText}
         />
 
         <div>
@@ -559,6 +520,12 @@ class ArcanaComposer extends React.Component {
           fullWidth={true}
           onChange={this.handleText}/><br/>
 
+        <TextField
+          name="tavern"
+          value={this.state.tavern}
+          floatingLabelText="출현 장소 (페스티벌, 답파, 등)"
+          fullWidth={true}
+          onChange={this.handleText}/><br/>
 
           <RaisedButton label="완료" style={buttonStyle} type="submit"/>
         </ValidatorForm>

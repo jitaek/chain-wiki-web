@@ -20,7 +20,7 @@ export default class ArcanaList extends React.Component {
                 
                     {this.props.arcanaArray.map(arcana => 
         
-                        <LazyLoad height={300} offset={[200,200]} unmountIfInvisible={true} key={arcana.uid}>
+                        <LazyLoad height={300} offset={[200,200]} unmountIfInvisible={true} once={true} key={arcana.uid}>
                             <ArcanaGridCell
 
                             onClick={() => this.props.onClick(arcana.uid)}
@@ -53,7 +53,7 @@ export default class ArcanaList extends React.Component {
 
                 {this.props.arcanaArray.map(arcana => 
 
-                    <LazyLoad height={90} offset={[200,200]} unmountIfInvisible={true} key={arcana.uid}>
+                    <LazyLoad height={90} offset={[200,200]} unmountIfInvisible={true} once={true} key={arcana.uid}>
                         <ArcanaCell
 
                         onClick={() => this.props.onClick(arcana.uid)}

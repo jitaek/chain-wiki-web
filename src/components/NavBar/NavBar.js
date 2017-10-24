@@ -78,7 +78,8 @@ class NavBar extends React.Component {
     }
     else if (index === -1) {
       console.log(`user pressed enter and searched for ${string}`)
-      let searchText = string
+      var searchText = string
+      // searchText = encodeURIComponent(searchText)
       this.props.history.push({
         pathname: '../search',
         search: '?search=' + searchText,

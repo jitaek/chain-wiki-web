@@ -95,8 +95,8 @@ class Filter extends Component {
 
   observeArcana() {
     
-    arcanaRef.limitToLast(100).once('value', snapshot => {
-        
+    // arcanaRef.limitToLast(100).once('value', snapshot => {
+    arcanaRef.once('value', snapshot => {
       var array = [];
       
       snapshot.forEach(child => {
@@ -106,6 +106,8 @@ class Filter extends Component {
 
         array.push(arcana)
       })
+
+      array.reverse()
 
       this.setState({
         arcanaArray: array,

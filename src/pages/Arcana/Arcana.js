@@ -9,7 +9,6 @@ import {
   Redirect
 } from 'react-router-dom'
 import sampleMain from '../../sampleMainImage.jpg';
-import { getParameterByName } from '../../helpers/QueryParameter'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
@@ -91,13 +90,10 @@ class Arcana extends React.Component {
 
   constructor(props) {
     super(props);
-    
-    const query = this.props.location.search;
-    arcanaID = getParameterByName('arcana');
 
-    this.state = { 
-      uid: arcanaID
-    };
+    this.state = {
+
+    }
     this.openJPWiki = this.openJPWiki.bind(this);
     this.editArcana = this.editArcana.bind(this);
     this.observeArcana = this.observeArcana.bind(this);
@@ -106,14 +102,14 @@ class Arcana extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     
-    const nextArcanaID = getParameterByName('arcana')
+    const search = this.props.history.location.search
+    let params = new URLSearchParams(search.slice(1));
+    const nextArcanaID = params.get('arcana');
 
-    if (nextArcanaID !== undefined && this.state.uid !== nextArcanaID) {
-      this.setState({
-        uid: nextArcanaID
-      }, function() {
-        this.observeArcana()        
-      })
+    if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
+      arcanaID = nextArcanaID
+      this.observeArcana()        
+      
     }
   }
 
@@ -122,17 +118,24 @@ class Arcana extends React.Component {
   }
 
   componentDidMount() {
-    this.observeArcana()    
+    const search = this.props.history.location.search
+    let params = new URLSearchParams(search.slice(1));
+    const nextArcanaID = params.get('arcana');
+
+    if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
+      arcanaID = nextArcanaID
+      this.observeArcana()        
+    }
   }
 
   componentWillUnmount() {
-    let arcanaRef = firebase.database().ref('arcana').child(this.state.uid);
+    let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
     arcanaRef.off();
   }
   
   observeArcana() {
 
-    let arcanaRef = firebase.database().ref('arcana').child(this.state.uid);
+    let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
 
     arcanaRef.on('value', snapshot => {
 
@@ -231,11 +234,11 @@ class Arcana extends React.Component {
         <div ref="homeRoot" style={{marginTop:'20px'}}>
           <div className={styles.placeholderMain}>
             {/* <img className={styles.arcanaImageMain} src={this.state.imageURL}/> */}
-            <img className={styles.arcanaMainImage} src={sampleMain}/>
+            <img className={styles.arcanaMainImage} src={this.state.imageURL}/>
           </div> 
           <div className={styles.container}>
             {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
-            <img className={styles.arcanaImageIcon} src={logo}/>
+            <img className={styles.arcanaImageIcon} src={this.state.iconURL}/>
             <div className={styles.nameContainer}>
               <div className={styles.nameKRContainer}>
                 <div className={styles.nameKRLabel}>{this.state.nicknameKR + " " + this.state.nameKR}</div>

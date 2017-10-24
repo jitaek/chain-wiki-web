@@ -5,36 +5,16 @@ import { ref } from '../../helpers/constants'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import LazyLoad from 'react-lazyload';
-import ReactDragList from 'react-drag-list';
-// import { DragDropContext } from 'react-beautiful-dnd';
+import { forceCheck } from 'react-lazyload';
+import Checkbox from 'material-ui/Checkbox';
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
-import {
-  Table,
-  TableBody,
-  TableFooter,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-
-const muiTheme = getMuiTheme({
-  tableRow: {
-    selectedColor: 'white',
-    height: '30px',
-  },
-  tableRowColumn: {
-    height: '30px',
-    padding: '0px'
-  }
-});
 
 const ButtonStyle = {
   margin: '10px',
@@ -64,7 +44,7 @@ const RowStyle = {
 
 const TableStyle = {
   float: 'left',
-  width: '40%',
+  width: '50%',
 }
 
 const CurrentListStyle = {
@@ -85,14 +65,11 @@ class UpdateArcanaRefs extends React.Component {
       height: '0px',
       listType: props.listType,
       nameArray: [],  // list of names, on the left.
-      festivalArray: [],  // list of current festival arcana. In future, will contain whole arcana data.
-      arcanaNameDictionary: {},
+      arcanaNameDictionary: {}, // Use arcanaID of selected list to find the names. 
       arcanaDictionary: {}, // For check/uncheck
-      arcanaListArray: [],
+      arcanaListArray: [], // selected list arcana. Ex: festival, reward, with arcanaIDs.
     };
     
-    this.updateTableHeight = this.updateTableHeight.bind(this)
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
     this.getNames = this.getNames.bind(this)
     this.selectList = this.selectList.bind(this)
     this.updateOrder = this.updateOrder.bind(this)
@@ -110,31 +87,11 @@ class UpdateArcanaRefs extends React.Component {
   componentDidMount() {
 
     window.addEventListener('resize', this.updateWindowDimensions);
-    this.updateTableHeight()
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions);    
   }
-
-  updateWindowDimensions() {
-    this.updateTableHeight()
-  }
-
-  updateTableHeight() {
-
-    const rect = ReactDOM.findDOMNode(this.table)
-    .getBoundingClientRect()
-    
-    const offset = rect.y
-    const windowHeight = window.innerHeight
-    const heightValue = windowHeight - offset
-
-    const height = `${heightValue}px`
-
-    this.setState({ height });
-  }
-  
 
   getNames() {
 
@@ -152,7 +109,7 @@ class UpdateArcanaRefs extends React.Component {
 
         let arcana = {
           arcanaID: arcanaID,          
-          name: nameKR,
+          nameKR: nameKR,
         }
         array.push(arcana)
         arcanaNameDict[arcanaID] = nameKR
@@ -169,32 +126,48 @@ class UpdateArcanaRefs extends React.Component {
 
   getArcanaList(listType) {
 
-    // clear previous values
-    // this.state.arcanaDictionary = {}
-    // this.state.arcanaListArray = []
-    this.setState({
-      arcanaDictionary: {},
-      arcanaListArray: []
-    }, function() {
-      // Get arcana IDs and names for filtering.
+    // Get arcana IDs and names for filtering.
+
+    ref.child(listType).orderByValue().on('value', snapshot => {
+
       const arcanaListDict = {}
       const currentArcanaListArray = []
-
-      ref.child(listType).orderByValue().on('child_added', snapshot => {
-
-          let arcanaID = snapshot.key
-          let order = snapshot.val()
-          console.log(arcanaID, order)
-          arcanaListDict[arcanaID] = order
-          currentArcanaListArray.push(arcanaID)
-
-          this.setState({
-            arcanaDictionary: arcanaListDict,
-            arcanaListArray: currentArcanaListArray,
-          })
       
+      snapshot.forEach(child => {
+
+        let arcanaID = child.key
+        let arcana = {
+          arcanaID: arcanaID,
+          nameKR: this.state.arcanaNameDictionary[arcanaID]
+        }
+        arcanaListDict[arcanaID] = true
+        currentArcanaListArray.push(arcana)
+
       });
-    })
+
+      // todo: sort nameArray based on checked arcana
+      var nameArray = this.state.nameArray;
+      nameArray.sort(function (a,b) {
+        if (arcanaListDict[a.arcanaID] === arcanaListDict[b.arcanaID]) {
+          return a.arcanaID > b.arcanaID ? -1 : 1
+        }
+        else if (arcanaListDict[a.arcanaID]) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      })
+
+      this.setState({
+        nameArray: nameArray,
+        arcanaDictionary: arcanaListDict,
+        arcanaListArray: currentArcanaListArray,
+      }, () => {
+        forceCheck()        
+      })
+    
+    });
 
   }
 
@@ -209,7 +182,7 @@ class UpdateArcanaRefs extends React.Component {
   }
 
   updateOrder(event) {
-    console.log(event)
+
     const oldIndex = event.oldIndex
     const newIndex = event.newIndex
     
@@ -218,61 +191,52 @@ class UpdateArcanaRefs extends React.Component {
     if (oldIndex < updatedArcanaListArray.length) {
       
       const arcana = updatedArcanaListArray[oldIndex]
-      console.log(arcana)
+
       updatedArcanaListArray.splice(oldIndex, 1);
       updatedArcanaListArray.splice(newIndex, 0, arcana);
 
-      console.log(updatedArcanaListArray[newIndex])
       this.setState({
         arcanaListArray: updatedArcanaListArray
-      }, function(){
-        // this.handleSubmit()
       })
     }
   }
 
-  updateCheck(row, column, event) {
+  updateCheck(arcana) {
 
-    console.log(`row is ${row}`)
-    if (row >= this.state.nameArray.length) {
-      return
-    }
-
-    let arcana = this.state.nameArray[row]
     let arcanaID = arcana.arcanaID
 
     var currentArcanaDict = this.state.arcanaDictionary
 
     if (currentArcanaDict[arcanaID] === undefined) {
-      var newFestivalArray = this.state.festivalArray.slice()
-      newFestivalArray.push(arcana)
+      var newListArray = this.state.arcanaListArray.slice()
+      newListArray.push(arcana)
 
       currentArcanaDict[arcanaID] = true
 
       this.setState({
-        festivalArray: newFestivalArray,
+        arcanaListArray: newListArray,
         arcanaDictionary: currentArcanaDict
       })
     }
     else {
 
-      var newFestivalArray = this.state.festivalArray.slice()
+      var newListArray = this.state.arcanaListArray.slice()
       
       var index = -1
-      for(var i = 0, len = newFestivalArray.length; i < len; i++) {
-        if (newFestivalArray[i].arcanaID === arcanaID) {
+      for(var i = 0, len = newListArray.length; i < len; i++) {
+        if (newListArray[i].arcanaID === arcanaID) {
             index = i;
             break;
         }
       }
 
       if (index > -1) {
-        newFestivalArray.splice(index, 1)
+        newListArray.splice(index, 1)
       }
 
       currentArcanaDict[arcanaID] = undefined
       this.setState({
-        festivalArray: newFestivalArray,
+        arcanaListArray: newListArray,
         arcanaDictionary: currentArcanaDict
       })
 
@@ -282,26 +246,27 @@ class UpdateArcanaRefs extends React.Component {
 
   removeArcana(arcana) {
 
+    console.log(`removing arcana ${arcana}`)
     let arcanaID = arcana.arcanaID
     
-    var newFestivalArray = this.state.festivalArray.slice()
+    var newListArray = this.state.arcanaListArray.slice()
     var currentArcanaDict = this.state.arcanaDictionary
     
     var index = -1
-    for(var i = 0, len = newFestivalArray.length; i < len; i++) {
-      if (newFestivalArray[i].arcanaID === arcanaID) {
+    for(var i = 0, len = newListArray.length; i < len; i++) {
+      if (newListArray[i].arcanaID === arcanaID) {
           index = i;
           break;
       }
     }
 
     if (index > -1) {
-      newFestivalArray.splice(index, 1)
+      newListArray.splice(index, 1)
     }
 
     currentArcanaDict[arcanaID] = undefined
     this.setState({
-      festivalArray: newFestivalArray,
+      arcanaListArray: newListArray,
       arcanaDictionary: currentArcanaDict
     })
   }
@@ -312,25 +277,25 @@ class UpdateArcanaRefs extends React.Component {
     console.log('uploading...')
     // arcanaListArray will be in order of what the user dragged around.
     var updatedArcanaDict = {}
+    const arcanaListArray = this.state.arcanaListArray
+    for (var i = 0; i < arcanaListArray.length; i++) {
 
-    for (var i = 0; i < this.state.arcanaListArray.length; i++) {
-
-      let arcanaID = this.state.arcanaListArray[i]
+      let arcanaID = arcanaListArray[i].arcanaID
       updatedArcanaDict[arcanaID] = i
 
     }
 
-    if (this.state.listType !== undefined) {
-      ref.child(this.state.listType).set(updatedArcanaDict)      
+    if (this.state.listType === undefined && this.state.listType === null) {
+      return
     }
-
+    ref.child(this.state.listType).set(updatedArcanaDict)      
 
   }
 
   render() {
 
     return (
-        <MuiThemeProvider muiTheme={muiTheme}>
+        <MuiThemeProvider>
         <div>
         <div style={{margin:'10px'}}>
           아르카나 목록 선택
@@ -366,29 +331,22 @@ class UpdateArcanaRefs extends React.Component {
         <h4 style={HeaderStyle}>
           전체 아르카나 목록
         </h4>
-        <Table
-          ref={el => this.table = el}
-          height={this.state.height}
-          selectable={this.state.listType !== undefined}
-          multiSelectable={true}
-          onCellClick={this.updateCheck}
-        >
+        
+          {this.state.nameArray.map( (arcana, index) => (
 
-          <TableBody
-            displayRowCheckbox={this.state.showCheckboxes}
-            showRowHover={this.state.showRowHover}
-            stripedRows={this.state.stripedRows}
-            deselectOnClickaway={false}
-          >
-            {this.state.nameArray.map( (row, index) => (
-              <TableRow key={index}
-              style={RowStyle}
-              selected={this.state.arcanaDictionary[row.arcanaID] !== undefined}>
-                <TableRowColumn style={RowStyle}>{row.name}</TableRowColumn>
-              </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+            // <LazyLoad height={24} key={arcana.arcanaID}>
+              <Checkbox
+              key={arcana.arcanaID}
+                label={arcana.nameKR}
+                checked={this.state.arcanaDictionary[arcana.arcanaID] !== undefined}
+                disabled={this.state.listType === undefined}
+                onCheck={() => this.updateCheck(arcana)}
+              />
+
+            // </LazyLoad>
+              
+          ))}
+
         </div>
           
         {this.state.listType !== undefined &&
@@ -399,22 +357,9 @@ class UpdateArcanaRefs extends React.Component {
           현재 목록
         </h4>
         <div style={{marginLeft: '20px',fontSize:'12px'}}>(위아래로 드래그하면 표시 순서 바뀜)</div>
-          <ReactDragList
-            dataSource={this.state.arcanaListArray}
-            handles={false}
-            onUpdate={this.updateOrder}
-            row={(arcanaID, index) => (
-              <Checkbox
-                key={arcanaID}
-                label={this.state.arcanaNameDictionary[arcanaID]}
-                style={CheckBoxStyle}
-                labelStyle={CheckBoxLabelStyle}
-                checked={this.state.arcanaDictionary[arcanaID] !== undefined}
-                onCheck={() => this.removeArcana(arcanaID)}
-              />
-            )}
-            />
-            
+
+        <SortableList items={this.state.arcanaListArray} onSortEnd={this.updateOrder}/>
+        
           <RaisedButton
             label="완료"
             style={{margin:'20px'}}
@@ -427,5 +372,21 @@ class UpdateArcanaRefs extends React.Component {
   }
 
 }
+
+const SortableItem = SortableElement(({value}) =>
+  <li>
+    {value.nameKR}
+  </li>
+);
+
+const SortableList = SortableContainer(({items, props1}) => {
+return (
+  <ol>
+    {items.map((value, index) => (
+      <SortableItem key={value.arcanaID} index={index} value={value}/>
+    ))}
+  </ol>
+);
+});
 
 export default UpdateArcanaRefs;

@@ -142,7 +142,7 @@ class Home extends Component {
   observeArcana() {
 
     var initialKey = true;
-    var count = Number(Math.max(fetchedArcanaCount, 10))
+    var count = Number(Math.max(fetchedArcanaCount, 30))
     console.log(`fetching ${count} arcana`)
 
     var fetchedArcanaArray = []

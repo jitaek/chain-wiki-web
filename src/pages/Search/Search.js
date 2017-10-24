@@ -6,17 +6,19 @@ import ArcanaList from '../../components/ArcanaList/ArcanaList'
 import { history } from '../../App'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
-import { getParameterByName } from '../../helpers/QueryParameter'
+import { getParameterByName, getParams } from '../../helpers/QueryParameter'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 var _ = require('lodash');
+var URLSearchParams = require('url-search-params');
 
 let arcanaRef = ref.child('arcana')
 const nameRef = ref.child('name')
 
 var arcanaArray = []
 var nameArray = []
+var searchText
 
 class Search extends Component {
 
@@ -41,11 +43,16 @@ class Search extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    const nextSearchText = getParameterByName('search')
+    const search = this.props.history.location.search
+    let params = new URLSearchParams(search.slice(1));
+    const nextSearchText = params.get('search');
 
-    if (this.state.searchText !== "" && nextSearchText !== this.state.searchText) {
+    console.log(`search text is ${nextSearchText}`)
+    if (searchText !== "" && nextSearchText !== searchText) {
+      searchText = nextSearchText
       this.observeNames()
     }
+
   }
 
   componentWillMount() {
@@ -55,16 +62,14 @@ class Search extends Component {
 
   componentDidMount() {
 
-    if (arcanaArray.length > 0) {
-      this.setState({
-        arcanaArray: arcanaArray,
-      }, () => {
-        const offset = sessionStorage.getItem('scrollSearch')
-        window.scrollTo(0, offset)
-      })
-    }
-    else {
-      this.observeNames()      
+    const search = this.props.history.location.search
+    let params = new URLSearchParams(search.slice(1));
+    const nextSearchText = params.get('search');
+
+    console.log(`search text is ${nextSearchText}`)
+    if (searchText !== "" && nextSearchText !== searchText) {
+      searchText = nextSearchText
+      this.observeNames()
     }
     window.addEventListener("scroll", this.handleScroll);
 
@@ -78,6 +83,7 @@ class Search extends Component {
   }
 
   observeNames() {
+
     arcanaArray = []
     
     nameRef.once('value', snapshot => {
@@ -108,12 +114,6 @@ class Search extends Component {
 
   searchArcana() {
 
-    const searchText = getParameterByName('search')
-
-    this.setState({
-      searchText: searchText
-    })
-
     if (nameArray === null || nameArray === undefined) {
       return
     }
@@ -132,7 +132,6 @@ class Search extends Component {
 
   observeArcanaWithID(arcanaID) {
 
-    console.log(arcanaID)
     let arcanaRef = ref.child('arcana').child(arcanaID)
     arcanaRef.once('value', snapshot => {
 
@@ -175,7 +174,7 @@ class Search extends Component {
 
     return (
       <MuiThemeProvider>
-        <div>        
+        <div key={this.state.searchText}>        
           <ArcanaList
             arcanaArray={this.state.arcanaArray}
             viewType={this.state.viewType}

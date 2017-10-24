@@ -43,7 +43,7 @@ class ArcanaGridCell extends React.Component {
                 onClick={this.props.onClick}>
 
                 <img className={styles.arcanaMainImage}
-                    src={SampleMain}
+                    src={this.props.imageURL}
                     onLoad={() => this.setState({loaded: true})}
                     alt={this.state.nameKR}/>
                 {/* <div className={styles.container}>
