@@ -1,12 +1,23 @@
+.gridContainerPlaceholder, .gridContainer {
+  padding-top: 150%;
+  position: relative;
+}
+
+.gridContainerPlaceholder {
+  opacity: 0;
+  transition: opacity 0.4s ease-in;
+  -ms-transition: opacity 0.4s ease-in;
+  -moz-transition: opacity 0.4s ease-in;
+  -webkit-transition: opacity 0.4s ease-in;
+}
+
 .gridContainer {
   opacity: 1;
   transition: opacity 0.4s ease-out;
   -ms-transition: opacity 0.4s ease-out;
   -moz-transition: opacity 0.4s ease-out;
   -webkit-transition: opacity 0.4s ease-out;
-  
-  padding-top: 150%;
-  position: relative;
+
   background-color: red;
   border: 1px hidden;
   border-radius: 3px;
@@ -18,14 +29,6 @@
   -moz-transform: scale(1.1);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-}
-
-.gridContainerPlaceholder {
-  opacity: 0;
-  transition: opacity 0.4s ease-in;
-  -ms-transition: opacity 0.4s ease-in;
-  -moz-transition: opacity 0.4s ease-in;
-  -webkit-transition: opacity 0.4s ease-in;
 }
 
 .arcanaMainImage {

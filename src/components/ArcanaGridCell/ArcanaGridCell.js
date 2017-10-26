@@ -4,6 +4,14 @@ import styles from './ArcanaGridCell.css'
 import logo from '../../logo.png'
 import SampleMain from '../ArcanaCell/riberaMain.jpg'
 import { Link } from 'react-router-dom'
+import LazyLoad from 'react-lazyload';
+
+function ImagePlaceholder() {
+    
+    return (
+        <div style={{height: '325px'}}></div>
+    )
+}
 
 class ArcanaGridCell extends React.Component {
 
@@ -12,7 +20,8 @@ class ArcanaGridCell extends React.Component {
         this.state = {
             loaded: false,
         };
-      }
+    }
+
     render() {
 
         var classNames
@@ -25,16 +34,17 @@ class ArcanaGridCell extends React.Component {
         
         return (
             <Link to={`/arcana?arcana=${this.props.arcanaID}`} className={styles.linkContainer}>
-                <div className={classNames}
-                    onClick={this.props.onClick}>
+                <LazyLoad height={325} debounce={100} placeholder={<ImagePlaceholder/>} once={true}>
+                    <div className={classNames}>
+                            <img className={styles.arcanaMainImage}
+                                /* src={this.props.imageURL} */
+                                src={SampleMain}
+                                alt={this.props.nameKR}
+                                onLoad={() => this.setState({loaded: true})}
+                            />
+                    </div>    
+                </LazyLoad>
 
-                    <img className={styles.arcanaMainImage}
-                        /* src={this.props.imageURL} */
-                        src={SampleMain}
-                        onLoad={() => this.setState({loaded: true})}
-                        alt={this.props.nameKR}
-                    />
-                </div>     
             </Link>        
         );
     }

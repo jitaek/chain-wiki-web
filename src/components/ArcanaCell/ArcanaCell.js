@@ -24,8 +24,10 @@ class ArcanaCell extends React.Component {
         this.state = {
             loaded: false,
         };
-      }
+    }
+
     render() {
+        
         var classNames
         if (!this.state.loaded) {
             classNames = styles.arcanaIconPlaceholder
