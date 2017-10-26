@@ -1,19 +1,33 @@
 .filterContainer {
-  /* display: none; */
+  min-width: 280px;
+  max-width: 80%;
+  position: absolute;
+  right: 0px;
+  z-index: 1;
+  background-color: white;
+  
+}
+
+.arcanaGrid {
   width: 100%;
+  position: absolute;
 }
 
 @media (min-width: 500px) {
   .filterContainer {
-    display: block;
-    float: right;
     width: 400px;
-    background-color: white;
   }
+}
+
+/* TODO: change from the below to something when pressing toggle filter */
+@media (min-width: 800px) {
   .arcanaGrid {
-    float: left;
-    width: calc(100% - 440px);
+    width: calc(100% - 400px);
   }
+}
+
+.arcanaGridFull {
+  width: 100%;
 }
 
 .filterGrid {

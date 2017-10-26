@@ -287,6 +287,13 @@ class Filter extends Component {
 
   render() {
 
+    var arcanaGridClass;
+    if (this.state.showFilter) {
+      arcanaGridClass = styles.arcanaGrid
+    }
+    else {
+      arcanaGridClass = styles.arcanaGridFull
+    }
     return (
         <div>
             <IconButton
@@ -310,7 +317,7 @@ class Filter extends Component {
 
             <br style={{clear:'both'}}/>
             <div style={{display:'flex'}}>
-            <div className={styles.arcanaGrid}>
+            <div className={arcanaGridClass}>
               <ArcanaList
                 arcanaArray={this.state.arcanaArray}
                 viewType={this.state.viewType}
