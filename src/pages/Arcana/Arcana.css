@@ -1,62 +1,56 @@
-@keyframes fadein {
-  from {
-      opacity:0;
-  }
-  to {
-      opacity:1;
-  }
-}
-@-moz-keyframes fadein { /* Firefox */
-  from {
-      opacity:0;
-  }
-  to {
-      opacity:1;
-  }
-}
-@-webkit-keyframes fadein { /* Safari and Chrome */
-  from {
-      opacity:0;
-  }
-  to {
-      opacity:1;
-  }
-}
-@-o-keyframes fadein { /* Opera */
-  from {
-      opacity:0;
-  }
-  to {
-      opacity: 1;
-  }
-}
-
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* th,
-td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #E1E1E1;
-} */
-
-.placeholderMain {
-  width: 320px;
-  height: 480px;
-  margin: auto;
-  margin-bottom: 20px;
+.mainImageContainer {
+  width: 100%;
+  padding-top: 150%;
+  position: relative;
 }
 
-.arcanaMainImage {
-  animation: fadein 1s;
-  -moz-animation: fadein 1s; /* Firefox */
-  -webkit-animation: fadein 1s; /* Safari and Chrome */
-  -o-animation: fadein 1s; /* Opera */
+@media (min-width: 400px) {
+  .mainImageContainer {
+    width: 320px;
+    height: 480px;
+    padding-top: 0;
+    margin: 20px auto 20px auto;
+  }
+}
+
+.mainImagePlaceholder, .mainImage {
   width: 100%;
   height: auto;
+  display: block;
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+}
+
+.mainImagePlaceholder {
+  opacity: 0;
+  transition: opacity 0.4s ease-in;
+  -ms-transition: opacity 0.4s ease-in;
+  -moz-transition: opacity 0.4s ease-in;
+  -webkit-transition: opacity 0.4s ease-in;
+}
+
+.mainImage {
+  opacity: 1;
+  transition: opacity 0.4s ease-out;
+  -ms-transition: opacity 0.4s ease-out;
+  -moz-transition: opacity 0.4s ease-out;
+  -webkit-transition: opacity 0.4s ease-out;
+
+}
+
+.headerContainer {
+  height: 90px;
+  width: 100%;
+  display: flex;
+  margin: 10px;
+  align-items: center;
+  
+  /* justify-content: center; */
 }
 
 .container {
@@ -92,13 +86,6 @@ td {
   display: block;
   width: 66px;
   height: 66px;
-}
-
-/* Larger than mobile */
-@media (min-width: 400px) {
-  .arcanaImageMain {
-    width: 320px;
-  }
 }
 
 .arcanaDetailTable {

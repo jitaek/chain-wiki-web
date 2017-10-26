@@ -92,7 +92,8 @@ class Arcana extends React.Component {
     super(props);
 
     this.state = {
-
+      mainImageLoaded: false,
+      iconLoaded: false,
     }
     this.openJPWiki = this.openJPWiki.bind(this);
     this.editArcana = this.editArcana.bind(this);
@@ -101,16 +102,13 @@ class Arcana extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    
+
     const search = this.props.history.location.search
     let params = getParams(search)
 
-    const nextArcanaID = params['arcana'];
+    arcanaID = params['arcana'];
 
-    if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
-      arcanaID = nextArcanaID
-      this.observeArcana()
-    }
+    this.observeArcana()
   }
 
   componentWillMount() {
@@ -118,15 +116,15 @@ class Arcana extends React.Component {
   }
 
   componentDidMount() {
+    
     const search = this.props.history.location.search
     let params = getParams(search)
 
-    const nextArcanaID = params['arcana'];
-
-    if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
-      arcanaID = nextArcanaID
+    arcanaID = params['arcana'];
+    // if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
+    //   arcanaID = nextArcanaID
       this.observeArcana()
-    }
+    // }
 
   }
 
@@ -136,6 +134,7 @@ class Arcana extends React.Component {
   }
   
   observeArcana() {
+
 
     let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
 
@@ -231,14 +230,31 @@ class Arcana extends React.Component {
   render() {
 
     if (this.state.nameKR !== undefined) {
+
+      var mainImageClassNames
+      if (!this.state.mainImageLoaded) {
+        mainImageClassNames = styles.mainImagePlaceholder
+      }
+      else {
+        mainImageClassNames = styles.mainImage
+      }
+
+      // var iconClassNames
+      // if (!this.state.iconLoaded) {
+      //   iconClassNames = styles.mainImagePlaceholder
+      // }
+      // else {
+      //   iconClassNames = styles.mainImage
+      // }
+
       return (
 
-        <div ref="homeRoot" style={{marginTop:'20px'}}>
-          <div className={styles.placeholderMain}>
-            {/* <img className={styles.arcanaImageMain} src={this.state.imageURL}/> */}
-            <img className={styles.arcanaMainImage} src={this.state.imageURL}/>
-          </div> 
-          <div className={styles.container}>
+        <div ref="homeRoot">
+
+          <div className={styles.mainImageContainer}>
+            <img className={mainImageClassNames} src={this.state.imageURL} onLoad={() => this.setState({mainImageLoaded: true})}/>
+          </div>
+          <div className={styles.headerContainer}>
             {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
             <img className={styles.arcanaImageIcon} src={this.state.iconURL}/>
             <div className={styles.nameContainer}>
