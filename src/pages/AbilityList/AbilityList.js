@@ -84,7 +84,7 @@ class AbilityList extends Component {
               <RadioButton style={RadioButtonStyle} label="어빌리티" value="Ability" />
               <RadioButton style={RadioButtonStyle} label="인연" value="Kizuna" />
             </RadioButtonGroup>
-            <Divider />
+
             <List>
               <ListItem primaryText="마나의 소양" onClick={() => this.selectAbility('mana')}/>
               <Divider />

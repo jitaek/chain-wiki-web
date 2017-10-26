@@ -9,23 +9,7 @@ class ArcanaGridCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
             loaded: false,
-            nameKR: props.nameKR,
-            nicknameKR: props.nicknameKR,
-
-            nameJP: props.nameJP,
-            nicknameJP: props.nicknameJP,
-
-            rarity: props.rarity,
-            class: props.class,
-            weapon: props.weapon,
-            affiliation: props.affiliation,
-            numberOfViews: props.numberOfViews,
-
-            imageURL: props.imageURL,
-            iconURL: props.iconURL
-
         };
       }
     render() {
@@ -45,7 +29,7 @@ class ArcanaGridCell extends React.Component {
                 <img className={styles.arcanaMainImage}
                     src={this.props.imageURL}
                     onLoad={() => this.setState({loaded: true})}
-                    alt={this.state.nameKR}/>
+                    alt={this.props.nameKR}/>
                 {/* <div className={styles.container}>
                     <img className={styles.arcanaIcon} src={logo} alt='not loaded'/>
                     <div>

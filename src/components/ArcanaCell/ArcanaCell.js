@@ -8,40 +8,40 @@ class ArcanaCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            nameKR: props.nameKR,
-            nicknameKR: props.nicknameKR,
-
-            nameJP: props.nameJP,
-            nicknameJP: props.nicknameJP,
-
-            rarity: props.rarity,
-            class: props.class,
-            weapon: props.weapon,
-            affiliation: props.affiliation,
-            numberOfViews: props.numberOfViews,
-
-            iconURL: props.iconURL
+            loaded: false,
         };
       }
     render() {
+        var classNames
+        if (!this.state.loaded) {
+            classNames = styles.arcanaIconPlaceholder
+        }
+        else {
+            classNames = styles.arcanaIcon
+        }
         return (
             <div className={styles.container} onClick={this.props.onClick}>
-                <img className={styles.arcanaIcon} src={this.state.iconURL} alt='not loaded'/>
+                <img
+                    className={classNames}
+                    src={this.props.iconURL}
+                    alt={this.props.nameKR}
+                    onLoad={() => this.setState({loaded: true})}
+                    />
                 <div>
                     <div className={styles.nameKRContainer}>
-                        <div className={styles.nameKRLabel}>{this.state.nameKR}</div>
-                        <div className={styles.nicknameKRLabel}>{this.state.nicknameKR}</div>
+                        <div className={styles.nameKRLabel}>{this.props.nameKR}</div>
+                        <div className={styles.nicknameKRLabel}>{this.props.nicknameKR}</div>
                     </div>
                     <div className={styles.nameJPContainer}>
-                        <div className={styles.nameJPLabel}>{this.state.nameJP}</div>
-                        <div className={styles.nicknameJPLabel}>{this.state.nicknameJP}</div>
+                        <div className={styles.nameJPLabel}>{this.props.nameJP}</div>
+                        <div className={styles.nicknameJPLabel}>{this.props.nicknameJP}</div>
                     </div>
                     <div className={styles.nameKRContainer}>
-                        <div className={styles.detailLabel}>#{this.state.rarity}성</div>
-                        <div className={styles.detailLabel}>#{this.state.class}</div>
-                        <div className={styles.detailLabel}>#{this.state.weapon}</div>
-                        <div className={styles.detailLabel}>#{this.state.affiliation}</div>
-                        <div className={styles.detailLabel}>조회 {this.state.numberOfViews}</div>
+                        <div className={styles.detailLabel}>#{this.props.rarity}성</div>
+                        <div className={styles.detailLabel}>#{this.props.class}</div>
+                        <div className={styles.detailLabel}>#{this.props.weapon}</div>
+                        <div className={styles.detailLabel}>#{this.props.affiliation}</div>
+                        <div className={styles.detailLabel}>조회 {this.props.numberOfViews}</div>
                     </div>
                 </div>
             </div>                

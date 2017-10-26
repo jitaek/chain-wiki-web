@@ -8,11 +8,26 @@
   background-color: #F7F7F7;
 }
 
-.arcanaIcon {
+.arcanaIcon, .arcanaIconPlaceholder {
   margin: 10px;
   height: 66px;
   width: 66px;
   float: left;
+}
+.arcanaIcon {
+  opacity: 1;
+  transition: opacity 0.4s ease-out;
+  -ms-transition: opacity 0.4s ease-out;
+  -moz-transition: opacity 0.4s ease-out;
+  -webkit-transition: opacity 0.4s ease-out;
+}
+
+.arcanaIconPlaceholder {
+  opacity: 0;
+  transition: opacity 0.4s ease-in;
+  -ms-transition: opacity 0.4s ease-in;
+  -moz-transition: opacity 0.4s ease-in;
+  -webkit-transition: opacity 0.4s ease-in;
 }
 
 .nameKRContainer, .nameJPContainer {
