@@ -9,7 +9,7 @@ import {
   Redirect
 } from 'react-router-dom'
 import sampleMain from '../../sampleMainImage.jpg';
-
+import { getParams } from '../../helpers/QueryParameter'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
 
@@ -103,13 +103,13 @@ class Arcana extends React.Component {
   componentWillReceiveProps(nextProps) {
     
     const search = this.props.history.location.search
-    let params = new URLSearchParams(search.slice(1));
-    const nextArcanaID = params.get('arcana');
+    let params = getParams(search)
+
+    const nextArcanaID = params['arcana'];
 
     if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
       arcanaID = nextArcanaID
-      this.observeArcana()        
-      
+      this.observeArcana()
     }
   }
 
@@ -119,12 +119,14 @@ class Arcana extends React.Component {
 
   componentDidMount() {
     const search = this.props.history.location.search
-    let params = new URLSearchParams(search.slice(1));
-    const nextArcanaID = params.get('arcana');
+    let params = getParams(search)
 
-    // if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
+    const nextArcanaID = params['arcana'];
+
+    if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
       arcanaID = nextArcanaID
-      this.observeArcana()        
+      this.observeArcana()
+    }
 
   }
 

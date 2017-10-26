@@ -6,12 +6,11 @@ import ArcanaList from '../../components/ArcanaList/ArcanaList'
 import { history } from '../../App'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
-import { getParameterByName, getParams } from '../../helpers/QueryParameter'
+import { getParams } from '../../helpers/QueryParameter'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 var _ = require('lodash');
-var URLSearchParams = require('url-search-params');
 
 let arcanaRef = ref.child('arcana')
 const nameRef = ref.child('name')
@@ -44,8 +43,8 @@ class Search extends Component {
   componentWillReceiveProps(nextProps) {
 
     const search = this.props.history.location.search
-    let params = new URLSearchParams(search.slice(1));
-    const nextSearchText = params.get('search');
+    let params = getParams(search)
+    const nextSearchText = params['search'];
 
     console.log(`search text is ${nextSearchText}`)
     if (searchText !== "" && nextSearchText !== searchText) {
@@ -63,8 +62,8 @@ class Search extends Component {
   componentDidMount() {
 
     const search = this.props.history.location.search
-    let params = new URLSearchParams(search.slice(1));
-    const nextSearchText = params.get('search');
+    let params = getParams(search)
+    const nextSearchText = params['search'];
 
     console.log(`search text is ${nextSearchText}`)
     if (searchText !== "" && nextSearchText !== searchText) {

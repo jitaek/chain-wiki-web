@@ -3,7 +3,7 @@ import { HashRouter, Link, withRouter } from "react-router-dom";
 import styles from './Ability.css';
 import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
-
+import { getParams } from '../../helpers/QueryParameter'
 import AbilityTabs from '../../components/AbilityTabs/AbilityTabs'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -53,9 +53,6 @@ class Ability extends Component {
   componentWillReceiveProps() {
 
     /*
-    const search = this.props.history.location.search
-    let params = new URLSearchParams(search.slice(1));
-    const nextSearchText = params.get('search');
 
     console.log(`search text is ${nextSearchText}`)
     if (searchText !== "" && nextSearchText !== searchText) {
@@ -69,8 +66,8 @@ class Ability extends Component {
     }
 */
     const search = this.props.history.location.search
-    let params = new URLSearchParams(search.slice(1));
-    const nextAbility = params.get('query');
+    let params = getParams(search)
+    const nextAbility = params['query'];
 
     console.log(`ability query text is ${nextAbility}`)
     if (ability !== "" && nextAbility !== ability) {
@@ -88,9 +85,10 @@ class Ability extends Component {
   componentDidMount() {
     
     const search = this.props.history.location.search
-    let params = new URLSearchParams(search.slice(1));
-    const nextAbility = params.get('query');
-    const selectedIndex = parseInt(params.get('index'))
+    let params = getParams(search)
+    const nextAbility = params['query']
+    const index = params['index']
+    const selectedIndex = parseInt(index)
 
     if (ability !== "" && nextAbility !== ability) {
       warriorArray = []
@@ -135,8 +133,8 @@ class Ability extends Component {
   selectedClass(index) {
 
     const search = this.props.history.location.search
-    let params = new URLSearchParams(search.slice(1));
-    const nextAbility = params.get('query');
+    let params = getParams(search)
+    const nextAbility = params['query'];
 
     this.props.history.replace({
       search: `?query=${nextAbility}&index=${index}`
