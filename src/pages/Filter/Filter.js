@@ -287,10 +287,6 @@ class Filter extends Component {
 
   render() {
 
-    return (<ArcanaList
-      arcanaArray={this.state.arcanaArray}
-      viewType={this.state.viewType}
-    />)
     return (
         <div>
             <IconButton

@@ -127,14 +127,13 @@ class Ability extends Component {
     let params = getParams(search)
     const nextAbility = params['query'];
 
+    forceCheck()
+    
     this.props.history.replace({
       search: `?query=${nextAbility}&index=${index}`
-    }, () => {
-      forceCheck()
     })
       
     console.log(`index is ${index}`)
-    // forceCheck()
 
   }
 

@@ -3,7 +3,7 @@ import React from 'react'
 import styles from './ArcanaCell.css'
 import logo from '../../logo.png'
 import { Link } from 'react-router-dom'
-import LazyLoad, { forceCheck } from 'react-lazyload';
+import LazyLoad from 'react-lazyload';
 
 const LinkStyle = {
     textDecoration:'none',
