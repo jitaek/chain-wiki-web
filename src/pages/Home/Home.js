@@ -86,7 +86,6 @@ class Home extends Component {
 
     this.observeArcana = this.observeArcana.bind(this);
     this.fetchArcana = this.fetchArcana.bind(this)
-    this.showArcana = this.showArcana.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.mergeArcanaArrayWith = _.debounce(this.mergeArcanaArrayWith.bind(this), 200)
     this.setViewType = this.setViewType.bind(this)
@@ -179,7 +178,6 @@ class Home extends Component {
       if (count < 10) {
         fetchedArcanaArray.unshift(arcana)
         this.mergeArcanaArrayWith(fetchedArcanaArray)
-
       }
       count++;
 
@@ -212,14 +210,6 @@ class Home extends Component {
       // console.log(`offset after merge is ${offset}`)
       // window.scrollTo(0, offset)
     })
-  }
-
-  showArcana(arcanaID) {
-
-    this.props.history.push({
-      pathname: '../Arcana',
-      search: '?arcana=' + arcanaID,
-    });
   }
 
   handleScroll() {
@@ -256,7 +246,6 @@ class Home extends Component {
           <ArcanaList
             arcanaArray={this.state.arcanaArray}
             viewType={this.state.viewType}
-            onClick={this.showArcana}
           />
 
         </div>

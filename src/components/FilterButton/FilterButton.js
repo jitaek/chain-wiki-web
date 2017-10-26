@@ -1,19 +1,20 @@
-import React, { Component } from 'react';import RaisedButton from 'material-ui/RaisedButton';
+import React, { Component } from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export default class FilterButton extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            selected: false
+            // selected: false
         }
     }
 
     handleClick() {
-        this.setState((prevState, props) => ({
-            selected: !prevState.selected
-        }));
-        this.props.onClick()
+        // this.setState((prevState, props) => ({
+            // selected: !prevState.selected
+        // }));
+        // this.props.onClick()
     }
 
     render() {
@@ -21,14 +22,14 @@ export default class FilterButton extends Component {
         return (
             <RaisedButton
                 backgroundColor={
-                    this.state.selected ?
+                    this.props.selected ?
                     '#68a283' : 'white'
                 }
                 labelStyle={
-                    this.state.selected ?
+                    this.props.selected ?
                     {color:'white', padding:'0px'} : {color:'black', padding:'0px'}
                 }
-                fullWidth={true} label={this.props.label} onClick={this.handleClick.bind(this)}/> 
+                fullWidth={true} label={this.props.label} filter={this.props.filter} onClick={() => this.props.onClick(this.props.filter, this.props.label)}/> 
         );
     }
 

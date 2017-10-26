@@ -38,7 +38,6 @@ class Ability extends Component {
       healerArray: [],
     }
 
-    this.showArcana = this.showArcana.bind(this);
     this.selectedClass = this.selectedClass.bind(this);
     this.showArcanaForAbility = this.showArcanaForAbility.bind(this)
     this.selectAbility = this.selectAbility.bind(this)
@@ -120,14 +119,6 @@ class Ability extends Component {
 
   componentWillUnmount() {
 
-  }
-
-  showArcana(arcanaID) {
-    
-    this.props.history.push({
-      pathname: '../Arcana',
-      search: '?arcana=' + arcanaID,
-    });
   }
   
   selectedClass(index) {
@@ -293,7 +284,6 @@ class Ability extends Component {
           archerArray={this.state.archerArray}
           magicianArray={this.state.magicianArray}
           healerArray={this.state.healerArray}
-          onClick={this.showArcana}
           onChange={this.selectedClass}
           initialSelectedIndex={this.state.selectedIndex}
         />

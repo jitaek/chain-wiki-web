@@ -6,11 +6,11 @@ import {ref} from '../../helpers/constants'
 import ArcanaList from '../../components/ArcanaList/ArcanaList'
 
 import { HashRouter, Link, withRouter } from "react-router-dom";
-import LazyLoad from 'react-lazyload';
+import LazyLoad, { forceCheck } from 'react-lazyload';
+import ReactDOM from 'react-dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import FilterIcon from 'material-ui/svg-icons/content/filter-list';
 import IconMenu from 'material-ui/IconMenu';
@@ -26,6 +26,8 @@ const gridStyle = {
   marginTop: '40px',
 }
 
+var originalArray = []
+
 class Filter extends Component {
 
   constructor(props) {
@@ -38,8 +40,8 @@ class Filter extends Component {
       groupTypes: {},
       weaponTypes: {},
       affiliationTypes: {},
-      originalArray: [],
       arcanaArray: [],
+      rarity: {},
     }
 
     this.updateFilter = this.updateFilter.bind(this);
@@ -48,6 +50,7 @@ class Filter extends Component {
     this.toggleFilterView = this.toggleFilterView.bind(this);
     this.observeArcana = this.observeArcana.bind(this)
     this.setViewType = this.setViewType.bind(this)
+    this.getFilterQueries = this.getFilterQueries.bind(this)
     
   }
 
@@ -59,32 +62,10 @@ class Filter extends Component {
         viewType: viewType
       })
     }
-    // let array = [
-    //   {
-    //     nameKR: '무지카',
-    //     rarity: '5',
-    //     class: '궁수'
-    //   },
-    //   {
-    //     nameKR: '록사나',
-    //     rarity: '4',
-    //     class: '법사'
-    //   },
-    //   {
-    //     nameKR: '팔린',
-    //     rarity: '5',
-    //     class: '궁수'
-    //   },
-    // ]
-    // this.setState({
-    //   originalArray: array,
-    // })
   }
 
   componentDidMount() {
-
     this.observeArcana()
-
   }
 
 
@@ -92,6 +73,26 @@ class Filter extends Component {
     arcanaRef.off()
   }
 
+  getFilterQueries() {
+
+    // const search = this.props.history.location.search
+    // let params = getParams(search)
+
+    // const rarity = params['rarity']
+    // const group = params['group']
+    // const weapon = params['weapon']
+    // const affiliation = params['affiliation']
+
+    // if (searchText !== "" && nextSearchText !== searchText) {
+    //   searchText = nextSearchText
+    //   this.observeNames()
+    // }
+    // else {
+    //   // const nameArray = JSON.parse(sessionStorage.getItem('nameArray'))
+    //   arcanaArray = []
+    //   this.searchArcana()
+    // }
+  }
 
   observeArcana() {
     
@@ -109,9 +110,10 @@ class Filter extends Component {
 
       array.reverse()
 
+      originalArray = array
+
       this.setState({
         arcanaArray: array,
-        originalArray: array,
       })
 
     })
@@ -129,13 +131,6 @@ class Filter extends Component {
     }
   }
 
-  showArcana(arcanaID) {
-    this.props.history.push({
-      pathname: '../Arcana',
-      search: '?arcana=' + arcanaID
-    });
-  }
-
   toggleFilterView() {
     console.log('filter')
     this.setState({
@@ -143,11 +138,11 @@ class Filter extends Component {
     })
   }
 
-  updateFilter(event, key, value) {
+  updateFilter(key, value) {
 
     console.log(`${key}: ${value}`)
     if (key === 'rarity') {
-      var raritySet = this.state.rarityTypes;
+      var raritySet = Object.assign({}, this.state.rarityTypes)
       raritySet[value] === undefined ? raritySet[value] = true : delete raritySet[value]
 
       this.setState({
@@ -190,14 +185,17 @@ class Filter extends Component {
 
   clearFilter() {
     this.setState({
-      arcanaArray: this.state.originalArray,
+      arcanaArray: originalArray,
+      rarityTypes: {},
+      groupTypes: {},
+      weaponTypes: {},
+      affiliationTypes: {},
     })
   }
 
   filterArcana() {
     console.log("filtering arcana")
 
-    let originalArray = this.state.originalArray    
     var arcanaArray = []  // the final array with combined filters
 
     var rarityArray = []
@@ -221,7 +219,6 @@ class Filter extends Component {
       for (var j = 0; j < originalArray.length; j++) {
         
         if (originalArray[j].rarity === rarity) {
-          console.log(`adding ${originalArray[j].nameKR}`)
           rarityArray.push(originalArray[j])
         }
 
@@ -229,11 +226,9 @@ class Filter extends Component {
     }
 
     for (var group in groupTypes) {
-      console.log(`finding arcana with class ${group}`)
       for (var j = 0; j < originalArray.length; j++) {
         
         if (originalArray[j].class === group) {
-          console.log(`adding ${originalArray[j].nameKR}`)
           groupArray.push(originalArray[j])
         }
 
@@ -245,7 +240,6 @@ class Filter extends Component {
       for (var j = 0; j < originalArray.length; j++) {
         
         if (originalArray[j].weapon === weapon) {
-          console.log(`adding ${originalArray[j].nameKR}`)
           weaponArray.push(originalArray[j])
         }
 
@@ -256,8 +250,10 @@ class Filter extends Component {
       console.log(`finding arcana with affiliation ${affiliation}`)
       for (var j = 0; j < originalArray.length; j++) {
         
-        if (originalArray[j].affiliation === affiliation) {
-          console.log(`Affiliation: adding ${originalArray[j].nameKR}`)
+        if (affiliation === "현탑" && originalArray[j].affiliation === "현자의탑") {
+          affiliationArray.push(originalArray[j])          
+        }
+        else if (originalArray[j].affiliation.includes(affiliation)) {
           affiliationArray.push(originalArray[j])
         }
 
@@ -271,40 +267,31 @@ class Filter extends Component {
           // set up the first array
           if (combinedSets[i].length > 0) {
             arcanaArray = combinedSets[i];
-            console.log(combinedSets[i].length);
           }
         }
         else {
           // already initialized, so combine
           if (combinedSets[i].length > 0) {
-            console.log("intersecting")
-            console.log(arcanaArray.length)
-            console.log(combinedSets[i].length)
-            let origina = _.intersection(arcanaArray,combinedSets[i]);
-            console.log(origina.length)
             arcanaArray = _.intersection(arcanaArray,combinedSets[i]);
-            console.log(arcanaArray.length)
           }
           
         }
     }
 
-    console.log('filtered array is-------------->')
-    for (var i = 0; i < arcanaArray.length; i++) {
-      console.log(arcanaArray[i].nameKR)
-    }
-
-    console.log("until this line")
-
     this.setState({
       arcanaArray: arcanaArray
+    }, () => {
+      forceCheck()
     })
   }
 
   render() {
 
+    return (<ArcanaList
+      arcanaArray={this.state.arcanaArray}
+      viewType={this.state.viewType}
+    />)
     return (
-      <MuiThemeProvider>
         <div>
             <IconButton
               style={{float:'right'}}
@@ -325,68 +312,66 @@ class Filter extends Component {
                 <MenuItem primaryText="리스트 뷰" value="list"/>
             </IconMenu>
 
+            <br style={{clear:'both'}}/>
+            <div style={{display:'flex'}}>
+            <div className={styles.arcanaGrid}>
+              <ArcanaList
+                arcanaArray={this.state.arcanaArray}
+                viewType={this.state.viewType}
+              />
+            </div>
+            {this.state.showFilter &&
+            <div className={styles.filterContainer}>
 
-        <br style={{clear:'both'}}/>
-        <div style={{display:'flex'}}>
-        <div className={styles.arcanaGrid}>
-        <ArcanaList
-          arcanaArray={this.state.arcanaArray}
-          viewType={this.state.viewType}
-          onClick={this.showArcana}
-        />
-        </div>
-        {this.state.showFilter &&
-        <div className={styles.filterContainer}>
+            <div className={styles.filterGrid}>
+              <FilterButton label='5' selected={this.state.rarityTypes['5']} filter='rarity' onClick={this.updateFilter}/>
+              <FilterButton label='4' selected={this.state.rarityTypes['4']} filter='rarity' onClick={this.updateFilter}/>
+              <FilterButton label='3' selected={this.state.rarityTypes['3']} filter='rarity' onClick={this.updateFilter}/>
+              <FilterButton label='2' selected={this.state.rarityTypes['2']} filter='rarity' onClick={this.updateFilter}/>
+              <FilterButton label='1' selected={this.state.rarityTypes['1']} filter='rarity' onClick={this.updateFilter}/>
+            </div>
+            <div className={styles.filterGrid} style={gridStyle}>
+              <FilterButton label='전사' selected={this.state.groupTypes['전사']} filter='class' onClick={this.updateFilter}/>
+              <FilterButton label='기사' selected={this.state.groupTypes['기사']} filter='class' onClick={this.updateFilter}/>
+              <FilterButton label='궁수' selected={this.state.groupTypes['궁수']} filter='class' onClick={this.updateFilter}/>
+              <FilterButton label='법사' selected={this.state.groupTypes['법사']} filter='class' onClick={this.updateFilter}/>
+              <FilterButton label='승려' selected={this.state.groupTypes['승려']} filter='class' onClick={this.updateFilter}/>
+            </div>
+            <div className={styles.filterGrid} style={gridStyle}>
+              <FilterButton label='검' selected={this.state.weaponTypes['검']} filter='weapon' onClick={this.updateFilter}/>
+              <FilterButton label='봉' selected={this.state.weaponTypes['봉']} filter='weapon' onClick={this.updateFilter}/>
+              <FilterButton label='창' selected={this.state.weaponTypes['창']} filter='weapon' onClick={this.updateFilter}/>
+              <FilterButton label='마' selected={this.state.weaponTypes['마']} filter='weapon' onClick={this.updateFilter}/>
+              <FilterButton label='궁' selected={this.state.weaponTypes['궁']} filter='weapon' onClick={this.updateFilter}/>
+              <FilterButton label='성' selected={this.state.weaponTypes['성']} filter='weapon' onClick={this.updateFilter}/>
+              <FilterButton label='권' selected={this.state.weaponTypes['권']} filter='weapon' onClick={this.updateFilter}/>
+              <FilterButton label='총' selected={this.state.weaponTypes['총']} filter='weapon' onClick={this.updateFilter}/>
+              <FilterButton label='저' selected={this.state.weaponTypes['저']} filter='weapon' onClick={this.updateFilter}/>
+            </div>
+            <div className={styles.filterGrid} style={gridStyle}>
+              <FilterButton label='여행자' selected={this.state.affiliationTypes['여행자']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='마신' selected={this.state.affiliationTypes['마신']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='부도' selected={this.state.affiliationTypes['부도']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='성도' selected={this.state.affiliationTypes['성도']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='현탑' selected={this.state.affiliationTypes['현탑']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='미궁' selected={this.state.affiliationTypes['미궁']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='호도' selected={this.state.affiliationTypes['호도']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='정령섬' selected={this.state.affiliationTypes['정령섬']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='구령' selected={this.state.affiliationTypes['구령']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='대해' selected={this.state.affiliationTypes['대해']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='수인' selected={this.state.affiliationTypes['수인']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='죄' selected={this.state.affiliationTypes['죄']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='박명' selected={this.state.affiliationTypes['박명']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='철연' selected={this.state.affiliationTypes['철연']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='연대기' selected={this.state.affiliationTypes['연대기']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='레무' selected={this.state.affiliationTypes['레무']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='의용군' selected={this.state.affiliationTypes['의용군']} filter='affiliation' onClick={this.updateFilter}/>
+              <FilterButton label='화격단' selected={this.state.affiliationTypes['화격단']} filter='affiliation' onClick={this.updateFilter}/>
+            </div>
 
-        <div className={styles.filterGrid}>
-          <FilterButton label='5' onClick={() => this.updateFilter(this, 'rarity', '5')}/>
-          <FilterButton label="4" onClick={() => this.updateFilter(this, 'rarity', '4')}/>
-          <FilterButton label="3" onClick={() => this.updateFilter(this, 'rarity', '3')}/>
-          <FilterButton label="2" onClick={() => this.updateFilter(this, 'rarity', '2')}/>
-          <FilterButton label="1" onClick={() => this.updateFilter(this, 'rarity', '1')}/>
-        </div>
-        <div className={styles.filterGrid} style={gridStyle}>
-          <FilterButton label="전사" onClick={() => this.updateFilter(this, 'class', '전사')}/>
-          <FilterButton label="기사" onClick={() => this.updateFilter(this, 'class', '기사')}/>
-          <FilterButton label="궁수" onClick={() => this.updateFilter(this, 'class', '궁수')}/>
-          <FilterButton label="법사" onClick={() => this.updateFilter(this, 'class', '법사')}/>
-          <FilterButton label="승려" onClick={() => this.updateFilter(this, 'class', '승려')}/>
-        </div>
-        <div className={styles.filterGrid} style={gridStyle}>
-          <FilterButton label="검" onClick={() => this.updateFilter(this, 'weapon', '검')}/>
-          <FilterButton label="봉" onClick={() => this.updateFilter(this, 'weapon', '봉')}/>
-          <FilterButton label="창" onClick={() => this.updateFilter(this, 'weapon', '창')}/>
-          <FilterButton label="마" onClick={() => this.updateFilter(this, 'weapon', '마')}/>
-          <FilterButton label="궁" onClick={() => this.updateFilter(this, 'weapon', '궁')}/>
-          <FilterButton label="성" onClick={() => this.updateFilter(this, 'weapon', '성')}/>
-          <FilterButton label="권" onClick={() => this.updateFilter(this, 'weapon', '권')}/>
-          <FilterButton label="총" onClick={() => this.updateFilter(this, 'weapon', '총')}/>
-          <FilterButton label="저" onClick={() => this.updateFilter(this, 'weapon', '저')}/>
-        </div>
-        <div className={styles.filterGrid} style={gridStyle}>
-          <FilterButton label="여행자" onClick={() => this.updateFilter(this, 'affiliation', '여행자')}/>
-          <FilterButton label="마신" onClick={() => this.updateFilter(this, 'affiliation', '마신')}/>
-          <FilterButton label="부도" onClick={() => this.updateFilter(this, 'affiliation', '부도')}/>
-          <FilterButton label="성도" onClick={() => this.updateFilter(this, 'affiliation', '성도')}/>
-          <FilterButton label="현탑" onClick={() => this.updateFilter(this, 'affiliation', '현탑')}/>
-          <FilterButton label="미궁" onClick={() => this.updateFilter(this, 'affiliation', '미궁')}/>
-          <FilterButton label="호도" onClick={() => this.updateFilter(this, 'affiliation', '호도')}/>
-          <FilterButton label="정령섬" onClick={() => this.updateFilter(this, 'affiliation', '정령섬')}/>
-          <FilterButton label="구령" onClick={() => this.updateFilter(this, 'affiliation', '구령')}/>
-          <FilterButton label="대해" onClick={() => this.updateFilter(this, 'affiliation', '대해')}/>
-          <FilterButton label="수인" onClick={() => this.updateFilter(this, 'affiliation', '수인')}/>
-          <FilterButton label="죄" onClick={() => this.updateFilter(this, 'affiliation', '죄')}/>
-          <FilterButton label="박명" onClick={() => this.updateFilter(this, 'affiliation', '박명')}/>
-          <FilterButton label="철연" onClick={() => this.updateFilter(this, 'affiliation', '철연')}/>
-          <FilterButton label="연대기" onClick={() => this.updateFilter(this, 'affiliation', '연대기')}/>
-          <FilterButton label="레무" onClick={() => this.updateFilter(this, 'affiliation', '레무')}/>
-          <FilterButton label="의용군" onClick={() => this.updateFilter(this, 'affiliation', '의용군')}/>
-          <FilterButton label="화격단" onClick={() => this.updateFilter(this, 'affiliation', '화격단')}/>
-        </div>
-
-        <div style={{margin:'10px', marginTop:'20px'}}>
-          <FilterButton label="모두 지우기" onClick={this.clearFilter}/>
-        </div>
+            <div style={{margin:'10px', marginTop:'20px'}}>
+              <FilterButton label="모두 지우기" onClick={this.clearFilter}/>
+            </div>
 
         </div>
         }
@@ -400,8 +385,6 @@ class Filter extends Component {
         </Toolbar> */}
         </div>
         </div>
-      </MuiThemeProvider>
-
     );
   }
 

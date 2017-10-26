@@ -36,7 +36,6 @@ class Search extends Component {
     this.observeNames = this.observeNames.bind(this);
     this.mergeArcanaArrayWith = _.debounce(this.mergeArcanaArrayWith.bind(this), 200)
     this.observeArcanaWithID = this.observeArcanaWithID.bind(this);
-    this.showArcana = this.showArcana.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
 
@@ -157,14 +156,6 @@ class Search extends Component {
     })
   }
 
-  showArcana(arcanaID) {
-
-    this.props.history.push({
-      pathname: '../Arcana',
-      search: '?arcana=' + arcanaID,
-    });
-  }
-
   handleScroll() {
     var d = document.documentElement;
     var offset = d.scrollTop + window.innerHeight;
@@ -182,7 +173,6 @@ class Search extends Component {
           <ArcanaList
             arcanaArray={this.state.arcanaArray}
             viewType={this.state.viewType}
-            onClick={this.showArcana}
           />
 
         </div>

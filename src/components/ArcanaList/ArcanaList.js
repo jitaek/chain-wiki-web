@@ -16,29 +16,15 @@ export default class ArcanaList extends React.Component {
 
             return (
 
-                <div className={styles.grid} ref="homeRoot">
+                <div className={styles.grid}>
                 
                     {this.props.arcanaArray.map(arcana => 
         
                         <LazyLoad height={300} offset={[200,200]} unmountIfInvisible={true} once={true} key={arcana.uid}>
                             <ArcanaGridCell
-
-                            onClick={() => this.props.onClick(arcana.uid)}
-                            key={arcana.uid}
-        
-                            nameKR={arcana.nameKR}
-                            nicknameKR={arcana.nicknameKR}
-                            nameJP={arcana.nameJP}
-                            nicknameJP={arcana.nicknameJP}
-            
-                            rarity={arcana.rarity}
-                            class={arcana.class}
-                            weapon={arcana.weapon}
-                            affiliation={arcana.affiliation}
-                            numberOfViews={arcana.numberOfViews}
-            
+                            arcanaID={arcana.uid}
                             imageURL={arcana.imageURL}
-                            iconURL={arcana.iconURL}
+
                             /> 
                         </LazyLoad>   
                     
@@ -47,17 +33,14 @@ export default class ArcanaList extends React.Component {
             );
         }
 
-        return ( 
-
-            <div ref="homeRoot">
-
+        return (             
+            <div>
                 {this.props.arcanaArray.map(arcana => 
 
-                    <LazyLoad height={90} offset={[200,200]} unmountIfInvisible={true} once={true} key={arcana.uid}>
-                        <ArcanaCell
+                    // <LazyLoad height={90} debounce={300}  once={true} key={arcana.uid}>
+                        <ArcanaCell key={arcana.uid}
 
-                        onClick={() => this.props.onClick(arcana.uid)}
-                        key={arcana.uid}
+                        arcanaID={arcana.uid}
 
                         nameKR={arcana.nameKR}
                         nicknameKR={arcana.nicknameKR}
@@ -72,7 +55,7 @@ export default class ArcanaList extends React.Component {
 
                         iconURL={arcana.iconURL}
                         />
-                    </LazyLoad>
+                    // </LazyLoad>
                 )}
             </div>
         );

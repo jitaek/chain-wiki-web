@@ -14,14 +14,7 @@
   overflow:hidden;  
 }
 
-/* @media (min-width: 500px) {
-  .gridContainer {
-      width: 200px;
-      height: 300px;
-  }
-} */
-
-.arcanaMainImage:hover {
+.linkContainer:hover .arcanaMainImage{
   -moz-transform: scale(1.1);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
