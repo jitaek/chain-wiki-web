@@ -239,13 +239,13 @@ class Arcana extends React.Component {
         mainImageClassNames = styles.mainImage
       }
 
-      // var iconClassNames
-      // if (!this.state.iconLoaded) {
-      //   iconClassNames = styles.mainImagePlaceholder
-      // }
-      // else {
-      //   iconClassNames = styles.mainImage
-      // }
+      var iconClassNames
+      if (!this.state.iconLoaded) {
+        iconClassNames = styles.iconPlaceholder
+      }
+      else {
+        iconClassNames = styles.icon
+      }
 
       return (
 
@@ -256,7 +256,7 @@ class Arcana extends React.Component {
           </div>
           <div className={styles.headerContainer}>
             {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
-            <img className={styles.arcanaImageIcon} src={this.state.iconURL}/>
+            <img className={iconClassNames} src={this.state.iconURL} onLoad={() => this.setState({iconLoaded: true})}/>
             <div className={styles.nameContainer}>
               <div className={styles.nameKRContainer}>
                 <div className={styles.nameKRLabel}>{this.state.nicknameKR + " " + this.state.nameKR}</div>

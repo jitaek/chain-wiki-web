@@ -26,7 +26,7 @@ table {
   top: 0; bottom: 0; left: 0; right: 0;
 }
 
-.mainImagePlaceholder {
+.mainImagePlaceholder, .iconPlaceholder {
   opacity: 0;
   transition: opacity 0.4s ease-in;
   -ms-transition: opacity 0.4s ease-in;
@@ -34,13 +34,12 @@ table {
   -webkit-transition: opacity 0.4s ease-in;
 }
 
-.mainImage {
+.mainImage, .icon {
   opacity: 1;
   transition: opacity 0.4s ease-out;
   -ms-transition: opacity 0.4s ease-out;
   -moz-transition: opacity 0.4s ease-out;
   -webkit-transition: opacity 0.4s ease-out;
-
 }
 
 .headerContainer {
@@ -49,19 +48,13 @@ table {
   display: flex;
   margin: 10px;
   align-items: center;
-  
-  /* justify-content: center; */
 }
 
-.container {
-  height: 90px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.nameContainer {
-  /* text-align: center; */
+.iconPlaceholder, .icon {
+  padding-right: 10px;
+  display: block;
+  width: 66px;
+  height: 66px;
 }
 
 .nameKRLabel {
