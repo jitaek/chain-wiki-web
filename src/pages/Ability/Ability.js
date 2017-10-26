@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import logo from '../../logo.png';
+import { HashRouter, Link, withRouter } from "react-router-dom";
 import styles from './Ability.css';
 import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
-import { getParameterByName } from '../../helpers/QueryParameter'
 
-import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
-import ArcanaGridCell from '../../components/ArcanaGridCell/ArcanaGridCell'
-import { HashRouter, Link, withRouter } from "react-router-dom";
+import AbilityTabs from '../../components/AbilityTabs/AbilityTabs'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {List, ListItem} from 'material-ui/List';
+import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
+import { forceCheck } from 'react-lazyload';
+
+var _ = require('lodash');
+
+var ability
+var warriorArray = []
+var knightArray = []
+var archerArray = []
+var magicianArray = []
+var healerArray = []
 
 class Ability extends Component {
 
@@ -21,65 +29,130 @@ class Ability extends Component {
     this.state = {
       abilityType: "Ability",
       abilityRef: null,
+      selectedIndex: 0,
       arcanaArray: [],
+      warriorArray: [],
+      knightArray: [],
+      archerArray: [],
+      magicianArray: [],
+      healerArray: [],
     }
 
+    this.showArcana = this.showArcana.bind(this);
+    this.selectedClass = this.selectedClass.bind(this);
     this.showArcanaForAbility = this.showArcanaForAbility.bind(this)
     this.selectAbility = this.selectAbility.bind(this)
     this.setAbilityType = this.setAbilityType.bind(this)
     this.observeArcanaWithAbility = this.observeArcanaWithAbility.bind(this)
+    this.mergeArcanaArrayWith = _.debounce(this.mergeArcanaArrayWith.bind(this), 200)
+    this.sortArcanaArray = this.sortArcanaArray.bind(this)
+    this.pushArcana = this.pushArcana.bind(this)
+    
   }
 
   componentWillReceiveProps() {
-    const search = this.props.location.search
 
-    if (search) {
-      const abilityRef = getParameterByName('query')
-      if (abilityRef) {
-        this.observeArcanaWithAbility(abilityRef)
-      }
+    /*
+    const search = this.props.history.location.search
+    let params = new URLSearchParams(search.slice(1));
+    const nextSearchText = params.get('search');
 
+    console.log(`search text is ${nextSearchText}`)
+    if (searchText !== "" && nextSearchText !== searchText) {
+      searchText = nextSearchText
+      this.observeNames()
     }
+    else {
+      // const nameArray = JSON.parse(sessionStorage.getItem('nameArray'))
+      arcanaArray = []
+      this.searchArcana()
+    }
+*/
+    const search = this.props.history.location.search
+    let params = new URLSearchParams(search.slice(1));
+    const nextAbility = params.get('query');
+
+    console.log(`ability query text is ${nextAbility}`)
+    if (ability !== "" && nextAbility !== ability) {
+      ability = nextAbility
+      this.observeArcanaWithAbility(ability)
+    }
+
+
   }
   
   componentWillMount() {
-  
-    let array = [
-      {
-        nameKR: '무지카',
-        rarity: '5',
-        class: '궁수'
-      },
-      {
-        nameKR: '록사나',
-        rarity: '4',
-        class: '법사'
-      },
-      {
-        nameKR: '팔린',
-        rarity: '5',
-        class: '궁수'
-      },
-    ]
-    this.setState({
-      originalArray: array,
-    })
+
   }
 
   componentDidMount() {
+    
+    const search = this.props.history.location.search
+    let params = new URLSearchParams(search.slice(1));
+    const nextAbility = params.get('query');
+    const selectedIndex = parseInt(params.get('index'))
 
+    if (ability !== "" && nextAbility !== ability) {
+      warriorArray = []
+      knightArray = []
+      archerArray = []
+      magicianArray = []
+      healerArray = []
+      
+      ability = nextAbility
+      this.observeArcanaWithAbility(ability)
+    }
+    else if (nextAbility === ability) {
+      this.setState({
+        warriorArray: warriorArray,
+        knightArray: knightArray,
+        archerArray: archerArray,
+        magicianArray: magicianArray,
+        healerArray: healerArray,
+        abilityRef: nextAbility,
+      })
+    }
+
+    if (selectedIndex || selectedIndex === 0) {
+      this.setState({
+        selectedIndex:selectedIndex
+      })
+    }
   }
-
 
   componentWillUnmount() {
 
   }
 
+  showArcana(arcanaID) {
+    
+    this.props.history.push({
+      pathname: '../Arcana',
+      search: '?arcana=' + arcanaID,
+    });
+  }
+  
+  selectedClass(index) {
+
+    const search = this.props.history.location.search
+    let params = new URLSearchParams(search.slice(1));
+    const nextAbility = params.get('query');
+
+    this.props.history.replace({
+      search: `?query=${nextAbility}&index=${index}`
+    }, () => {
+      forceCheck()
+    })
+      
+    console.log(`index is ${index}`)
+    // forceCheck()
+
+  }
 
   observeArcanaWithAbility(abilityRef) {
 
-    if (abilityRef !== undefined) {
-        
+    if (abilityRef !== undefined && abilityRef !== null) {
+
       ref.child('ability').child(abilityRef).on('child_added', snapshot => {
 
         let arcanaID = snapshot.key
@@ -88,17 +161,91 @@ class Ability extends Component {
 
           let arcana = snapshot.val()
 
+          // might be null because of stale IDs remaining in abilityRef
           if (arcana !== null) {
             this.setState({
-              arcanaArray: [arcana].concat(this.state.arcanaArray)
+              abilityRef: abilityRef
             })
+            this.pushArcana(arcana)            
           }
 
         })
       })
+    }
+  }
 
+  pushArcana(arcana) {
+
+    const arcanaClass = arcana.class
+
+    switch (arcanaClass) {
+      case "전사":
+        warriorArray.push(arcana)
+        this.sortArcanaArray(warriorArray, "전사")
+        break
+      case "기사":
+        knightArray.push(arcana)
+        this.sortArcanaArray(knightArray, "기사")
+        break
+      case "궁수":
+        archerArray.push(arcana)
+        this.sortArcanaArray(archerArray, "궁수")
+        break
+      case "법사":      
+        magicianArray.push(arcana)
+        this.sortArcanaArray(magicianArray, "법사")
+        break
+      case "승려":
+        healerArray.push(arcana)
+        this.sortArcanaArray(healerArray, "승려")
+        break
+      default:
+        break;
     }
 
+  }
+
+  sortArcanaArray(array, arcanaClass) {
+
+    array.sort(function (a,b) {
+      return a.rarity > b.rarity ? -1 : 1
+    })
+    
+    switch (arcanaClass) {
+      case "전사":
+        this.setState({
+          warriorArray: array
+        })
+        break
+      case "기사":
+        this.setState({
+          knightArray: array
+        })
+        break
+      case "궁수":
+        this.setState({
+          archerArray: array
+        })
+        break
+      case "법사":
+        this.setState({
+          magicianArray: array
+        })
+        break
+      case "승려":
+        this.setState({
+          healerArray: array
+        })
+        break
+    }
+
+  }
+
+  mergeArcanaArrayWith(abilityRef, fetchedArcanaArray) {
+    this.setState({
+      abilityRef: abilityRef,
+      arcanaArray: fetchedArcanaArray.concat(this.state.arcanaArray)
+    })
   }
 
   setAbilityType(event, value) {
@@ -138,100 +285,27 @@ class Ability extends Component {
 
     const search = this.props.location.search
 
-    if (this.state.arcanaArray.length > 0) {
+    if (this.state.abilityRef !== null) {
       
+      // TODO: 5 lists for each class. Also depending on width, show several at once.
       return (
-        <div>
-          {this.state.arcanaArray.map( arcana => 
-
-              <ArcanaCell
-                key={arcana.uid}
-
-                nameKR={arcana.nameKR}
-                nicknameKR={arcana.nicknameKR}
-                nameJP={arcana.nameJP}
-                nicknameJP={arcana.nicknameJP}
-
-                rarity={arcana.rarity}
-                class={arcana.class}
-                weapon={arcana.weapon}
-                affiliation={arcana.affiliation}
-                numberOfViews={arcana.numberOfViews}
-
-                imageURL={arcana.imageURL}
-                iconURL={arcana.iconURL}
-              />          
-          
-          )}
-        </div>
+        <AbilityTabs
+          warriorArray={this.state.warriorArray}
+          knightArray={this.state.knightArray}
+          archerArray={this.state.archerArray}
+          magicianArray={this.state.magicianArray}
+          healerArray={this.state.healerArray}
+          onClick={this.showArcana}
+          onChange={this.selectedClass}
+          initialSelectedIndex={this.state.selectedIndex}
+        />
       )
       
     }
     else {
 
-    return (
-      <MuiThemeProvider>
-        <div>
-          
-          <div style={{margin:'10px'}}>
-            <RadioButtonGroup name="status" defaultSelected="Ability" onChange={this.setAbilityType}>
-              <RadioButton style={{ display: 'inline-block', width: '150px' }} label="어빌리티" value="Ability" />
-              <RadioButton style={{ display: 'inline-block', width: '150px', marginLeft: '50px' }} label="인연" value="Kizuna" />
-            </RadioButtonGroup>
-
-            <List>
-              <ListItem primaryText="마나의 소양" onClick={() => this.selectAbility('mana')}/>
-              <ListItem primaryText="상자 획득" onClick={() => this.selectAbility('treasure')}/>
-              <ListItem primaryText="골드" onClick={() => this.selectAbility('gold')}/>
-              <ListItem primaryText="경험치" onClick={() => this.selectAbility('exp')}/>
-              <ListItem primaryText="AP 회복" onClick={() => this.selectAbility('apRecover')}/>
-              <ListItem primaryText="서브시 증가" onClick={() => this.selectAbility('sub')}/>
-              <ListItem primaryText="필살기 증가" onClick={() => this.selectAbility('skillUp')}/>
-              <ListItem primaryText="보스 웨이브시 공격력 증가" onClick={() => this.selectAbility('bossWave')}/>
-              <ListItem primaryText="마나 슬롯 속도" onClick={() => this.selectAbility('manaSlot')}/>
-              <ListItem primaryText="마나 획득 확률 증가" onClick={() => this.selectAbility('manaChance')}/>
-              <ListItem primaryText="웨이브 회복" onClick={() => this.selectAbility('partyHeal')}/>
-              <ListItem primaryText="어둠 적에게 공격력 증가" onClick={() => this.selectAbility('darkAttackUp')}/>
-              <ListItem primaryText="어둠 면역" onClick={() => this.selectAbility('darkImmune')}/>
-              <ListItem primaryText="어둠 부여" onClick={() => this.selectAbility('darkStrike')}/>
-              <ListItem primaryText="슬로우 적에게 공격력 증가" onClick={() => this.selectAbility('slowAttackUp')}/>
-              <ListItem primaryText="슬로우 면역" onClick={() => this.selectAbility('slowImmune')}/>
-              <ListItem primaryText="슬로우 부여" onClick={() => this.selectAbility('slowStrike')}/>
-              <ListItem primaryText="독 적에게 공격력 증가" onClick={() => this.selectAbility('poisonAttackUp')}/>
-              <ListItem primaryText="독 면역" onClick={() => this.selectAbility('poisonImmune')}/>
-              <ListItem primaryText="독 부여" onClick={() => this.selectAbility('poisonStrike')}/>
-              <ListItem primaryText="저주 적에게 공격력 증가" onClick={() => this.selectAbility('curseAttackUp')}/>
-              <ListItem primaryText="저주 면역" onClick={() => this.selectAbility('curseImmune')}/>
-              <ListItem primaryText="저주 부여" onClick={() => this.selectAbility('curseStrike')}/>
-              <ListItem primaryText="쇠약 적에게 공격력 증가" onClick={() => this.selectAbility('weakAttackUp')}/>
-              <ListItem primaryText="쇠약 면역" onClick={() => this.selectAbility('weakImmune')}/>
-              <ListItem primaryText="쇠약 부여" onClick={() => this.selectAbility('weakStrike')}/>
-              <ListItem primaryText="다운 적에게 공격력 증가" onClick={() => this.selectAbility('stunAttackUp')}/>
-              <ListItem primaryText="다운 면역" onClick={() => this.selectAbility('stunImmune')}/>
-              <ListItem primaryText="다운 부여" onClick={() => this.selectAbility('stunStrike')}/>
-              <ListItem primaryText="동결 적에게 공격력 증가" onClick={() => this.selectAbility('frostAttackUp')}/>
-              <ListItem primaryText="동결 면역" onClick={() => this.selectAbility('frostImmune')}/>
-              <ListItem primaryText="동결 부여" onClick={() => this.selectAbility('frostStrike')}/>
-              <ListItem primaryText="봉인 적에게 공격력 증가" onClick={() => this.selectAbility('sealAttackUp')}/>
-              <ListItem primaryText="봉인 면역" onClick={() => this.selectAbility('sealImmune')}/>
-              <ListItem primaryText="봉인 부여" onClick={() => this.selectAbility('sealStrike')}/>
-              <ListItem primaryText="황무지" onClick={() => this.selectAbility('wastelands')}/>
-              <ListItem primaryText="숲" onClick={() => this.selectAbility('forest')}/>
-              <ListItem primaryText="덩굴" onClick={() => this.selectAbility('cavern')}/>
-              <ListItem primaryText="사막" onClick={() => this.selectAbility('desert')}/>
-              <ListItem primaryText="설산" onClick={() => this.selectAbility('snow')}/>
-              <ListItem primaryText="도시" onClick={() => this.selectAbility('urban')}/>
-              <ListItem primaryText="해변" onClick={() => this.selectAbility('water')}/>
-              <ListItem primaryText="야간" onClick={() => this.selectAbility('night')}/>
-
-            </List>
-          </div>
-
-        </div>
-      </MuiThemeProvider>
-
-    );
-  }
+      return <LoadingIndicator/>
+    }
   }
 
 }

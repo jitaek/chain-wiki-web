@@ -11,7 +11,7 @@ import {
 import sampleMain from '../../sampleMainImage.jpg';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RefreshIndicator from 'material-ui/RefreshIndicator';
+import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
 
 var arcanaID
 
@@ -314,31 +314,11 @@ class Arcana extends React.Component {
     }
 
     else {
-      return <div className={styles.refreshContainer}>
-        <MuiThemeProvider>
-          <RefreshIndicator
-            size={40}
-            left={-20}
-            top={-20}
-            loadingColor={'#68a283'}
-            status="loading"
-            style={style.refresh}
-          />
-        </MuiThemeProvider>
-      </div>
+      return <LoadingIndicator/>
+      
     }
   }
 
 }
-
-const style = {
-  container: {
-    position: 'relative',
-  },
-  refresh: {
-    marginLeft: '50%',
-    marginTop: '10%'
-  },
-};
 
 export default Arcana;

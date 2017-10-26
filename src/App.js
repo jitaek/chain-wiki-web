@@ -20,6 +20,7 @@ import Home from "./pages/Home/Home"
 import Arcana from "./pages/Arcana/Arcana"
 import Search from "./pages/Search/Search"
 import Filter from "./pages/Filter/Filter"
+import AbilityList from './pages/AbilityList/AbilityList'
 import Ability from './pages/Ability/Ability'
 import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
 import Login from './pages/Login/Login'
@@ -84,6 +85,7 @@ class App extends Component {
                 <Route path="/arcana" exact component={Arcana} />
                 <Route path="/search" exact component={Search} />
                 <Route path="/filter" exact component={Filter} />
+                <Route path="/abilityList" exact component={AbilityList} />
                 <Route path="/ability" exact component={Ability} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/arcanaComposer" exact component={ArcanaComposer} />
