@@ -204,10 +204,10 @@ class UpdateArcanaRefs extends React.Component {
 
     let arcanaID = arcana.arcanaID
 
-    var currentArcanaDict = this.state.arcanaDictionary
+    const currentArcanaDict = Object.assign({}, this.state.arcanaDictionary)
 
     if (currentArcanaDict[arcanaID] === undefined) {
-      var newListArray = this.state.arcanaListArray.slice()
+      const newListArray = Object.assign([], this.state.arcanaListArray)
       newListArray.push(arcana)
 
       currentArcanaDict[arcanaID] = true
@@ -219,7 +219,7 @@ class UpdateArcanaRefs extends React.Component {
     }
     else {
 
-      var newListArray = this.state.arcanaListArray.slice()
+      var newListArray = Object.assign([], this.state.arcanaListArray)
       
       var index = -1
       for(var i = 0, len = newListArray.length; i < len; i++) {
@@ -233,7 +233,8 @@ class UpdateArcanaRefs extends React.Component {
         newListArray.splice(index, 1)
       }
 
-      currentArcanaDict[arcanaID] = undefined
+      delete currentArcanaDict[arcanaID]
+      
       this.setState({
         arcanaListArray: newListArray,
         arcanaDictionary: currentArcanaDict

@@ -193,13 +193,13 @@ class Arcana extends React.Component {
 
     if (arcanaID) {
 
-      // incrementViewCount(arcanaID)
+      incrementViewCount(arcanaID)
       
       let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
 
       arcanaRef.on('value', snapshot => {
 
-        let arcana = snapshot.val();
+        let arcana = snapshot.val()
 
         this.createJPLink(arcana.nicknameJP, arcana.nameJP)
 
