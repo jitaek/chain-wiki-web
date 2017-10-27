@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, Link, withRouter } from "react-router-dom";
+import { BrowserRouter, Link, withRouter } from "react-router-dom";
 import styles from './Ability.css';
 import firebase from 'firebase';
 import {ref} from '../../helpers/constants'

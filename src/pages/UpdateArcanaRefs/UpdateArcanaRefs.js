@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from '../../logo.png';
 import firebase from 'firebase';
 import { ref } from '../../helpers/constants'
-import { HashRouter, Link, withRouter } from "react-router-dom";
+import { BrowserRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import LazyLoad from 'react-lazyload';
 import { forceCheck } from 'react-lazyload';

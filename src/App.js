@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import styles from './App.css';
 
 import {
-  hashHistory,
-  HashRouter as Router,
+  browserHistory,
+  BrowserRouter as Router,
   Route,
   Switch,
   Redirect
 } from 'react-router-dom'
-
-import { createHashHistory } from 'history'
 
 import { firebaseAuth } from './helpers/constants'
 
@@ -38,8 +36,6 @@ function PrivateRoute ({component: Component, authed, ...rest}) {
     />
   )
 }
-
-export const history = createHashHistory()
 
 class App extends Component {
 

@@ -3,7 +3,7 @@ import logo from '../../logo.png';
 import styles from './ArcanaComposer.css';
 import firebase from 'firebase';
 import { ref } from '../../helpers/constants'
-import { HashRouter, Link, withRouter } from "react-router-dom";
+import { BrowserRouter, Link, withRouter } from "react-router-dom";
 
 // Material UI
 import TextField from 'material-ui/TextField';

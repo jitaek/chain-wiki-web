@@ -5,7 +5,7 @@ import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
 
 import ArcanaList from '../../components/ArcanaList/ArcanaList'
-import { HashRouter, Link, withRouter } from "react-router-dom";
+import { BrowserRouter, Link, withRouter } from "react-router-dom";
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {List, ListItem} from 'material-ui/List';

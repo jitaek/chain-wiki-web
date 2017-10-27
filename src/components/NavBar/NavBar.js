@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Link, withRouter } from "react-router-dom";
+import { BrowserRouter, Link, withRouter } from "react-router-dom";
 import { ref } from '../../helpers/constants'
 import { history } from '../../App'
 
