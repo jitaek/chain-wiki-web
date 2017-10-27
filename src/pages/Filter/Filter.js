@@ -295,7 +295,7 @@ class Filter extends Component {
       arcanaGridClass = styles.arcanaGridFull
     }
     return (
-        <div>
+        <div style={{position:'relative'}}>
             <IconButton
               style={{float:'right'}}
               onClick={this.toggleFilterView}

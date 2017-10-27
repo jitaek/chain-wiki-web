@@ -1,8 +1,14 @@
+@supports (display: grid) {
+  
 .gridContainerPlaceholder, .gridContainer {
   padding-top: 150%;
   position: relative;
+  }
 }
 
+@supports not (display: grid) {
+
+}
 .gridContainerPlaceholder {
   opacity: 0;
   transition: opacity 0.4s ease-in;
@@ -25,7 +31,7 @@
   overflow:hidden;  
 }
 
-.linkContainer:hover .arcanaMainImage{
+.linkContainer:hover .arcanaMainImage {
   -moz-transform: scale(1.1);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);

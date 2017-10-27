@@ -22,7 +22,6 @@ export default class ArcanaList extends React.Component {
         
                         // <LazyLoad height={300} offset={[200,200]} unmountIfInvisible={true} once={true} key={arcana.uid}>
                             <ArcanaGridCell
-
                             key={arcana.uid}
                             arcanaID={arcana.uid}
                             imageURL={arcana.imageURL}
