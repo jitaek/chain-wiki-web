@@ -3,6 +3,7 @@ import logo from '../../logo.png';
 import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
 import ArcanaList from '../../components/ArcanaList/ArcanaList'
+import { getParams } from '../../helpers/QueryParameter'
 
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
@@ -61,19 +62,22 @@ class Home extends Component {
       legendArray: [],
       abyssalArray: [],
       viewType: "grid",
+      list: "recent",
+      index: 0,
       user: null,
-    };
+    }
 
-    this.observeArcana = this.observeArcana.bind(this);
-    this.observeRewardArcana = this.observeRewardArcana.bind(this);
-    this.observeFestivalArcana = this.observeFestivalArcana.bind(this);
-    this.observeLegendArcana = this.observeLegendArcana.bind(this);
-    this.observeAbyssalArcana = this.observeAbyssalArcana.bind(this);
+    this.observeArcana = this.observeArcana.bind(this)
+    this.observeRewardArcana = this.observeRewardArcana.bind(this)
+    this.observeFestivalArcana = this.observeFestivalArcana.bind(this)
+    this.observeLegendArcana = this.observeLegendArcana.bind(this)
+    this.observeAbyssalArcana = this.observeAbyssalArcana.bind(this)
     this.fetchArcana = this.fetchArcana.bind(this)
 
-    this.handleScroll = this.handleScroll.bind(this);
+    this.handleScroll = this.handleScroll.bind(this)
 
     this.setViewType = this.setViewType.bind(this)
+    this.selectedArcanaList = this.selectedArcanaList.bind(this)
     this.reloadArcanaList = this.reloadArcanaList.bind(this)
     this.loadedLists = _.debounce(this.loadedLists.bind(this), 200)
     
@@ -107,6 +111,14 @@ class Home extends Component {
         viewType: viewType,
       })
     }
+
+    const search = this.props.history.location.search
+    let params = getParams(search)
+    const index = params['index']
+    this.setState({
+      index: index
+    })
+    
   }
  
 
@@ -368,16 +380,11 @@ class Home extends Component {
 
   selectedArcanaList(index) {
     
+    setTimeout(forceCheck, 300)
 
-    // const search = this.props.history.location.search
-    // let params = getParams(search)
-    // const nextAbility = params['query'];
-
-    // forceCheck()
-    
-    // this.props.history.replace({
-    //   search: `?query=${nextAbility}&index=${index}`
-    // })
+    this.props.history.replace({
+      search: `index=${index}`
+    })
       
     console.log(`index is ${index}`)
 
@@ -522,8 +529,11 @@ class Home extends Component {
             recentArray={this.state.recentArray}
             legendArray={this.state.legendArray}
             abyssalArray={this.state.abyssalArray}
+
             viewType={this.state.viewType}
-            onChange={()=>setTimeout(forceCheck, 300)}
+            index={this.state.index}
+
+            onChange={this.selectedArcanaList}
           />
           }
 

@@ -28,9 +28,27 @@ export default class HomeTabs extends React.Component {
         }
     }
 
+    calculateIndex(index) {
+
+        console.log(`raw index is ${index}`)
+        if (this.props.rewardArray.length === 0 && this.props.festivalArray.length === 0) {
+            index = index - 2
+        }
+        else if (this.props.festivalArray.length > 0) {
+            index--
+        }
+        else if (this.props.rewardArray.length > 0) {
+            index--
+        }
+        console.log(`adjust index is ${index}`)
+
+        return index
+        
+    }
+
     render() {
         return (
-        <Tabs onChange={this.props.onChange} inkBarStyle={InkBarStyle} initialSelectedIndex={0}>
+        <Tabs onChange={this.props.onChange} inkBarStyle={InkBarStyle} initialSelectedIndex={this.calculateIndex(this.props.index)}>
             {this.props.rewardArray.length > 0 &&
             <Tab
                 label="보상"
