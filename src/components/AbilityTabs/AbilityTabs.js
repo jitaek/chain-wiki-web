@@ -7,11 +7,15 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
 
 const TabBarStyle = {
-    backgroundColor: greenColor
+    backgroundColor: 'white'
+}
+
+const TabButtonStyle = {
+    color: 'black',
 }
 
 const InkBarStyle = {
-    backgroundColor: 'white'
+    backgroundColor: greenColor
 }
 
 export default class AbilityTabs extends React.Component {
@@ -30,55 +34,55 @@ export default class AbilityTabs extends React.Component {
                 label="전사"
                 style={TabBarStyle}
                 value={0}
+                buttonStyle={TabButtonStyle}
             >
                 <ArcanaList
                     arcanaArray={this.props.warriorArray}
                     viewType='list'
-                    onClick={this.props.onClick}
                 />
             </Tab>
             <Tab
                 label="기사"
                 style={TabBarStyle}
                 value={1}
+                buttonStyle={TabButtonStyle}
             >
                 <ArcanaList
                     arcanaArray={this.props.knightArray}
                     viewType='list'
-                    onClick={this.props.onClick}
                 />
             </Tab>
             <Tab
                 label="궁수"
                 style={TabBarStyle}
                 value={2}
+                buttonStyle={TabButtonStyle}
             >
                 <ArcanaList
                     arcanaArray={this.props.archerArray}
                     viewType='list'
-                    onClick={this.props.onClick}
                 />
             </Tab>
             <Tab
                 label="법사"
                 style={TabBarStyle}
                 value={3}
+                buttonStyle={TabButtonStyle}
             >
                 <ArcanaList
                     arcanaArray={this.props.magicianArray}
                     viewType='list'
-                    onClick={this.props.onClick}
                 />
             </Tab>
             <Tab
                 label="승려"
                 style={TabBarStyle}
                 value={4}
+                buttonStyle={TabButtonStyle}
             >
                 <ArcanaList
                     arcanaArray={this.props.healerArray}
                     viewType='list'
-                    onClick={this.props.onClick}
                 />
             </Tab>
         </Tabs>

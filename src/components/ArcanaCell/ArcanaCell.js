@@ -41,8 +41,7 @@ class ArcanaCell extends React.Component {
                     <LazyLoad height={66} debounce={300} placeholder={<IconPlaceholder/>} once={true}>
                         <img
                             className={classNames}
-                            src={logo}
-                            /* src={this.props.iconURL} */
+                            src={this.props.iconURL}
                             alt={this.props.nameKR}
                             onLoad={() => this.setState({loaded: true})}
                         />

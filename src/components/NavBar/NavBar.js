@@ -70,7 +70,7 @@ class NavBar extends React.Component {
 
     if (index > 0 && index < this.state.nameArray.length) {
       let arcanaID = this.state.nameArray[index].value
-      history.push({
+      this.props.history.push({
         pathname: '../arcana',
         search: '?arcana=' + arcanaID
       });

@@ -37,13 +37,13 @@ class ArcanaGridCell extends React.Component {
                 <LazyLoad height={325} debounce={100} placeholder={<ImagePlaceholder/>} once={true}>
                     <div className={classNames}>
                             <img className={styles.arcanaMainImage}
+                                /* src={this.props.imageURL} */
                                 src={SampleMain}
                                 alt={this.props.nameKR}
                                 onLoad={() => this.setState({loaded: true})}
                             />
                     </div>    
                 </LazyLoad>
-
             </Link>        
         );
     }

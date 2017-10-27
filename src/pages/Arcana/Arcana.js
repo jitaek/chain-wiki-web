@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import logo from '../../logo.png';
 import styles from './Arcana.css';
 import firebase from 'firebase';
-import ArcanaCell from '../../components/ArcanaCell/ArcanaCell';
+import {ref} from '../../helpers/constants'
+
 import {
   Route,
   Link,
@@ -84,6 +85,15 @@ function Ability(props) {
   } 
 }
 
+function incrementViewCount() {
+  ref.child(`arcana/${arcanaID}/numberOfViews`).transaction(function(count) {
+    if (count) {
+      console.log('count was', count);
+      count++;
+    }
+    return count;
+  });
+}
 
 class Arcana extends React.Component {
 
@@ -105,9 +115,13 @@ class Arcana extends React.Component {
     const search = this.props.history.location.search
     let params = getParams(search)
 
-    arcanaID = params['arcana'];
+    const newArcanaID = params['arcana'];
 
-    this.observeArcana()
+    if (arcanaID !== newArcanaID) {
+      arcanaID = newArcanaID
+      this.observeArcana()      
+    }
+
   }
 
   componentWillMount() {
@@ -119,11 +133,14 @@ class Arcana extends React.Component {
     const search = this.props.history.location.search
     let params = getParams(search)
 
-    arcanaID = params['arcana'];
-    // if (nextArcanaID !== undefined && arcanaID !== nextArcanaID) {
-    //   arcanaID = nextArcanaID
-      this.observeArcana()
-    // }
+    const newArcanaID = params['arcana'];
+
+    if (arcanaID !== newArcanaID) {
+      arcanaID = newArcanaID
+      this.observeArcana()      
+    }
+
+    // this.observeArcana()
 
   }
 
@@ -134,6 +151,7 @@ class Arcana extends React.Component {
   
   observeArcana() {
 
+    incrementViewCount()
 
     let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
 

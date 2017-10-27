@@ -26,11 +26,11 @@ export default class HomeTabs extends React.Component {
         this.state = {
             index: 0,
         }
+        this.calculateIndex = this.calculateIndex.bind(this)
     }
 
     calculateIndex(index) {
 
-        console.log(`raw index is ${index}`)
         if (this.props.rewardArray.length === 0 && this.props.festivalArray.length === 0) {
             index = index - 2
         }
@@ -40,7 +40,6 @@ export default class HomeTabs extends React.Component {
         else if (this.props.rewardArray.length > 0) {
             index--
         }
-        console.log(`adjust index is ${index}`)
 
         return index
         
@@ -82,6 +81,8 @@ export default class HomeTabs extends React.Component {
                 value={2}
             >
                 <ArcanaList
+                    ref='recentRef'
+                    id="homeID"
                     arcanaArray={this.props.recentArray}
                     viewType={this.props.viewType}
                 />

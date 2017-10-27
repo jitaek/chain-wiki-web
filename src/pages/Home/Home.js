@@ -27,6 +27,7 @@ let rewardRef = ref.child('reward')
 let legendRef = ref.child('legend')
 let abyssalRef = ref.child('abyssal')
 
+var listRef
 
 var lastArcanaIDKey
 var fetchedArcanaCount
@@ -43,8 +44,6 @@ const legendArcanaDict = {}
 const legendOrder = {}
 
 const abyssalArcanaDict = {}
-
-var placeArray = []
 
 // create a set that stores observed arcana refs. we will remove observers when unneeded.
 let observedRefs = new Set()
@@ -97,9 +96,9 @@ class Home extends Component {
 
   componentDidMount() {
 
-    this.observeArcana()
     this.observeRewardArcana()
     this.observeFestivalArcana()
+    this.observeArcana()
     this.observeLegendArcana()
     this.observeAbyssalArcana()
 
@@ -120,7 +119,6 @@ class Home extends Component {
     })
     
   }
- 
 
   componentWillUnmount() {
 
@@ -143,14 +141,14 @@ class Home extends Component {
 
   observeArcana() {
 
-    var initialKey = true;
-    var count = Number(Math.max(fetchedArcanaCount, 30))
+    let initialKey = true;
+    const count = Number(Math.max(fetchedArcanaCount, 30))
     console.log(`fetching ${count} arcana`)
 
     ARCANA_REF.orderByKey().limitToLast(count).on('child_added', snapshot => {
 
-      let arcanaID = snapshot.key
-      let arcana = snapshot.val();
+      const arcanaID = snapshot.key
+      const arcana = snapshot.val();
 
       if (initialKey) {
         lastArcanaIDKey = arcanaID
@@ -169,8 +167,8 @@ class Home extends Component {
 
     ARCANA_REF.orderByKey().limitToLast(count).on('child_changed', snapshot => {
       
-      let arcanaID = snapshot.key
-      let arcana = snapshot.val();
+      const arcanaID = snapshot.key
+      const arcana = snapshot.val();
       
       if (arcana.nameKR) {
         recentArcanaDict[arcanaID] = arcana
@@ -185,8 +183,7 @@ class Home extends Component {
 
     ARCANA_REF.orderByKey().limitToLast(count).on('child_removed', snapshot => {
       
-      let arcanaID = snapshot.key
-      let arcana = snapshot.val();
+      const arcanaID = snapshot.key
 
       delete recentArcanaDict[arcanaID]
 
@@ -344,26 +341,57 @@ class Home extends Component {
   fetchArcana() {
 
     console.log('fetching arcana')
-    var count = 0
-    var fetchedArcanaArray = []
 
-    ARCANA_REF.orderByKey().endAt(lastArcanaIDKey).limitToLast(11).on('child_added', snapshot => {
+    let initialKey = true
 
-      let arcanaID = snapshot.key
-      let arcana = snapshot.val()
+    if (lastArcanaIDKey) {
 
-      if (count == 0) {
-        lastArcanaIDKey = arcanaID
-      }
-      if (count < 10) {
-        fetchedArcanaArray.unshift(arcana)
-        // this.mergeArcanaArrayWith(fetchedArcanaArray)
-      }
-      count++;
+      ARCANA_REF.orderByKey().endAt(lastArcanaIDKey).limitToLast(11).on('child_added', snapshot => {
+        
+        const arcanaID = snapshot.key
+        const arcana = snapshot.val()
+        
+        if (initialKey) {
+          lastArcanaIDKey = arcanaID
+          initialKey = false
+        }
 
-    });   
+        if (arcana.nameKR) {
+          recentArcanaDict[arcanaID] = arcana
+        }
+        else {
+          delete recentArcanaDict[arcanaID]
+        }            
+        this.reloadArcanaList('recentArray')
 
-    // pages = arcanaArray.length;
+      });   
+
+      ARCANA_REF.orderByKey().endAt(lastArcanaIDKey).limitToLast(11).on('child_changed', snapshot => {
+
+        const arcanaID = snapshot.key
+        const arcana = snapshot.val()
+
+        if (arcana.nameKR) {
+          recentArcanaDict[arcanaID] = arcana
+        }
+        else {
+          delete recentArcanaDict[arcanaID]
+        }           
+        
+        this.reloadArcanaList('recentArray')
+      })
+
+      ARCANA_REF.orderByKey().endAt(lastArcanaIDKey).limitToLast(11).on('child_removed', snapshot => {
+
+        const arcanaID = snapshot.key
+
+        delete recentArcanaDict[arcanaID]
+
+        this.reloadArcanaList('recentArray')
+      })
+
+    }
+
   }
 
   setViewType(event, child) {
@@ -392,48 +420,41 @@ class Home extends Component {
 
   reloadArcanaList(arrayType) {
 
-    let array = []
-
     switch (arrayType) {
       case 'rewardArray':
         const rewardArray = _.values(rewardArcanaDict)
         rewardArray.sort(function (a,b) {
           return rewardOrder[a.uid] > rewardOrder[b.uid]
         })
-        this.setRewardArray(array)
-        array = rewardArray
+        this.setRewardArray(rewardArray)
         break
       case 'festivalArray':
         const festivalArray = _.values(festivalArcanaDict)
         festivalArray.sort(function (a,b) {
           return festivalOrder[a.uid] > festivalOrder[b.uid]
         })
-        array = festivalArray
-        this.setFestivalArray(array)
+        this.setFestivalArray(festivalArray)
         break
       case 'recentArray':
         const recentArray = _.values(recentArcanaDict)
         recentArray.sort(function (a,b) {
           return a.uid > b.uid ? -1 : 1
         })
-        array = recentArray
-        this.setRecentArray(array)
+        this.setRecentArray(recentArray)
         break
       case 'legendArray':
         const legendArray = _.values(legendArcanaDict)
         legendArray.sort(function (a,b) {
           return a.uid > b.uid ? -1 : 1
         })
-        array = legendArray
-        this.setLegendArray(array)
+        this.setLegendArray(legendArray)
         break
       case 'abyssalArray':
         const abyssalArray = _.values(abyssalArcanaDict)
         abyssalArray.sort(function (a,b) {
           return a.uid < b.uid ? -1 : 1
         })
-        array = abyssalArray
-        this.setAbyssalArray(array)
+        this.setAbyssalArray(abyssalArray)
         break
       default:
         break
@@ -478,20 +499,6 @@ class Home extends Component {
       abyssalArray: array
     })
   }
-
-  // mergeArcanaArrayWith(fetchedArcanaArray) {
-
-  //   placeArray = []
-  //   placeArray = this.state.arcanaArray.concat(fetchedArcanaArray)
-
-  //   this.setState({
-  //     arcanaArray: placeArray
-  //   }, () => {
-  //     // const offset = sessionStorage.getItem('scroll')
-  //     // console.log(`offset after merge is ${offset}`)
-  //     // window.scrollTo(0, offset)
-  //   })
-  // }
 
   handleScroll() {
     var d = document.documentElement;

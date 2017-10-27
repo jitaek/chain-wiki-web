@@ -35,6 +35,8 @@ class Ability extends Component {
       archerArray: [],
       magicianArray: [],
       healerArray: [],
+      viewType: "list",
+      
     }
 
     this.selectedClass = this.selectedClass.bind(this);
@@ -126,7 +128,7 @@ class Ability extends Component {
     let params = getParams(search)
     const nextAbility = params['query'];
 
-    forceCheck()
+    setTimeout(forceCheck, 300)    
     
     this.props.history.replace({
       search: `?query=${nextAbility}&index=${index}`
