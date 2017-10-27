@@ -149,7 +149,7 @@ class Home extends Component {
         recentArcanaDict[arcanaID] = arcana
       }
       else {
-        recentArcanaDict[arcanaID] = null
+        delete recentArcanaDict[arcanaID]
       }            
 
       this.reloadArcanaList('recentArray')
@@ -164,7 +164,7 @@ class Home extends Component {
         recentArcanaDict[arcanaID] = arcana
       }
       else {
-        recentArcanaDict[arcanaID] = null
+        delete recentArcanaDict[arcanaID]
       }            
 
       this.reloadArcanaList('recentArray')
@@ -176,7 +176,7 @@ class Home extends Component {
       let arcanaID = snapshot.key
       let arcana = snapshot.val();
 
-      recentArcanaDict[arcanaID] = null
+      delete recentArcanaDict[arcanaID]
 
       this.reloadArcanaList('recentArray')
       
@@ -203,7 +203,7 @@ class Home extends Component {
           rewardArcanaDict[arcanaID] = arcana
         }
         else {
-          rewardArcanaDict[arcanaID] = null
+          delete rewardArcanaDict[arcanaID]
         }            
         // debounce sort array?
         this.reloadArcanaList('rewardArray')
@@ -215,7 +215,7 @@ class Home extends Component {
 
       const arcanaID = snapshot.key
 
-      rewardArcanaDict[arcanaID] = null
+      delete rewardArcanaDict[arcanaID]
 
       this.reloadArcanaList('rewardArray')
     })
@@ -240,7 +240,7 @@ class Home extends Component {
           festivalArcanaDict[arcanaID] = arcana
         }
         else {
-          festivalArcanaDict[arcanaID] = null
+          delete festivalArcanaDict[arcanaID]
         }            
         // debounce sort array?
         this.reloadArcanaList('festivalArray')
@@ -252,7 +252,7 @@ class Home extends Component {
       
       const arcanaID = snapshot.key
 
-      festivalArcanaDict[arcanaID] = null
+      delete festivalArcanaDict[arcanaID]
 
       this.reloadArcanaList('festivalArray')
     })
@@ -275,7 +275,7 @@ class Home extends Component {
           legendArcanaDict[arcanaID] = arcana
         }
         else {
-          legendArcanaDict[arcanaID] = null
+          delete legendArcanaDict[arcanaID]
         }            
         // debounce sort array?
         this.reloadArcanaList('legendArray')
@@ -287,7 +287,7 @@ class Home extends Component {
       
       const arcanaID = snapshot.key
 
-      legendArcanaDict[arcanaID] = null
+      delete legendArcanaDict[arcanaID]
 
       this.reloadArcanaList('legendArray')
     })
@@ -310,7 +310,7 @@ class Home extends Component {
           abyssalArcanaDict[arcanaID] = arcana
         }
         else {
-          abyssalArcanaDict[arcanaID] = null
+          delete abyssalArcanaDict[arcanaID]
         }            
         this.reloadArcanaList('abyssalArray')
       })
@@ -321,7 +321,7 @@ class Home extends Component {
       
       const arcanaID = snapshot.key
 
-      abyssalArcanaDict[arcanaID] = null
+      delete abyssalArcanaDict[arcanaID]
 
       this.reloadArcanaList('abyssalArray')
     })
@@ -345,7 +345,7 @@ class Home extends Component {
       }
       if (count < 10) {
         fetchedArcanaArray.unshift(arcana)
-        this.mergeArcanaArrayWith(fetchedArcanaArray)
+        // this.mergeArcanaArrayWith(fetchedArcanaArray)
       }
       count++;
 
