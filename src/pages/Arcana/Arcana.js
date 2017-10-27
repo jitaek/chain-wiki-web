@@ -85,14 +85,17 @@ function Ability(props) {
   } 
 }
 
-function incrementViewCount() {
-  ref.child(`arcana/${arcanaID}/numberOfViews`).transaction(function(count) {
-    if (count) {
-      console.log('count was', count);
-      count++;
-    }
-    return count;
-  });
+function incrementViewCount(arcanaID) {
+
+  if (arcanaID) {
+    ref.child(`arcana/${arcanaID}/numberOfViews`).transaction(function(count) {
+      if (count) {
+        console.log('count was', count);
+        count++;
+      }
+      return count;
+    });
+  }
 }
 
 class Arcana extends React.Component {
@@ -101,6 +104,7 @@ class Arcana extends React.Component {
     super(props);
 
     this.state = {
+      arcanaID: null,
       mainImageLoaded: false,
       iconLoaded: false,
     }
@@ -117,9 +121,14 @@ class Arcana extends React.Component {
 
     const newArcanaID = params['arcana'];
 
-    if (arcanaID !== newArcanaID) {
-      arcanaID = newArcanaID
-      this.observeArcana()      
+    if (this.state.arcanaID !== newArcanaID) {
+      // arcanaID = newArcanaID
+      this.setState({
+        arcanaID: newArcanaID
+      }, () => {
+        this.observeArcana()  
+        
+      })
     }
 
   }
@@ -135,80 +144,98 @@ class Arcana extends React.Component {
 
     const newArcanaID = params['arcana'];
 
-    if (arcanaID !== newArcanaID) {
-      arcanaID = newArcanaID
-      this.observeArcana()      
+    if (this.state.arcanaID !== newArcanaID) {
+      // arcanaID = newArcanaID
+      this.setState({
+        arcanaID: newArcanaID
+      }, () => {
+        this.observeArcana()          
+      })
     }
+    // if (arcanaID !== newArcanaID) {
+    //   arcanaID = newArcanaID
+    //   this.observeArcana()      
+    // }
 
     // this.observeArcana()
 
   }
 
   componentWillUnmount() {
-    let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
-    arcanaRef.off();
+    
+    // let arcanaRef = firebase.database().ref('arcana').child(arcanaID)
+    if (this.state.arcanaID) {
+      let arcanaRef = firebase.database().ref('arcana').child(this.state.arcanaID);
+      arcanaRef.off()
+    }
+
   }
   
   observeArcana() {
 
-    incrementViewCount()
+    const arcanaID = this.state.arcanaID
 
-    let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
+    if (arcanaID) {
 
-    arcanaRef.on('value', snapshot => {
+      incrementViewCount(arcanaID)
+      
+      let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
 
-      let arcana = snapshot.val();
+      arcanaRef.on('value', snapshot => {
 
-      this.createJPLink(arcana.nicknameJP, arcana.nameJP)
+        let arcana = snapshot.val();
 
-      this.setState({
-        
-        nameKR: arcana.nameKR,
-        nicknameKR: arcana.nicknameKR || "",
+        this.createJPLink(arcana.nicknameJP, arcana.nameJP)
 
-        nameJP: arcana.nameJP,
-        nicknameJP: arcana.nicknameJP || "",
+        this.setState({
+          
+          nameKR: arcana.nameKR,
+          nicknameKR: arcana.nicknameKR || "",
 
-        rarity: arcana.rarity,
-        class: arcana.class,
-        weapon: arcana.weapon,
-        affiliation: arcana.affiliation,
-        cost: arcana.cost,
-        tavern: arcana.tavern,
-        numberOfViews: arcana.numberOfViews,
-        
-        skillName1: arcana.skillName1 || null,
-        skillMana1: arcana.skillMana1,
-        skillDesc1: arcana.skillDesc1,
-        
-        skillName2: arcana.skillName2 || null,
-        skillMana2: arcana.skillMana2 || null,
-        skillDesc2: arcana.skillDesc2 || null,
+          nameJP: arcana.nameJP,
+          nicknameJP: arcana.nicknameJP || "",
 
-        skillName3: arcana.skillName3 || null,
-        skillMana3: arcana.skillMana3 || null,
-        skillDesc3: arcana.skillDesc3 || null,
+          rarity: arcana.rarity,
+          class: arcana.class,
+          weapon: arcana.weapon,
+          affiliation: arcana.affiliation,
+          cost: arcana.cost,
+          tavern: arcana.tavern,
+          numberOfViews: arcana.numberOfViews,
+          
+          skillName1: arcana.skillName1 || null,
+          skillMana1: arcana.skillMana1,
+          skillDesc1: arcana.skillDesc1,
+          
+          skillName2: arcana.skillName2 || null,
+          skillMana2: arcana.skillMana2 || null,
+          skillDesc2: arcana.skillDesc2 || null,
 
-        abilityName1: arcana.abilityName1 || null,
-        abilityDesc1: arcana.abilityDesc1 || null,
+          skillName3: arcana.skillName3 || null,
+          skillMana3: arcana.skillMana3 || null,
+          skillDesc3: arcana.skillDesc3 || null,
 
-        abilityName2: arcana.abilityName2 || null,
-        abilityDesc2: arcana.abilityDesc2 || null,
+          abilityName1: arcana.abilityName1 || null,
+          abilityDesc1: arcana.abilityDesc1 || null,
 
-        abilityName3: arcana.abilityName3 || null,
-        abilityDesc3: arcana.abilityDesc3 || null,
+          abilityName2: arcana.abilityName2 || null,
+          abilityDesc2: arcana.abilityDesc2 || null,
 
-        partyAbility: arcana.partyAbility || null,
+          abilityName3: arcana.abilityName3 || null,
+          abilityDesc3: arcana.abilityDesc3 || null,
 
-        kizunaName: arcana.kizunaName || null,
-        kizunaCost: arcana.kizunaCost,
-        kizunaDesc: arcana.kizunaDesc, 
+          partyAbility: arcana.partyAbility || null,
 
-        iconURL: arcana.iconURL || null,
-        imageURL: arcana.imageURL || null,
+          kizunaName: arcana.kizunaName || null,
+          kizunaCost: arcana.kizunaCost,
+          kizunaDesc: arcana.kizunaDesc, 
 
-      });
-    })
+          iconURL: arcana.iconURL || null,
+          imageURL: arcana.imageURL || null,
+
+        });
+      })
+    }
   }
 
   createJPLink(nicknameJP, nameJP) {

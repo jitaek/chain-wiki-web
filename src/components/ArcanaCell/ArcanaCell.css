@@ -23,7 +23,7 @@
 }
 
 .arcanaIconPlaceholder {
-  opacity: 0;
+  opacity: 0.01;
   transition: opacity 0.4s ease-in;
   -ms-transition: opacity 0.4s ease-in;
   -moz-transition: opacity 0.4s ease-in;
