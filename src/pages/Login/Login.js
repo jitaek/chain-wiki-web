@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { login, resetPassword } from '../../helpers/auth'
 
 import logo from '../../logo.png'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import RaisedButton from 'material-ui/RaisedButton';
 import { ValidatorForm } from 'react-form-validator-core';
 import { TextValidator, SelectValidator } from 'react-material-ui-form-validator';
@@ -54,7 +53,7 @@ export default class Login extends Component {
         return (
             <div style={containerStyle}>
                 <img style={logoStyle} src={logo}/><br clear='all'/>
-                <MuiThemeProvider>
+                <div>
                     <ValidatorForm
                         ref="form"
                         onSubmit={this.handleSubmit}
@@ -76,8 +75,8 @@ export default class Login extends Component {
                         /><br/>
 
                         <RaisedButton label="로그인" type="submit"/>
-                        </ValidatorForm>
-                </MuiThemeProvider>
+                    </ValidatorForm>
+                </div>
             </div>
         );
     }

@@ -6,7 +6,6 @@ import {ref} from '../../helpers/constants'
 import { getParams } from '../../helpers/QueryParameter'
 import AbilityTabs from '../../components/AbilityTabs/AbilityTabs'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {List, ListItem} from 'material-ui/List';
 import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'

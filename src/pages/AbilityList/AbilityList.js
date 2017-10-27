@@ -7,7 +7,6 @@ import {ref} from '../../helpers/constants'
 import ArcanaList from '../../components/ArcanaList/ArcanaList'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -76,9 +75,7 @@ class AbilityList extends Component {
   render() {
 
     return (
-      <MuiThemeProvider>
-        <div>
-          
+        <div>          
           <div style={{margin:'20px'}}>
             <RadioButtonGroup name="status" defaultSelected="Ability" onChange={this.setAbilityType}>
               <RadioButton style={RadioButtonStyle} label="어빌리티" value="Ability" />
@@ -175,10 +172,7 @@ class AbilityList extends Component {
 
             </List>
           </div>
-
         </div>
-      </MuiThemeProvider>
-
     );
   }
 

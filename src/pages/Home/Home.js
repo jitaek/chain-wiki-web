@@ -7,13 +7,14 @@ import ArcanaList from '../../components/ArcanaList/ArcanaList'
 import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import FadeIn from 'react-fade-in'
+import { forceCheck } from 'react-lazyload'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Dashboard from 'material-ui/svg-icons/action/dashboard';
 import List from 'material-ui/svg-icons/action/list'
+import HomeTabs from '../../components/HomeTabs/HomeTabs'
 
 import { getViewType, setViewType } from '../../helpers/ArcanaViewType'
 
@@ -53,6 +54,7 @@ class Home extends Component {
     super(props);
 
     this.state = { 
+      loadedLists: false,
       rewardArray: [],
       festivalArray: [],
       recentArray: [],      
@@ -73,7 +75,13 @@ class Home extends Component {
 
     this.setViewType = this.setViewType.bind(this)
     this.reloadArcanaList = this.reloadArcanaList.bind(this)
-    this.setArcanaArray = _.debounce(this.setArcanaArray.bind(this), 200)
+    this.loadedLists = _.debounce(this.loadedLists.bind(this), 200)
+    
+    this.setRewardArray = _.debounce(this.setRewardArray.bind(this), 200)
+    this.setFestivalArray = _.debounce(this.setFestivalArray.bind(this), 200)
+    this.setRecentArray = _.debounce(this.setRecentArray.bind(this), 200)
+    this.setLegendArray = _.debounce(this.setLegendArray.bind(this), 200)
+    this.setAbyssalArray = _.debounce(this.setAbyssalArray.bind(this), 200)
     
   }
 
@@ -81,30 +89,15 @@ class Home extends Component {
 
     fetchedArcanaCount = sessionStorage.getItem('fetchedArcanaCount')
 
-    // if (placeArray.length > 0) {
-    //   this.setState({
-    //     arcanaArray: placeArray,
-    //   }, () => {
-    //     const offset = sessionStorage.getItem('scroll')
-    //     window.scrollTo(0, offset)
-    //     console.log(`didMount. offset is ${offset}`)
-    //   })
-    // }
-    // else {
-    //   this.observeArcana()      
-    // }
   }
 
   componentDidMount() {
 
-    // this.observeFestivalArcana()
-    // this.observeLegendArcana()
     this.observeArcana()
-    // if (placeArray.length > 0) {
-      // const offset = sessionStorage.getItem('scroll')
-      // window.scrollTo(0, offset)
-      // console.log(`didMount. offset is ${offset}`)
-    // }
+    this.observeRewardArcana()
+    this.observeFestivalArcana()
+    this.observeLegendArcana()
+    this.observeAbyssalArcana()
 
     window.addEventListener("scroll", this.handleScroll);
     
@@ -115,19 +108,24 @@ class Home extends Component {
       })
     }
   }
-
+ 
 
   componentWillUnmount() {
 
-    console.log('unmounting')
     let fetchedArcanaCount = this.state.recentArray.length
     sessionStorage.setItem('fetchedArcanaCount', fetchedArcanaCount)
+
     window.removeEventListener("scroll", this.handleScroll)
+
     ARCANA_REF.off()
     rewardRef.off()
     festivalRef.off()
     legendRef.off()
     abyssalRef.off()
+
+    for (let ref of observedRefs) {
+      ref.off()
+    }
     
   }
 
@@ -153,9 +151,37 @@ class Home extends Component {
       else {
         recentArcanaDict[arcanaID] = null
       }            
-      // debounce sort array?
+
       this.reloadArcanaList('recentArray')
     })
+
+    ARCANA_REF.orderByKey().limitToLast(count).on('child_changed', snapshot => {
+      
+      let arcanaID = snapshot.key
+      let arcana = snapshot.val();
+      
+      if (arcana.nameKR) {
+        recentArcanaDict[arcanaID] = arcana
+      }
+      else {
+        recentArcanaDict[arcanaID] = null
+      }            
+
+      this.reloadArcanaList('recentArray')
+
+    })
+
+    ARCANA_REF.orderByKey().limitToLast(count).on('child_removed', snapshot => {
+      
+      let arcanaID = snapshot.key
+      let arcana = snapshot.val();
+
+      recentArcanaDict[arcanaID] = null
+
+      this.reloadArcanaList('recentArray')
+      
+    })
+
   }
 
   observeRewardArcana() {
@@ -184,18 +210,29 @@ class Home extends Component {
       })
       
     })
+
+    rewardRef.on('child_removed', snapshot => {
+
+      const arcanaID = snapshot.key
+
+      rewardArcanaDict[arcanaID] = null
+
+      this.reloadArcanaList('rewardArray')
+    })
   }
   
   observeFestivalArcana() {
 
-    festivalRef.on('child_added', snapshot => {
+    festivalRef.orderByValue().on('child_added', snapshot => {
 
       const arcanaID = snapshot.key
+      const index = snapshot.val()
+      festivalOrder[arcanaID] = index
 
       const arcanaRef = ARCANA_REF.child(arcanaID)
       observedRefs.add(arcanaRef)
 
-      arcanaRef.child(arcanaID).on('value', snapshot => {
+      arcanaRef.on('value', snapshot => {
 
         const arcana = snapshot.val()
 
@@ -209,6 +246,15 @@ class Home extends Component {
         this.reloadArcanaList('festivalArray')
       })
       
+    })
+
+    festivalRef.on('child_removed', snapshot => {
+      
+      const arcanaID = snapshot.key
+
+      festivalArcanaDict[arcanaID] = null
+
+      this.reloadArcanaList('festivalArray')
     })
   }
 
@@ -236,11 +282,20 @@ class Home extends Component {
       })
       
     })
+    
+    legendRef.on('child_removed', snapshot => {
+      
+      const arcanaID = snapshot.key
+
+      legendArcanaDict[arcanaID] = null
+
+      this.reloadArcanaList('legendArray')
+    })
   }
 
   observeAbyssalArcana() {
     
-    abyssalRef.orderByValue().on('child_added', snapshot => {
+    abyssalRef.on('child_added', snapshot => {
 
       const arcanaID = snapshot.key
 
@@ -257,10 +312,18 @@ class Home extends Component {
         else {
           abyssalArcanaDict[arcanaID] = null
         }            
-        // debounce sort array?
         this.reloadArcanaList('abyssalArray')
       })
       
+    })
+
+    abyssalRef.on('child_removed', snapshot => {
+      
+      const arcanaID = snapshot.key
+
+      abyssalArcanaDict[arcanaID] = null
+
+      this.reloadArcanaList('abyssalArray')
     })
   }
 
@@ -303,7 +366,25 @@ class Home extends Component {
     }
   }
 
+  selectedArcanaList(index) {
+    
+
+    // const search = this.props.history.location.search
+    // let params = getParams(search)
+    // const nextAbility = params['query'];
+
+    // forceCheck()
+    
+    // this.props.history.replace({
+    //   search: `?query=${nextAbility}&index=${index}`
+    // })
+      
+    console.log(`index is ${index}`)
+
+  }
+
   reloadArcanaList(arrayType) {
+
     let array = []
 
     switch (arrayType) {
@@ -312,6 +393,7 @@ class Home extends Component {
         rewardArray.sort(function (a,b) {
           return rewardOrder[a.uid] > rewardOrder[b.uid]
         })
+        this.setRewardArray(array)
         array = rewardArray
         break
       case 'festivalArray':
@@ -320,6 +402,7 @@ class Home extends Component {
           return festivalOrder[a.uid] > festivalOrder[b.uid]
         })
         array = festivalArray
+        this.setFestivalArray(array)
         break
       case 'recentArray':
         const recentArray = _.values(recentArcanaDict)
@@ -327,6 +410,7 @@ class Home extends Component {
           return a.uid > b.uid ? -1 : 1
         })
         array = recentArray
+        this.setRecentArray(array)
         break
       case 'legendArray':
         const legendArray = _.values(legendArcanaDict)
@@ -334,25 +418,58 @@ class Home extends Component {
           return a.uid > b.uid ? -1 : 1
         })
         array = legendArray
+        this.setLegendArray(array)
         break
-      case 'abyssArray':
+      case 'abyssalArray':
         const abyssalArray = _.values(abyssalArcanaDict)
         abyssalArray.sort(function (a,b) {
           return a.uid < b.uid ? -1 : 1
         })
         array = abyssalArray
+        this.setAbyssalArray(array)
         break
       default:
         break
     }
-    // debounce function to set state
-    this.setArcanaArray(array, arrayType)
+
+    this.loadedLists()
+    
   }
 
-  setArcanaArray(array, arrayType) {
-    var arrayState = {}
-    arrayState[arrayType] = array
-    this.setState(arrayState)
+  loadedLists() {
+    this.setState({
+      loadedLists: true
+    })
+  }
+
+  setRewardArray(array) {
+    this.setState({
+      rewardArray: array
+    })
+  }
+
+  setFestivalArray(array) {
+    this.setState({
+      festivalArray: array
+    })
+  }
+
+  setRecentArray(array) {
+    this.setState({
+      recentArray: array
+    })
+  }
+
+  setLegendArray(array) {
+    this.setState({
+      legendArray: array
+    })
+  }
+
+  setAbyssalArray(array) {
+    this.setState({
+      abyssalArray: array
+    })
   }
 
   // mergeArcanaArrayWith(fetchedArcanaArray) {
@@ -398,11 +515,17 @@ class Home extends Component {
             <MenuItem primaryText="리스트 뷰" value="list"/>
           </IconMenu>
           <br style={{clear:'both'}}/>
-        
-          <ArcanaList
-            arcanaArray={this.state.recentArray}
+          {this.state.loadedLists &&
+          <HomeTabs
+            rewardArray={this.state.rewardArray}
+            festivalArray={this.state.festivalArray}
+            recentArray={this.state.recentArray}
+            legendArray={this.state.legendArray}
+            abyssalArray={this.state.abyssalArray}
             viewType={this.state.viewType}
+            onChange={()=>setTimeout(forceCheck, 300)}
           />
+          }
 
         </div>
 

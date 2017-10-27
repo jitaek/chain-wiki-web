@@ -4,8 +4,8 @@ import styles from './ArcanaComposer.css';
 import firebase from 'firebase';
 import { ref } from '../../helpers/constants'
 import { HashRouter, Link, withRouter } from "react-router-dom";
+
 // Material UI
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -222,9 +222,8 @@ class ArcanaComposer extends React.Component {
 
     return (
       <div className={styles.fullWidthContainer}>
-      <MuiThemeProvider>
         
-      <ValidatorForm
+        <ValidatorForm
                 ref="form"
                 onSubmit={this.uploadArcana}
                 onError={errors => console.log(errors)}
@@ -529,9 +528,6 @@ class ArcanaComposer extends React.Component {
 
           <RaisedButton label="완료" style={buttonStyle} type="submit"/>
         </ValidatorForm>
-      </MuiThemeProvider>
-
-
       </div>
     );
 

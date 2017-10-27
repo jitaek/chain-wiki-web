@@ -9,7 +9,6 @@ import { HashRouter, Link, withRouter } from "react-router-dom";
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import ReactDOM from 'react-dom';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import FilterIcon from 'material-ui/svg-icons/content/filter-list';

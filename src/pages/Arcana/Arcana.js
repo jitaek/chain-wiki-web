@@ -10,7 +10,6 @@ import {
 } from 'react-router-dom'
 import sampleMain from '../../sampleMainImage.jpg';
 import { getParams } from '../../helpers/QueryParameter'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
 
 var arcanaID

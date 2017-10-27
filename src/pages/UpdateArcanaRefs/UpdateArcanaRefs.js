@@ -10,7 +10,6 @@ import Checkbox from 'material-ui/Checkbox';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 
 // Material UI
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -295,7 +294,6 @@ class UpdateArcanaRefs extends React.Component {
   render() {
 
     return (
-        <MuiThemeProvider>
         <div>
         <div style={{margin:'10px'}}>
           아르카나 목록 선택
@@ -367,7 +365,6 @@ class UpdateArcanaRefs extends React.Component {
         </div>
         }
         </div>
-        </MuiThemeProvider>
     );
   }
 

@@ -3,7 +3,6 @@ import { HashRouter, Link, withRouter } from "react-router-dom";
 import { ref } from '../../helpers/constants'
 import { history } from '../../App'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -99,7 +98,7 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider>
+      <div>
         <AppBar
           style={NavBarStyle}
         
@@ -179,8 +178,7 @@ class NavBar extends React.Component {
           />
         </Drawer>
         </AppBar>
-
-      </MuiThemeProvider>
+      </div>
     );
   }
 }

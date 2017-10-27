@@ -8,8 +8,6 @@ import { HashRouter, Link, withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import { getParams } from '../../helpers/QueryParameter'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 var _ = require('lodash');
 
 let arcanaRef = ref.child('arcana')
@@ -168,16 +166,12 @@ class Search extends Component {
   render() {
 
     return (
-      <MuiThemeProvider>
         <div key={this.state.searchText}>        
           <ArcanaList
             arcanaArray={this.state.arcanaArray}
             viewType={this.state.viewType}
           />
-
         </div>
-      </MuiThemeProvider>
-
     );
   }
 
