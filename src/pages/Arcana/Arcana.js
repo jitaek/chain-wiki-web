@@ -85,12 +85,27 @@ function Ability(props) {
   } 
 }
 
+function Tavern(props) {
+
+  const tavern = props.tavern
+
+  if (tavern) {
+    return (
+      <tr>
+          <th className={styles.headerCell}>출현 장소</th>
+          <td className={styles.bodyCell}>{tavern}</td>
+      </tr>
+    )
+  }
+
+  return null
+}
+
 function incrementViewCount(arcanaID) {
 
   if (arcanaID) {
     ref.child(`arcana/${arcanaID}/numberOfViews`).transaction(function(count) {
       if (count) {
-        console.log('count was', count);
         count++;
       }
       return count;
@@ -164,8 +179,9 @@ class Arcana extends React.Component {
   componentWillUnmount() {
     
     // let arcanaRef = firebase.database().ref('arcana').child(arcanaID)
-    if (this.state.arcanaID) {
-      let arcanaRef = firebase.database().ref('arcana').child(this.state.arcanaID);
+    const arcanaID = this.state.arcanaID
+    if (arcanaID) {
+      let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
       arcanaRef.off()
     }
 
@@ -177,7 +193,7 @@ class Arcana extends React.Component {
 
     if (arcanaID) {
 
-      incrementViewCount(arcanaID)
+      // incrementViewCount(arcanaID)
       
       let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
 
@@ -336,10 +352,7 @@ class Arcana extends React.Component {
                   <th className={styles.headerCell}>무기</th>
                   <td className={styles.bodyCell}>{this.state.weapon}</td>
               </tr>
-              <tr>
-                  <th className={styles.headerCell}>출현 장소</th>
-                  <td className={styles.bodyCell}>{this.state.tavern}</td>
-              </tr>
+              <Tavern tavern={this.state.tavern}/>
             </tbody>
         </table>
 
