@@ -128,8 +128,7 @@ class Search extends Component {
 
   observeArcanaWithID(arcanaID) {
 
-    let arcanaRef = arcanaRef.child(arcanaID)
-    arcanaRef.once('value', snapshot => {
+    arcanaRef.child(arcanaID).once('value', snapshot => {
 
       let arcana = snapshot.val()
       arcanaArray.push(arcana)

@@ -3,6 +3,7 @@ import styles from './Filter.css';
 import {ref} from '../../helpers/constants'
 import ArcanaList from '../../components/ArcanaList/ArcanaList'
 
+import { forceCheck } from 'react-lazyload'
 import IconButton from 'material-ui/IconButton';
 import FilterIcon from 'material-ui/svg-icons/content/filter-list';
 import IconMenu from 'material-ui/IconMenu';
@@ -273,7 +274,7 @@ class Filter extends Component {
     this.setState({
       arcanaArray: arcanaArray
     }, () => {
-      forceCheck()
+      setTimeout(forceCheck(), 200)
     })
   }
 
