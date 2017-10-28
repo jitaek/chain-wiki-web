@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Link, withRouter } from "react-router-dom";
-import styles from './Ability.css';
-import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
 import { getParams } from '../../helpers/QueryParameter'
 import AbilityTabs from '../../components/AbilityTabs/AbilityTabs'
 
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import {List, ListItem} from 'material-ui/List';
 import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
 import { forceCheck } from 'react-lazyload';
 
@@ -226,6 +221,8 @@ class Ability extends Component {
           healerArray: array
         })
         break
+      default:
+        break
     }
 
   }
@@ -271,8 +268,6 @@ class Ability extends Component {
   }
 
   render() {
-
-    const search = this.props.location.search
 
     if (this.state.abilityRef !== null) {
       

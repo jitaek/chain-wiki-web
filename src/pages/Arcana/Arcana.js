@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import logo from '../../logo.png';
+import React from 'react';
 import styles from './Arcana.css';
-import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
 
 import {
@@ -9,6 +7,7 @@ import {
   Link,
   Redirect
 } from 'react-router-dom'
+
 import sampleMain from '../../components/ArcanaCell/riberaMain.jpg'
 import { getParams } from '../../helpers/QueryParameter'
 import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
@@ -181,7 +180,7 @@ class Arcana extends React.Component {
     // let arcanaRef = ref('arcana').child(arcanaID)
     const arcanaID = this.state.arcanaID
     if (arcanaID) {
-      let arcanaRef = ref('arcana').child(arcanaID);
+      let arcanaRef = ref.child('arcana').child(arcanaID);
       arcanaRef.off()
     }
 

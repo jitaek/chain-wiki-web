@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import {
-  browserHistory,
   BrowserRouter as Router,
   Route,
   Switch,

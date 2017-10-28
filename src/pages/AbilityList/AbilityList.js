@@ -1,19 +1,8 @@
 import React, { Component } from 'react';
-import logo from '../../logo.png';
-import styles from './AbilityList.css';
-import firebase from 'firebase';
-import {ref} from '../../helpers/constants'
-
-import ArcanaList from '../../components/ArcanaList/ArcanaList'
-import { BrowserRouter, Link, withRouter } from "react-router-dom";
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-
-var _ = require('lodash');
-
-var ability
 
 const RadioButtonStyle = {
   display: 'inline-block',

@@ -1,20 +1,13 @@
 import React, { Component } from 'react';
-import logo from '../../logo.png';
-import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
-import ArcanaList from '../../components/ArcanaList/ArcanaList'
 import { getParams } from '../../helpers/QueryParameter'
 
-import { BrowserRouter, Link, withRouter } from "react-router-dom";
-import ReactDOM from 'react-dom';
-import FadeIn from 'react-fade-in'
 import { forceCheck } from 'react-lazyload'
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Dashboard from 'material-ui/svg-icons/action/dashboard';
-import List from 'material-ui/svg-icons/action/list'
 import HomeTabs from '../../components/HomeTabs/HomeTabs'
 
 import { getViewType, setViewType } from '../../helpers/ArcanaViewType'
@@ -41,7 +34,6 @@ const rewardOrder = {}
 const recentArcanaDict = {}
 
 const legendArcanaDict = {}
-const legendOrder = {}
 
 const abyssalArcanaDict = {}
 

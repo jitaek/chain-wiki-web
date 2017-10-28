@@ -1,9 +1,6 @@
-import React, { Component } from 'react';
-import logo from '../../logo.png';
+import React from 'react';
 import styles from './ArcanaComposer.css';
-import firebase from 'firebase';
 import { ref } from '../../helpers/constants'
-import { BrowserRouter, Link, withRouter } from "react-router-dom";
 
 // Material UI
 import TextField from 'material-ui/TextField';
@@ -26,13 +23,6 @@ class ArcanaComposer extends React.Component {
 
   constructor(props) {
     super(props);
-
-    console.log('constructer for composer loaded')
-    console.log(props.location.state)
-    this.showArcana = this.getParameterByName.bind(this);
-    
-    const query = this.props.location.search;
-    const arcanaID = this.getParameterByName('arcana');
 
     if (props.location.state !== undefined) {
       this.state = props.location.state;      
@@ -191,7 +181,7 @@ class ArcanaComposer extends React.Component {
     if (this.state.uid) {
       // editing. TODO: move previous data to /arcanaEdit, using firebase functions.
       console.log('editing arcana')
-      let arcanaID = this.state.uid
+      // let arcanaID = this.state.uid
       // ref.child('arcana').child(arcanaID).once('value', snapshot => {
 
       //   let previousArcana = snapshot.val()
@@ -531,18 +521,6 @@ class ArcanaComposer extends React.Component {
       </div>
     );
 
-  }
-
-  getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 
 }

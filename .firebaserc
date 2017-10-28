@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "chainchronicle-ea233"
+    "default": "chainchronicle-ea233",
+    "react": "chainchronicle-ea233"
   }
 }

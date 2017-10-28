@@ -1,44 +1,17 @@
-import React, { Component } from 'react';
-import logo from '../../logo.png';
-import firebase from 'firebase';
+import React from 'react';
 import { ref } from '../../helpers/constants'
-import { BrowserRouter, Link, withRouter } from "react-router-dom";
-import ReactDOM from 'react-dom';
-import LazyLoad from 'react-lazyload';
 import { forceCheck } from 'react-lazyload';
 import Checkbox from 'material-ui/Checkbox';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 
 // Material UI
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton'
-import FlatButton from 'material-ui/FlatButton'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
-
-const ButtonStyle = {
-  margin: '10px',
-}
-
-const ButtonLabelStyle = {
-  fontWeight: '600',
-}
 
 const RadioButtonStyle = {
   width: 'auto',
   margin: '20px',
   whiteSpace: 'nowrap',
-}
-
-const CheckBoxStyle = {
-  margin: '20px',
-}
-
-const CheckBoxLabelStyle = {
-  fontSize: '13px',
-}
-
-const RowStyle = {
-  padding: '0px',
 }
 
 const TableStyle = {
@@ -234,7 +207,7 @@ class UpdateArcanaRefs extends React.Component {
       }
 
       delete currentArcanaDict[arcanaID]
-      
+
       this.setState({
         arcanaListArray: newListArray,
         arcanaDictionary: currentArcanaDict

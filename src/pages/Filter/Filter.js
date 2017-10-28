@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import logo from '../../logo.png';
 import styles from './Filter.css';
-import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
 import ArcanaList from '../../components/ArcanaList/ArcanaList'
 
-import { BrowserRouter, Link, withRouter } from "react-router-dom";
-import LazyLoad, { forceCheck } from 'react-lazyload';
-import ReactDOM from 'react-dom';
-
-import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import FilterIcon from 'material-ui/svg-icons/content/filter-list';
 import IconMenu from 'material-ui/IconMenu';
@@ -101,7 +94,7 @@ class Filter extends Component {
       
       snapshot.forEach(child => {
 
-        let arcanaID = child.key
+        // let arcanaID = child.key
         let arcana = child.val()
 
         array.push(arcana)
@@ -262,7 +255,7 @@ class Filter extends Component {
 
     for (var i = 0; i < combinedSets.length; i++) {
       
-        if (arcanaArray.length == 0) {
+        if (arcanaArray.length === 0) {
           // set up the first array
           if (combinedSets[i].length > 0) {
             arcanaArray = combinedSets[i];

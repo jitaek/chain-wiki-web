@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import logo from '../../logo.png';
-import firebase from 'firebase';
 import {ref} from '../../helpers/constants'
 import ArcanaList from '../../components/ArcanaList/ArcanaList'
-import { history } from '../../App'
-import { BrowserRouter, Link, withRouter } from "react-router-dom";
-import ReactDOM from 'react-dom';
 import { getParams } from '../../helpers/QueryParameter'
 
 var _ = require('lodash');
 
-let arcanaRef = ref.child('arcana')
+const arcanaRef = ref.child('arcana')
 const nameRef = ref.child('name')
 
 var arcanaArray = []
@@ -133,7 +128,7 @@ class Search extends Component {
 
   observeArcanaWithID(arcanaID) {
 
-    let arcanaRef = ref.child('arcana').child(arcanaID)
+    let arcanaRef = arcanaRef.child(arcanaID)
     arcanaRef.once('value', snapshot => {
 
       let arcana = snapshot.val()

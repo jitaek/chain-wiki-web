@@ -1,10 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ArcanaCell from '../../components/ArcanaCell/ArcanaCell'
 import ArcanaGridCell from '../../components/ArcanaGridCell/ArcanaGridCell'
 import styles from './ArcanaList.css';
-import LazyLoad from 'react-lazyload';
-
-var _ = require('lodash');
 
 export default class ArcanaList extends React.Component {
 

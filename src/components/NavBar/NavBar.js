@@ -1,15 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Link, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { ref } from '../../helpers/constants'
-import { history } from '../../App'
 
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import TextField from 'material-ui/TextField'
 import AppBar from 'material-ui/AppBar'
-import greenColor from '../../helpers/constants'
 import logo from '../../logo.png';
 import AutoComplete from 'material-ui/AutoComplete';
 import Menu from 'material-ui/svg-icons/navigation/menu'
