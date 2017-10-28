@@ -4,7 +4,8 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect
+  Redirect,
+  routes
 } from 'react-router-dom'
 
 import { firebaseAuth } from './helpers/constants'
@@ -23,6 +24,15 @@ import Login from './pages/Login/Login'
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+// var routes = require('./routes')
+var ReactGA = require('react-ga')
+ReactGA.initialize('UA-73091430-2')
+
+function logPageView() {
+  ReactGA.set({ page: window.location.pathname + window.location.search });
+  ReactGA.pageview(window.location.pathname + window.location.search);
+}
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
@@ -69,7 +79,7 @@ class App extends Component {
     return (
       <div>
         <MuiThemeProvider>
-          <Router>
+          <Router routes={routes} onUpdate={logPageView}>
               <div>
                 <NavBar location={this.props.location}/>
                 <Switch>
