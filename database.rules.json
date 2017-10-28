@@ -9,149 +9,126 @@
       ".write": "auth != null"
     },
     "arcana": {
-      "${arcanaID}": {
+      "$arcanaID": {
+        ".read": true,
         "abilityDesc1": {
-          ".read": true,
           ".write": "auth != null"
         },
         "abilityDesc2": {
-          ".read": true,
           ".write": "auth != null"
         },
         "abilityDesc3": {
-          ".read": true,
           ".write": "auth != null"
         },
         "abilityName1": {
-          ".read": true,
           ".write": "auth != null"
         },
         "abilityName2": {
-          ".read": true,
           ".write": "auth != null"
         },
         "abilityName3": {
-          ".read": true,
           ".write": "auth != null"
         },
         "affiliation": {
-          ".read": true,
+          ".write": "auth != null"
+        },
+        "chainStone": {
+          ".write": "auth != null"
+        },
+        "chainStory": {
           ".write": "auth != null"
         },
         "class": {
-          ".read": true,
           ".write": "auth != null"
         },
         "cost": {
-          ".read": true,
           ".write": "auth != null"
         },
         "dateAdded": {
-          ".read": true,
           ".write": "auth != null"
         },
         "iconURL": {
-          ".read": true,
           ".write": "auth != null"
         },
         "imageURL": {
-          ".read": true,
           ".write": "auth != null"
         },
         "kizunaCost": {
-          ".read": true,
           ".write": "auth != null"
         },
         "kizunaDesc": {
-          ".read": true,
           ".write": "auth != null"
         },
         "kizunaName": {
-          ".read": true,
           ".write": "auth != null"
         },
         "nameJP": {
-          ".read": true,
           ".write": "auth != null"
         },
         "nicknameJP": {
-          ".read": true,
+          ".write": "auth != null"
+        },
+        "nickNameJP": {
           ".write": "auth != null"
         },
         "nameKR": {
-          ".read": true,
           ".write": "auth != null"
         },
         "nicknameKR": {
-          ".read": true,
+          ".write": "auth != null"
+        },
+        "nickNameKR": {
           ".write": "auth != null"
         },
         "numberOfLikes": {
-          ".read": true,
           ".write": "auth != null"
         },
         "numberOfViews": {
-          ".read": true,
           ".write": true
         },
         "partyAbility": {
-          ".read": true,
           ".write": "auth != null"
         },
         "rarity": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillCount": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillDesc1": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillDesc2": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillDesc3": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillMana1": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillMana2": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillMana3": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillName1": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillName2": {
-          ".read": true,
           ".write": "auth != null"
         },
         "skillName3": {
-          ".read": true,
           ".write": "auth != null"
         },
         "tavern": {
-          ".read": true,
           ".write": "auth != null"
         },
         "uid": {
-          ".read": true,
           ".write": "auth != null"
         },
         "weapon": {
-          ".read": true,
           ".write": "auth != null"
         }
       }
