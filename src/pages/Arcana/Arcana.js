@@ -9,7 +9,7 @@ import {
   Link,
   Redirect
 } from 'react-router-dom'
-import sampleMain from '../../sampleMainImage.jpg';
+import sampleMain from '../../components/ArcanaCell/riberaMain.jpg'
 import { getParams } from '../../helpers/QueryParameter'
 import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
 
@@ -178,10 +178,10 @@ class Arcana extends React.Component {
 
   componentWillUnmount() {
     
-    // let arcanaRef = firebase.database().ref('arcana').child(arcanaID)
+    // let arcanaRef = ref('arcana').child(arcanaID)
     const arcanaID = this.state.arcanaID
     if (arcanaID) {
-      let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
+      let arcanaRef = ref('arcana').child(arcanaID);
       arcanaRef.off()
     }
 
@@ -195,7 +195,7 @@ class Arcana extends React.Component {
 
       incrementViewCount(arcanaID)
       
-      let arcanaRef = firebase.database().ref('arcana').child(arcanaID);
+      let arcanaRef = ref.child('arcana').child(arcanaID)
 
       arcanaRef.on('value', snapshot => {
 
