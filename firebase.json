@@ -4,6 +4,17 @@
   },
   "hosting": {
     "public": "build",
-    "cleanUrls": true
+    "cleanUrls": true,
+    "headers": [
+      {
+        "source": "build/apple-app-site-association",
+        "headers": [{"key": "Content-Type", "value": "application/json"}]
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
   }
 }

@@ -24,6 +24,7 @@ import Login from './pages/Login/Login'
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+var apple = require("./apple-app-site-association");
 
 // var routes = require('./routes')
 var ReactGA = require('react-ga')

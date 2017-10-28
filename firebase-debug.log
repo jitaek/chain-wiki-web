@@ -1,0 +1,28 @@
+[debug] [2017-10-28T05:44:56.590Z] ----------------------------------------------------------------------
+[debug] [2017-10-28T05:44:56.592Z] Command:       /Users/jitae/.nvm/versions/node/v8.6.0/bin/node /Users/jitae/.nvm/versions/node/v8.6.0/bin/firebase serve
+[debug] [2017-10-28T05:44:56.592Z] CLI Version:   3.13.1
+[debug] [2017-10-28T05:44:56.592Z] Platform:      darwin
+[debug] [2017-10-28T05:44:56.592Z] Node Version:  v8.6.0
+[debug] [2017-10-28T05:44:56.592Z] Time:          Fri Oct 27 2017 22:44:56 GMT-0700 (PDT)
+[debug] [2017-10-28T05:44:56.592Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-10-28T05:44:56.603Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-10-28T05:44:56.603Z] > authorizing via signed-in user
+[debug] [2017-10-28T05:44:56.605Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/chainchronicle-ea233  
+ Fri Oct 27 2017 22:44:56 GMT-0700 (PDT)
+[debug] [2017-10-28T05:44:57.091Z] <<< HTTP RESPONSE 200
+[debug] [2017-10-28T05:44:57.092Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/chainchronicle-ea233/tokens  
+ Fri Oct 27 2017 22:44:57 GMT-0700 (PDT)
+[debug] [2017-10-28T05:44:57.465Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/jitae/Documents/GitHub/chain-wiki-web'...
+[info] 
+[debug] [2017-10-28T05:44:57.467Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/chainchronicle-ea233  
+ Fri Oct 27 2017 22:44:57 GMT-0700 (PDT)
+[debug] [2017-10-28T05:44:57.981Z] <<< HTTP RESPONSE 200
+[debug] [2017-10-28T05:44:57.981Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/1008757887866/clients/_:getWebAppConfig  
+ Fri Oct 27 2017 22:44:57 GMT-0700 (PDT)
+[debug] [2017-10-28T05:44:58.468Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: build
+[info] ✔  hosting: Local server: http://localhost:5000
+

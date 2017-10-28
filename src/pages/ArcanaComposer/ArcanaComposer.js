@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './ArcanaComposer.css';
 import { ref } from '../../helpers/constants'
+import Snackbar from 'material-ui/Snackbar';
 
 // Material UI
 import TextField from 'material-ui/TextField';
@@ -25,13 +26,15 @@ class ArcanaComposer extends React.Component {
     super(props);
 
     if (props.location.state !== undefined) {
-      this.state = props.location.state;      
+      this.state = props.location.state  
     }
     else {
       this.state = { 
         tavern: "",
         numberOfViews: 0,
         numberOfLikes: 0,
+        alert: false,
+        confirmationText: "",
       };
     }
 
@@ -47,7 +50,6 @@ class ArcanaComposer extends React.Component {
     this.handleSkillMana2 = this.handleSkillMana2.bind(this);
     this.handleSkillMana3 = this.handleSkillMana3.bind(this);
     this.handleKizunaCost = this.handleKizunaCost.bind(this);
-    
     
   }
 
@@ -200,12 +202,39 @@ class ArcanaComposer extends React.Component {
       this.setState({
         uid: arcanaID
       }, () => {
-        const newArcanaRef = ref.child('arcana').child(arcanaID);
-        newArcanaRef.set(this.state)
+
+        const newArcanaRef = ref.child('arcana').child(arcanaID)
+
+        if (this.state && this.state.nameKR) {
+
+          const arcana = Object.assign({}, this.state)
+          delete arcana[alert]
+          delete arcana[confirmationText]
+
+          newArcanaRef.set(arcana, error => {
+            this.showAlert(error)
+          })
+        }
       })
       
     }
 
+  }
+
+  showAlert(error) {
+    
+    let text = ""
+
+    if (error) {
+      text = "업로드 실패."
+    }
+    else {
+      text = "업로드 완료!"
+    }
+    this.setState({
+      alert: true,
+      confirmationText: text,
+    })
   }
 
   render() {
@@ -214,10 +243,10 @@ class ArcanaComposer extends React.Component {
       <div className={styles.fullWidthContainer}>
         
         <ValidatorForm
-                ref="form"
-                onSubmit={this.uploadArcana}
-                onError={errors => console.log(errors)}
-            >
+          ref="form"
+          onSubmit={this.uploadArcana}
+          onError={errors => console.log(errors)}
+        >
         <TextValidator
           name="nicknameKR"
           floatingLabelText="한글 호칭 (선택)"
@@ -518,6 +547,12 @@ class ArcanaComposer extends React.Component {
 
           <RaisedButton label="완료" style={buttonStyle} type="submit"/>
         </ValidatorForm>
+        <Snackbar
+          open={this.state.alert}
+          message={this.state.confirmationText}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     );
 
