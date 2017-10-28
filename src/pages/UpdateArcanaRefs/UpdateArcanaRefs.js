@@ -3,6 +3,7 @@ import { ref } from '../../helpers/constants'
 import { forceCheck } from 'react-lazyload';
 import Checkbox from 'material-ui/Checkbox';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import Snackbar from 'material-ui/Snackbar';
 
 // Material UI
 import RaisedButton from 'material-ui/RaisedButton'
@@ -40,6 +41,8 @@ class UpdateArcanaRefs extends React.Component {
       arcanaNameDictionary: {}, // Use arcanaID of selected list to find the names. 
       arcanaDictionary: {}, // For check/uncheck
       arcanaListArray: [], // selected list arcana. Ex: festival, reward, with arcanaIDs.
+      alert: false,
+      confirmationText: "",
     };
     
     this.getNames = this.getNames.bind(this)
@@ -48,6 +51,7 @@ class UpdateArcanaRefs extends React.Component {
     this.updateCheck = this.updateCheck.bind(this)
     this.removeArcana = this.removeArcana.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.showAlert = this.showAlert.bind(this)
   }
 
   componentWillMount() {
@@ -258,11 +262,31 @@ class UpdateArcanaRefs extends React.Component {
 
     }
 
-    if (this.state.listType === undefined && this.state.listType === null) {
-      return
-    }
-    ref.child(this.state.listType).set(updatedArcanaDict)      
+    const listType = this.state.listType
 
+    if (listType) {
+      
+      ref.child(listType).set(updatedArcanaDict, error => {
+        this.showAlert(error)
+      })
+    }
+
+  }
+
+  showAlert(error) {
+
+    let text = ""
+
+    if (error) {
+      text = "업데이트 실패."
+    }
+    else {
+      text = "목록 업데이트 완료!"
+    }
+    this.setState({
+      alert: true,
+      confirmationText: text,
+    })
   }
 
   render() {
@@ -338,6 +362,12 @@ class UpdateArcanaRefs extends React.Component {
             onClick={this.handleSubmit}/>
         </div>
         }
+        <Snackbar
+          open={this.state.alert}
+          message={this.state.confirmationText}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
         </div>
     );
   }

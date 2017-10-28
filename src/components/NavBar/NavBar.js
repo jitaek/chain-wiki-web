@@ -162,7 +162,7 @@ class NavBar extends React.Component {
             containerElement={<Link to='/abilityList'/>}
             onClick={this.handleClose}
           />
-          {/* <MenuItem
+          <MenuItem
             primaryText="아르카나 추가"
             containerElement={<Link to='/arcanaComposer'/>}
             onClick={this.handleClose}
@@ -171,7 +171,7 @@ class NavBar extends React.Component {
             primaryText="목록 업데이트"
             containerElement={<Link to='/updateArcanaRefs'/>}
             onClick={this.handleClose}
-          /> */}
+          />
         </Drawer>
         </AppBar>
       </div>
