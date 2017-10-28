@@ -45,24 +45,24 @@ class App extends Component {
 
   componentDidMount () {
 
-    this.removeListener = firebaseAuth().onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({
-          user: user.uid,
-          authed: true,
-          loading: false,
-        })
-      } else {
-        this.setState({
-          authed: false,
-          loading: false
-        })
-      }
-    })
+    // this.removeListener = firebaseAuth().onAuthStateChanged((user) => {
+    //   if (user) {
+    //     this.setState({
+    //       user: user.uid,
+    //       authed: true,
+    //       loading: false,
+    //     })
+    //   } else {
+    //     this.setState({
+    //       authed: false,
+    //       loading: false
+    //     })
+    //   }
+    // })
   }
 
   componentWillUnmount() {
-    this.removeListener()
+    // this.removeListener()
   }
 
   render() {
@@ -74,7 +74,7 @@ class App extends Component {
                 <NavBar location={this.props.location}/>
                 <Switch>
                 <Route exact path='/' render={(props) => (
-                  <Home {...props} user={this.state.user} />
+                  <Home {...props}/>
                 )}/>
                 <Route path="/arcana" exact component={Arcana} />
                 <Route path="/search" exact component={Search} />
