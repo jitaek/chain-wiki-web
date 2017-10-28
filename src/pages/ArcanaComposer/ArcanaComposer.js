@@ -208,8 +208,8 @@ class ArcanaComposer extends React.Component {
         if (this.state && this.state.nameKR) {
 
           const arcana = Object.assign({}, this.state)
-          delete arcana[alert]
-          delete arcana[confirmationText]
+          delete arcana['alert']
+          delete arcana['confirmationText']
 
           newArcanaRef.set(arcana, error => {
             this.showAlert(error)
