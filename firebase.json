@@ -2,7 +2,8 @@
   "database": {
     "rules": "database.rules.json"
   },
-  "storage": {
-    "rules": "storage.rules"
+  "hosting": {
+    "public": "src",
+    "cleanUrls": true
   }
 }
