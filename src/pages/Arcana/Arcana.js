@@ -271,9 +271,14 @@ class Arcana extends React.Component {
           kizunaCost: arcana.kizunaCost,
           kizunaDesc: arcana.kizunaDesc, 
 
+          buddyNameKR: arcana.buddyNameKR || null,
+          buddyNameJP: arcana.buddyNameJP || null,
+
           buddyIconURL: arcana.buddyIconURL || null,
+
           buddyClass: arcana.buddyClass || null,
           buddyWeapon: arcana.buddyWeapon || null,
+
           buddySkillDesc: arcana.buddySkillDesc || null,
           buddyAbilityDesc: arcana.buddyAbilityDesc || null,
 
@@ -399,8 +404,17 @@ class Arcana extends React.Component {
         {
           this.state.buddySkillDesc && 
           <div >
-            <div style={{margin: '10px'}}>
+            <div className={styles.headerContainer}>
+              {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
               <img className={styles.icon} src={this.state.buddyIconURL || logo}/>
+              <div className={styles.nameContainer}>
+                <div className={styles.nameKRContainer}>
+                  <div className={styles.nameKRLabel}>{this.state.buddyNameKR}</div>
+                </div>
+                <div className={styles.nameJPContainer}>
+                <div className={styles.nameJPLabel}>{this.state.buddyNameJP}</div>
+                </div>
+            </div>
             </div>
             <table className={styles.arcanaDetailTable}>
               <tbody>
@@ -429,14 +443,14 @@ class Arcana extends React.Component {
             target="_blank"
             >일첸 위키 가기</a>
         </div>
-        <div style={{margin:'10px'}}>
+        {/* <div style={{margin:'10px'}}>
           <Link 
             to={{
               pathname: '/arcanaComposer',
               state: this.state
             }}
           >아르카나 수정</Link>
-        </div>
+        </div> */}
         
         </div>
       );

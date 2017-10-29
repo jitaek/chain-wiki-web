@@ -618,6 +618,25 @@ class ArcanaComposer extends React.Component {
         {
           this.state.hasBuddy && 
           <div>
+
+            <TextValidator
+              name="buddyNameKR"
+              floatingLabelText="버디 한글 이름"
+              /* errorText={this.state.errorText} */
+              value={this.state.buddyNameKR}
+              /* validators={['required']}
+              errorMessages={[`한글 이름이 필요합니다.`]} */
+              onChange={this.handleText}/><br/>
+
+            <TextValidator
+              name="buddyNameJP"
+              floatingLabelText="버디 일어 이름"
+              /* errorText={this.state.errorText} */
+              value={this.state.buddyNameJP}
+              /* validators={['required']}
+              errorMessages={[`한글 이름이 필요합니다.`]} */
+              onChange={this.handleText}/><br/>
+
             <TextValidator
               name="buddyIconURL"
               value={this.state.buddyIconURL}
