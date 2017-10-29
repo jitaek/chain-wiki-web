@@ -1,21 +1,22 @@
-import React from 'react';
-import styles from './ArcanaComposer.css';
+import React from 'react'
+import styles from './ArcanaComposer.css'
 import { ref } from '../../helpers/constants'
-import Snackbar from 'material-ui/Snackbar';
+import Snackbar from 'material-ui/Snackbar'
 
 // Material UI
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
-import { ValidatorForm } from 'react-form-validator-core';
-import { TextValidator, SelectValidator } from 'react-material-ui-form-validator';
+import TextField from 'material-ui/TextField'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
+import RaisedButton from 'material-ui/RaisedButton'
+import { ValidatorForm } from 'react-form-validator-core'
+import { TextValidator, SelectValidator } from 'react-material-ui-form-validator'
+import Checkbox from 'material-ui/Checkbox'
 
 const ARCANA_REF = ref.child('arcana')
 
 const costArray = [];
 for (let i = 26; i >= 0; i--) {
-  costArray.push(<MenuItem value={`${i}`} key={i} primaryText={`${i}`} />);
+  costArray.push(<MenuItem value={`${i}`} key={i} primaryText={`${i}`} />)
 }
 
 const buttonStyle = {
@@ -25,34 +26,38 @@ const buttonStyle = {
 class ArcanaComposer extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
 
     if (props.location.state !== undefined) {
       this.state = props.location.state  
     }
     else {
       this.state = { 
+        hasBuddy: false,
         tavern: "",
         numberOfViews: 0,
         numberOfLikes: 0,
         alert: false,
         confirmationText: "",
-      };
+      }
     }
 
-    this.validateInput = this.validateInput.bind(this);    
-    this.arcanaForState = this.arcanaForState.bind(this);    
-    this.uploadArcana = this.uploadArcana.bind(this);
-    this.handleText = this.handleText.bind(this);
-    this.handleClass = this.handleClass.bind(this);
-    this.handleRarity = this.handleRarity.bind(this);
-    this.handleWeapon = this.handleWeapon.bind(this);
-    this.handleAffiliation = this.handleAffiliation.bind(this);
-    this.handleCost = this.handleCost.bind(this);
-    this.handleSkillMana1 = this.handleSkillMana1.bind(this);
-    this.handleSkillMana2 = this.handleSkillMana2.bind(this);
-    this.handleSkillMana3 = this.handleSkillMana3.bind(this);
-    this.handleKizunaCost = this.handleKizunaCost.bind(this);
+    this.validateInput = this.validateInput.bind(this)
+    this.arcanaForState = this.arcanaForState.bind(this)
+    this.uploadArcana = this.uploadArcana.bind(this)
+    this.handleText = this.handleText.bind(this)
+    this.handleClass = this.handleClass.bind(this)
+    this.handleRarity = this.handleRarity.bind(this)
+    this.handleWeapon = this.handleWeapon.bind(this)
+    this.handleAffiliation = this.handleAffiliation.bind(this)
+    this.handleCost = this.handleCost.bind(this)
+    this.handleSkillMana1 = this.handleSkillMana1.bind(this)
+    this.handleSkillMana2 = this.handleSkillMana2.bind(this)
+    this.handleSkillMana3 = this.handleSkillMana3.bind(this)
+    this.handleKizunaCost = this.handleKizunaCost.bind(this)
+    this.updateBuddy = this.updateBuddy.bind(this)
+    this.handleBuddyClass = this.handleBuddyClass.bind(this)
+    this.handleBuddyWeapon = this.handleBuddyWeapon.bind(this)
     
   }
 
@@ -61,16 +66,16 @@ class ArcanaComposer extends React.Component {
     console.log('will mount')
     ValidatorForm.addValidationRule('validAbility1', (value) => {
       if (value === undefined && this.state.rarity >= "3") {
-          return false;
+          return false
       }
-      return true;
+      return true
     });
 
     ValidatorForm.addValidationRule('validAbility2', (value) => {
       if (value === undefined && this.state.rarity >= "4") {
-          return false;
+          return false
       }
-      return true;
+      return true
     });
 
   }
@@ -78,9 +83,9 @@ class ArcanaComposer extends React.Component {
   handleText(event, text) {
 
     var input = {}
-    input[event.target.name] = text;
+    input[event.target.name] = text
 
-    this.setState(input);
+    this.setState(input)
   }
 
   handleClass(event, index, value) {
@@ -170,6 +175,31 @@ class ArcanaComposer extends React.Component {
     })
   }
 
+  updateBuddy() {
+    this.setState({
+      hasBuddy: !this.state.hasBuddy
+    })
+  }
+
+  handleBuddyClass(event, index, value) {
+    console.log(index)
+    console.log(value)
+
+    this.setState({
+      buddyClass: value
+    })
+  }
+
+  handleBuddyWeapon(event, index, value) {
+    
+    console.log(event.target.name)
+    console.log(value)
+
+    this.setState({
+      buddyWeapon: value
+    })
+  }
+
   validateInput() {
 
     console.log('uploading arcana')
@@ -184,6 +214,9 @@ class ArcanaComposer extends React.Component {
     delete arcana['alert']
     delete arcana['confirmationText']
     delete arcana['arcanaID']
+    delete arcana['hasBuddy']
+    delete arcana['iconLoaded']
+    delete arcana['mainImageLoaded']
 
     let skillCount = 1
     if (arcana.skillDesc3) {
@@ -575,8 +608,87 @@ class ArcanaComposer extends React.Component {
           fullWidth={true}
           onChange={this.handleText}/><br/>
 
-          <RaisedButton label="완료" style={buttonStyle} type="submit"/>
+        <Checkbox
+          label={'버디 아르카나'}
+          style={{marginTop:'20px', marginBottom:'20px'}}
+          checked={this.state.hasBuddy}
+          onCheck={this.updateBuddy}
+        />
+        
+        {
+          this.state.hasBuddy && 
+          <div>
+            <TextValidator
+              name="buddyIconURL"
+              value={this.state.buddyIconURL}
+              floatingLabelText="버디 아이콘 주소 (선택)"
+              fullWidth={true}
+              onChange={this.handleText}
+            /><br/>
+              
+            <SelectValidator
+              name="class"
+              floatingLabelText="버디 직업"
+              value={this.state.buddyClass}
+              validators={['required']}
+              errorMessages={[`직업이 필요합니다.`]}
+              onChange={this.handleBuddyClass}>
+              <MenuItem value="전사" primaryText="전사" />
+              <MenuItem value="기사" primaryText="기사" />
+              <MenuItem value="궁수" primaryText="궁수" />
+              <MenuItem value="법사" primaryText="법사" />
+              <MenuItem value="승려" primaryText="승려" />
+            </SelectValidator>
+            
+            <SelectValidator
+              name={"weapon"}
+              floatingLabelText="버디 무기"
+              value={this.state.buddyWeapon}
+              /* validators={['required']}
+              errorMessages={[`무기가 필요합니다.`]} */
+              onChange={this.handleBuddyWeapon}>
+              <MenuItem value="검" primaryText="검" />
+              <MenuItem value="봉" primaryText="봉" />
+              <MenuItem value="창" primaryText="창" />
+              <MenuItem value="궁" primaryText="궁" />
+              <MenuItem value="마" primaryText="마" />
+              <MenuItem value="성" primaryText="성" />
+              <MenuItem value="권" primaryText="권" />
+              <MenuItem value="총" primaryText="총" />
+              <MenuItem value="저" primaryText="저" />
+            </SelectValidator>
+
+            <TextValidator
+              name="buddySkillDesc"
+              value={this.state.buddySkillDesc}
+              floatingLabelText="버디 스킬 설명"
+              fullWidth={true}
+              multiLine={true}
+              rows={1}
+              rowsMax={5}
+              /* validators={['required']}
+              errorMessages={[`스킬 정보가 필요합니다.`]} */
+              onChange={this.handleText}
+            />
+            <TextValidator
+              name="buddyAbilityDesc"
+              value={this.state.buddyAbilityDesc}
+              floatingLabelText="버디 어빌 설명"
+              fullWidth={true}
+              multiLine={true}
+              rows={1}
+              rowsMax={5}
+              /* validators={['validAbility1']}
+              errorMessages={[`3성 이상 아르카나는 어빌이 필요합니다.`]} */
+              onChange={this.handleText}/><br/>
+          </div>
+        }
+        
+        
+        <RaisedButton label="완료" style={buttonStyle} type="submit"/>
+
         </ValidatorForm>
+
         <Snackbar
           open={this.state.alert}
           message={this.state.confirmationText}

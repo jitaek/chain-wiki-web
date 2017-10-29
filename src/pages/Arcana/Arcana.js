@@ -28,11 +28,11 @@ function PrivateRoute ({component: Component, authed, ...rest}) {
 }
 
 function Skill(props) {
-  const skillNumber = props.skillNumber;
-  const skillName = props.skillName;
-  const skillMana = props.skillMana;  
-  const skillDesc = props.skillDesc;
-  const isKizuna = props.isKizuna;
+  const skillNumber = props.skillNumber
+  const skillName = props.skillName
+  const skillMana = props.skillMana
+  const skillDesc = props.skillDesc
+  const isKizuna = props.isKizuna
 
   if (skillDesc) {
     return (
@@ -55,18 +55,37 @@ function Skill(props) {
         </table>
         <div className={styles.skillAbilityDescCell}>{skillDesc}</div>
       </div>
-    );
+    )
   }
   else {
-    return null;
+    return null
   } 
 }
 
 function Ability(props) {
-  const abilityNumber = props.abilityNumber;
-  const abilityName = props.abilityName;
-  const abilityDesc = props.abilityDesc;
-  if (abilityDesc) {
+  const abilityNumber = props.abilityNumber
+  const abilityName = props.abilityName
+  const abilityDesc = props.abilityDesc
+  const isBuddy = props.isBuddy
+  const isBuddySkill = props.isBuddySkill
+  
+  if (isBuddy) {
+    return (
+      <div>
+        <table className={styles.arcanaSkillTable}>
+        <tbody>
+          <tr>
+            <th className={styles.headerCell}>{isBuddySkill ? "버디 스킬 " : "버디 어빌"}</th>
+            <td className={styles.bodyCell}></td>
+          </tr>
+        </tbody>
+        </table>
+        <div className={styles.skillAbilityDescCell}>{abilityDesc}</div>
+      </div>
+    )
+  }
+
+  else if (abilityDesc) {
     return (
       <div>
         <table className={styles.arcanaSkillTable}>
@@ -79,10 +98,10 @@ function Ability(props) {
         </table>
         <div className={styles.skillAbilityDescCell}>{abilityDesc}</div>
       </div>
-    );
+    )
   }
   else {
-    return null;
+    return null
   } 
 }
 
@@ -194,7 +213,7 @@ class Arcana extends React.Component {
 
     if (arcanaID) {
 
-      incrementViewCount(arcanaID)
+      // incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 
@@ -206,11 +225,16 @@ class Arcana extends React.Component {
 
         this.setState({
           
+          uid: arcana.uid,
+
           nameKR: arcana.nameKR,
           nicknameKR: arcana.nicknameKR || "",
 
           nameJP: arcana.nameJP,
           nicknameJP: arcana.nicknameJP || "",
+
+          iconURL: arcana.iconURL || null,
+          imageURL: arcana.imageURL || null,
 
           rarity: arcana.rarity,
           class: arcana.class,
@@ -247,8 +271,11 @@ class Arcana extends React.Component {
           kizunaCost: arcana.kizunaCost,
           kizunaDesc: arcana.kizunaDesc, 
 
-          iconURL: arcana.iconURL || null,
-          imageURL: arcana.imageURL || null,
+          buddyIconURL: arcana.buddyIconURL || null,
+          buddyClass: arcana.buddyClass || null,
+          buddyWeapon: arcana.buddyWeapon || null,
+          buddySkillDesc: arcana.buddySkillDesc || null,
+          buddyAbilityDesc: arcana.buddyAbilityDesc || null,
 
         });
       })
@@ -368,6 +395,34 @@ class Arcana extends React.Component {
         <Ability abilityNumber={4} abilityName={this.state.partyAbility} abilityDesc={this.state.partyAbility}/>
 
         <Skill isKizuna={true} skillName={this.state.kizunaName} skillMana={this.state.kizunaCost} skillDesc={this.state.kizunaDesc} />
+
+        {
+          this.state.buddySkillDesc && 
+          <div >
+            <div style={{margin: '10px'}}>
+              <img className={styles.icon} src={this.state.buddyIconURL || logo}/>
+            </div>
+            <table className={styles.arcanaDetailTable}>
+              <tbody>
+                {/* <tr>
+                    <th className={styles.headerCell}>이름</th>
+                    <td className={styles.bodyCell}>{this.state.nicknameKR + " " + this.state.nameKR} </td>
+                </tr> */}
+                <tr>
+                    <th className={styles.headerCell}>버디 직업</th>
+                    <td className={styles.bodyCell}>{this.state.buddyClass}</td>
+                </tr>
+                <tr>
+                    <th className={styles.headerCell}>버디 무기</th>
+                    <td className={styles.bodyCell}>{this.state.buddyWeapon}</td>
+                </tr>
+              </tbody>
+            </table>
+            <Ability isBuddy={true} isBuddySkill={true} abilityDesc={this.state.buddySkillDesc}/>
+            <Ability isBuddy={true} abilityDesc={this.state.buddyAbilityDesc}/>
+          </div>
+          
+        }
 
         <div className={styles.skillAbilityDescCell}>
           <a href={this.state.linkJP}

@@ -332,7 +332,7 @@ class UpdateArcanaRefs extends React.Component {
 
             // <LazyLoad height={24} key={arcana.arcanaID}>
               <Checkbox
-              key={arcana.arcanaID}
+                key={arcana.arcanaID}
                 label={arcana.nameKR}
                 checked={this.state.arcanaDictionary[arcana.arcanaID] !== undefined}
                 disabled={this.state.listType === undefined}
