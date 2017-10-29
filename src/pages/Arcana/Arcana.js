@@ -280,10 +280,10 @@ class Arcana extends React.Component {
 
   editArcana() {
 
-    // this.props.history.push({
-    //   pathname: '/login',
-    //   state: {this.state}
-    // })
+    this.props.history.push({
+      pathname: '/login',
+      state: this.state
+    })
   }
 
   render() {
@@ -372,14 +372,14 @@ class Arcana extends React.Component {
             target="_blank"
             >일첸 위키 가기</a>
         </div>
-        {/* <div style={{margin:'10px'}}>
+        <div style={{margin:'10px'}}>
           <Link 
             to={{
               pathname: '/arcanaComposer',
               state: this.state
             }}
           >아르카나 수정</Link>
-        </div> */}
+        </div>
         
         </div>
       );

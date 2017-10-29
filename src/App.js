@@ -56,6 +56,7 @@ class App extends Component {
 
   componentDidMount () {
 
+    console.log(apple)
     // this.removeListener = firebaseAuth().onAuthStateChanged((user) => {
     //   if (user) {
     //     this.setState({
@@ -95,6 +96,7 @@ class App extends Component {
                 <Route path="/login" exact component={Login} />
                 <Route path="/arcanaComposer" exact component={ArcanaComposer} />
                 <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
+                
                 {/* <PrivateRoute authed={this.state.authed} path="/arcanaComposer" exact component={ArcanaComposer} /> */}
                 </Switch>
               </div>

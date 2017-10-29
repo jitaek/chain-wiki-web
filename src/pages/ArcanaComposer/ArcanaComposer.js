@@ -180,18 +180,27 @@ class ArcanaComposer extends React.Component {
 
     // check if uploading new, or editing.
     
-    if (this.state.uid) {
+    if (this.state.arcanaID) {
       // editing. TODO: move previous data to /arcanaEdit, using firebase functions.
       console.log('editing arcana')
-      // let arcanaID = this.state.uid
-      // ref.child('arcana').child(arcanaID).once('value', snapshot => {
+      let arcanaID = this.state.uid
+      ref.child('arcana').child(arcanaID).once('value', snapshot => {
 
-      //   let previousArcana = snapshot.val()
-      //   console.log('previous arcana is ')
-      //   console.log(previousArcana)
-      //   let newEditRef = ref.child('arcanaEdit').child(arcanaID).push()
-      //   newEditRef.set(previousArcana)
-      // });
+        let previousArcana = snapshot.val()
+        console.log('previous arcana is ')
+        console.log(previousArcana)
+        let newEditRef = ref.child('arcanaEdit').child(arcanaID).push()
+        newEditRef.set(previousArcana)
+
+        const arcana = Object.assign({}, this.state)
+        delete arcana['alert']
+        delete arcana['confirmationText']
+
+        ref.child('arcana').child(arcanaID).set(arcana, error => {
+          this.showAlert(error)
+        })
+
+      });
     }
     else {
       // uploading new.

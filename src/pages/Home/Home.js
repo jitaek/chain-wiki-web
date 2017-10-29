@@ -237,7 +237,7 @@ class Home extends Component {
 
         const arcana = snapshot.val()
 
-        if (arcana.nameKR) {
+        if (arcana && arcana.nameKR) {
           festivalArcanaDict[arcanaID] = arcana
         }
         else {

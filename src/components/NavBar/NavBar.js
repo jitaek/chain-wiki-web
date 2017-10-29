@@ -26,6 +26,7 @@ class NavBar extends React.Component {
       open: false,
       nameArray: [],
     };
+
   }
 
   componentWillUnmount() {
