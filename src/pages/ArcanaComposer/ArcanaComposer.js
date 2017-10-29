@@ -11,6 +11,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { ValidatorForm } from 'react-form-validator-core';
 import { TextValidator, SelectValidator } from 'react-material-ui-form-validator';
 
+const ARCANA_REF = ref.child('arcana')
+
 const costArray = [];
 for (let i = 26; i >= 0; i--) {
   costArray.push(<MenuItem value={`${i}`} key={i} primaryText={`${i}`} />);
@@ -39,6 +41,7 @@ class ArcanaComposer extends React.Component {
     }
 
     this.validateInput = this.validateInput.bind(this);    
+    this.arcanaForState = this.arcanaForState.bind(this);    
     this.uploadArcana = this.uploadArcana.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleClass = this.handleClass.bind(this);
@@ -175,16 +178,38 @@ class ArcanaComposer extends React.Component {
     ref.child('/test').set(this.state)
   }
 
+  arcanaForState() {
+
+    const arcana = Object.assign({}, this.state)
+    delete arcana['alert']
+    delete arcana['confirmationText']
+    delete arcana['arcanaID']
+
+    let skillCount = 1
+    if (arcana.skillDesc3) {
+      skillCount = 3
+    }
+    else if (arcana.skillDesc2) {
+      skillCount = 2
+    }
+
+    arcana['skillCount'] = skillCount
+
+    return arcana
+
+  }
+
   uploadArcana() {
-    console.log(this.state)
 
     // check if uploading new, or editing.
     
-    if (this.state.arcanaID) {
+    const arcanaID = this.state.arcanaID
+
+    if (arcanaID) {
       // editing. TODO: move previous data to /arcanaEdit, using firebase functions.
       console.log('editing arcana')
-      let arcanaID = this.state.uid
-      ref.child('arcana').child(arcanaID).once('value', snapshot => {
+
+      ARCANA_REF.child(arcanaID).once('value', snapshot => {
 
         let previousArcana = snapshot.val()
         console.log('previous arcana is ')
@@ -192,11 +217,9 @@ class ArcanaComposer extends React.Component {
         let newEditRef = ref.child('arcanaEdit').child(arcanaID).push()
         newEditRef.set(previousArcana)
 
-        const arcana = Object.assign({}, this.state)
-        delete arcana['alert']
-        delete arcana['confirmationText']
+        const arcana = this.arcanaForState()
 
-        ref.child('arcana').child(arcanaID).set(arcana, error => {
+        ARCANA_REF.child(arcanaID).set(arcana, error => {
           this.showAlert(error)
         })
 
@@ -206,19 +229,17 @@ class ArcanaComposer extends React.Component {
       // uploading new.
       console.log('uploading new arcana')
 
-      const arcanaID = ref.child('arcana').push().key
+      const arcanaID = ARCANA_REF.push().key
 
       this.setState({
         uid: arcanaID
       }, () => {
 
-        const newArcanaRef = ref.child('arcana').child(arcanaID)
+        const newArcanaRef = ARCANA_REF.child(arcanaID)
 
         if (this.state && this.state.nameKR) {
 
-          const arcana = Object.assign({}, this.state)
-          delete arcana['alert']
-          delete arcana['confirmationText']
+          const arcana = this.arcanaForState()
 
           newArcanaRef.set(arcana, error => {
             this.showAlert(error)
