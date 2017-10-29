@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Arcana.css';
-import {ref} from '../../helpers/constants'
+import {ref, ARCANA_REF} from '../../helpers/constants'
 
 import {
   Route,
@@ -180,7 +180,7 @@ class Arcana extends React.Component {
     // let arcanaRef = ref('arcana').child(arcanaID)
     const arcanaID = this.state.arcanaID
     if (arcanaID) {
-      let arcanaRef = ref.child('arcana').child(arcanaID);
+      let arcanaRef = ARCANA_REF.child(arcanaID);
       arcanaRef.off()
     }
 
@@ -194,7 +194,7 @@ class Arcana extends React.Component {
 
       incrementViewCount(arcanaID)
       
-      let arcanaRef = ref.child('arcana').child(arcanaID)
+      let arcanaRef = ARCANA_REF.child(arcanaID)
 
       arcanaRef.on('value', snapshot => {
 
