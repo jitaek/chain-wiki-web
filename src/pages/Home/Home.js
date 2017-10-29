@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {ref} from '../../helpers/constants'
+import { ref, ARCANA_REF } from '../../helpers/constants'
 import { getParams } from '../../helpers/QueryParameter'
 
 import { forceCheck } from 'react-lazyload'
@@ -14,11 +14,10 @@ import { getViewType, setViewType } from '../../helpers/ArcanaViewType'
 
 var _ = require('lodash');
 
-let ARCANA_REF = ref.child('arcana')
-let festivalRef = ref.child('festival')
-let rewardRef = ref.child('reward')
-let legendRef = ref.child('legend')
-let abyssalRef = ref.child('abyssal')
+const festivalRef = ref.child('festival')
+const rewardRef = ref.child('reward')
+const legendRef = ref.child('legend')
+const abyssalRef = ref.child('abyssal')
 
 var listRef
 
