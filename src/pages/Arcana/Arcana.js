@@ -213,7 +213,7 @@ class Arcana extends React.Component {
 
     if (arcanaID) {
 
-      // incrementViewCount(arcanaID)
+      incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 

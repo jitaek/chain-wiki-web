@@ -65,8 +65,8 @@ class AbilityList extends Component {
 
     return (
         <div>          
-          <div style={{margin:'20px'}}>
-            <RadioButtonGroup name="status" defaultSelected="Ability" onChange={this.setAbilityType}>
+          <div style={{marginTop:'20px'}}>
+            <RadioButtonGroup style={{marginLeft: '10px'}} name="status" defaultSelected="Ability" onChange={this.setAbilityType}>
               <RadioButton style={RadioButtonStyle} label="어빌리티" value="Ability" />
               <RadioButton style={RadioButtonStyle} label="인연" value="Kizuna" />
             </RadioButtonGroup>
