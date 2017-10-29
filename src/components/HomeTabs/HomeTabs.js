@@ -31,15 +31,29 @@ export default class HomeTabs extends React.Component {
 
     calculateIndex(index) {
 
-        if (this.props.rewardArray.length === 0 && this.props.festivalArray.length === 0) {
-            index = index - 2
+        const rewardArray = this.props.rewardArray
+        const festivalArray = this.props.festivalArray
+
+        if (rewardArray.length > 0 && festivalArray.length > 0) {
+            return index
         }
-        else if (this.props.festivalArray.length > 0) {
-            index--
-        }
-        else if (this.props.rewardArray.length > 0) {
-            index--
-        }
+
+        if (rewardArray.length > 0 || festivalArray.length > 0) {
+            return index--
+        } 
+
+        // both arrays are empty
+        return index - 2
+
+        // if (this.props.rewardArray.length === 0 && this.props.festivalArray.length === 0) {
+        //     index = index - 2
+        // }
+        // else if (this.props.festivalArray.length > 0) {
+        //     index--
+        // }
+        // else if (this.props.rewardArray.length > 0) {
+        //     index--
+        // }
 
         return index
         

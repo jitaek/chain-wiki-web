@@ -53,7 +53,7 @@ class Home extends Component {
       abyssalArray: [],
       viewType: "grid",
       list: "recent",
-      index: 0,
+      index: 1,
       user: null,
     }
 
@@ -104,10 +104,14 @@ class Home extends Component {
 
     const search = this.props.history.location.search
     let params = getParams(search)
-    const index = params['index']
-    this.setState({
-      index: index
-    })
+    let index = params['index']
+    if (index) {
+
+      index = parseInt(index)
+      this.setState({
+        index: index
+      })
+    }
     
   }
 
@@ -159,7 +163,7 @@ class Home extends Component {
     ARCANA_REF.orderByKey().limitToLast(count).on('child_changed', snapshot => {
       
       const arcanaID = snapshot.key
-      const arcana = snapshot.val();
+      const arcana = snapshot.val()
       
       if (arcana.nameKR) {
         recentArcanaDict[arcanaID] = arcana
