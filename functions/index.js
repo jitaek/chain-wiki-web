@@ -23,7 +23,7 @@ const gcs = require('@google-cloud/storage')();
 const exec = require('child-process-promise').exec;
 const LOCAL_TMP_FOLDER = '/tmp/';
 
-const ref = admin.database().ref()
+const abilityRef = admin.database().ref('ability')
 
 exports.createUser = functions.auth.user().onCreate(event => {
 
@@ -69,6 +69,8 @@ exports.deleteUser = functions.auth.user().onDelete(event => {
 // function that takes in ability1 or ability 2, and returns the abilityRef if true.
 function abilityType(arcanaID, abilityDesc, isKizuna) {
 
+  console.log(`updating ability for ${arcanaID} with ${abilityDesc}`)
+
   var abilityType = 'Ability';
 
   if (isKizuna) {
@@ -76,151 +78,151 @@ function abilityType(arcanaID, abilityDesc, isKizuna) {
   }
   
   if (abilityDesc.indexOf('서브') !== -1) {
-    abilityRef.child(`sub${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`sub${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('마나') !== -1 && abilityDesc.indexOf('시작') !== -1) {
-    abilityRef.child(`mana${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`mana${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('마나 슬롯') !== -1 && abilityDesc.indexOf('속도') !== -1) {
-    abilityRef.child(`manaSlot${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`manaSlot${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('마나 슬롯 때') !== -1 || (abilityDesc.indexOf('마나') !== -1 && abilityDesc.indexOf('쉽게한다') !== -1)) {
-    abilityRef.child(`manaChance${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`manaChance${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('보물') !== -1 || abilityDesc.indexOf('상자') !== -1) {
-    abilityRef.child(`treasure${abilityType}`).child(arcanaID).setValue(true);    
+    abilityRef.child(`treasure${abilityType}`).child(arcanaID).set(true);    
   }
 
   if (abilityDesc.indexOf('골드') !== -1) {
-    abilityRef.child(`gold${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`gold${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('경험치') !== -1) {
-    abilityRef.child(`exp${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`exp${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('필살기') !== -1) {
-    abilityRef.child(`skillUp${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`skillUp${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('AP') !== -1) {
-    abilityRef.child(`apRecover${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`apRecover${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('보스') !== -1) {
-    abilityRef.child(`bossWave${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`bossWave${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('웨이브') !== -1 && abilityDesc.indexOf('회복한다') !== -1 && abilityDesc.indexOf('아군') !== -1) {
-    abilityRef.child(`partyHeal${abilityType}`).child(arcanaID).setValue(true);
+    abilityRef.child(`partyHeal${abilityType}`).child(arcanaID).set(true);
   }
 
   if (abilityDesc.indexOf('적에게') !== -1) {
 
     if (abilityDesc.indexOf('독') !== -1) {
-      abilityRef.child(`poisonAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+      abilityRef.child(`poisonAttackUp${abilityType}`).child(arcanaID).set(true);      
     }
 
     if (abilityDesc.indexOf('암흑') !== -1 || abilityDesc.indexOf('어둠') !== -1) {
-      abilityRef.child(`darkAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+      abilityRef.child(`darkAttackUp${abilityType}`).child(arcanaID).set(true);      
     }
 
     if (abilityDesc.indexOf('스러운') !== -1 || abilityDesc.indexOf('슬로우') !== -1) {
-      abilityRef.child(`slowAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+      abilityRef.child(`slowAttackUp${abilityType}`).child(arcanaID).set(true);      
     }
 
     if (abilityDesc.indexOf('저주') !== -1) {
-      abilityRef.child(`curseAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+      abilityRef.child(`curseAttackUp${abilityType}`).child(arcanaID).set(true);      
     }
 
     if (abilityDesc.indexOf('쇠약') !== -1) {
-      abilityRef.child(`weakAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+      abilityRef.child(`weakAttackUp${abilityType}`).child(arcanaID).set(true);      
     }
 
     if (abilityDesc.indexOf('백골') !== -1) {
-      abilityRef.child(`skeletonAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+      abilityRef.child(`skeletonAttackUp${abilityType}`).child(arcanaID).set(true);      
     }
 
     if (abilityDesc.indexOf('다운') !== -1) {
-      abilityRef.child(`stunAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+      abilityRef.child(`stunAttackUp${abilityType}`).child(arcanaID).set(true);      
     }
 
     if (abilityDesc.indexOf('동결') !== -1) {
-      abilityRef.child(`frostAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+      abilityRef.child(`frostAttackUp${abilityType}`).child(arcanaID).set(true);      
     }
 
   }
 
   if (abilityDesc.indexOf('상태로한다') !== -1 || abilityDesc.indexOf('추가된다') !== -1 || abilityDesc.indexOf('만든다') !== -1) {
     if (abilityDesc.indexOf('독') !== -1) {
-      abilityRef.child(`poisonStrike${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`poisonStrike${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('슬로우') !== -1 || abilityDesc.indexOf('스러운') !== -1) {
-      abilityRef.child(`slowStrike${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`slowStrike${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('암흑') !== -1 || abilityDesc.indexOf('어둠') !== -1) {
-      abilityRef.child(`darkStrike${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`darkStrike${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('동결') !== -1) {
-      abilityRef.child(`frostStrike${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`frostStrike${abilityType}`).child(arcanaID).set(true);            
     }
   }
 
   if (abilityDesc.indexOf('않는다') !== -1 || abilityDesc.indexOf('면역') !== -1) {
     if (abilityDesc.indexOf('독') !== -1) {
-      abilityRef.child(`poisonImmune${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`poisonImmune${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('슬로우') !== -1 || abilityDesc.indexOf('스러운') !== -1) {
-      abilityRef.child(`slowImmune${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`slowImmune${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('암흑') !== -1 || abilityDesc.indexOf('어둠') !== -1) {
-      abilityRef.child(`darkImmune${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`darkImmune${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('동결') !== -1) {
-      abilityRef.child(`frostImmune${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`frostImmune${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('쇠약') !== -1) {
-      abilityRef.child(`weakImmune${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`weakImmune${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('백골') !== -1) {
-      abilityRef.child(`skeletonImmune${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`skeletonImmune${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('다운') !== -1) {
-      abilityRef.child(`stunImmune${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`stunImmune${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('봉인') !== -1) {
-      abilityRef.child(`sealImmune${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`sealImmune${abilityType}`).child(arcanaID).set(true);            
     }
   }
 
   if (abilityDesc.indexOf('지형') !== -1) {
     if (abilityDesc.indexOf('황무지') !== -1) {
-      abilityRef.child(`wastelands${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`wastelands${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('숲') !== -1) {
-      abilityRef.child(`forest${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`forest${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('덩굴') !== -1) {
-      abilityRef.child(`cavern${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`cavern${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('사막') !== -1) {
-      abilityRef.child(`desert${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`desert${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('설산') !== -1) {
-      abilityRef.child(`snow${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`snow${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('도시') !== -1) {
-      abilityRef.child(`urban${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`urban${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('해변') !== -1) {
-      abilityRef.child(`water${abilityType}`).child(arcanaID).setValue(true);            
+      abilityRef.child(`water${abilityType}`).child(arcanaID).set(true);            
     }
-    if (abilityDesc.indexOf('야간') !== -1) {
-      abilityRef.child(`night${abilityType}`).child(arcanaID).setValue(true);            
+    if (abilityDesc.indexOf('야간') !== -1 || abilityDesc.indexOf('밤') !== -1) {
+      abilityRef.child(`night${abilityType}`).child(arcanaID).set(true);            
     }
   }
 
