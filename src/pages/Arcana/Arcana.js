@@ -231,7 +231,7 @@ class Arcana extends React.Component {
     if (arcanaID) {
       shareLink = createShareLinkWithArcana(arcanaID)
       
-      incrementViewCount(arcanaID)
+      // incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 

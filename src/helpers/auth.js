@@ -1,4 +1,10 @@
-import { ref, firebaseAuth } from './constants'
+import firebase from 'firebase'
+import { ref } from './constants'
+
+export const firebaseAuth = firebase.auth()
+
+export const googleProvider = new firebase.auth.GoogleAuthProvider()
+export const facebookProvider = new firebase.auth.FacebookAuthProvider()
 
 export function auth (email, pw) {
   return firebaseAuth().createUserWithEmailAndPassword(email, pw)

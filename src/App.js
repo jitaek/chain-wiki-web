@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from 'firebase'
 
 import {
   BrowserRouter as Router,
@@ -7,8 +8,6 @@ import {
   Redirect,
   routes
 } from 'react-router-dom'
-
-import { firebaseAuth } from './helpers/constants'
 
 import NavBar from './components/NavBar/NavBar'
 // import Nav from "./components/Nav/Nav"
@@ -30,12 +29,16 @@ var apple = require("./apple-app-site-association");
 var ReactGA = require('react-ga')
 ReactGA.initialize('UA-73091430-2')
 
+var previousPath
+
 function logPageView() {
   ReactGA.set({ page: window.location.pathname + window.location.search });
   ReactGA.pageview(window.location.pathname + window.location.search);
 }
 
-function PrivateRoute ({component: Component, authed, ...rest}) {
+function PrivateRoute ({component: Component, authed, path, ...rest}) {
+  previousPath = path
+  console.log(previousPath)
   return (
     <Route
       {...rest}
@@ -57,32 +60,40 @@ class App extends Component {
   componentDidMount () {
 
     console.log(apple)
-    // this.removeListener = firebaseAuth().onAuthStateChanged((user) => {
-    //   if (user) {
-    //     this.setState({
-    //       user: user.uid,
-    //       authed: true,
-    //       loading: false,
-    //     })
-    //   } else {
-    //     this.setState({
-    //       authed: false,
-    //       loading: false
-    //     })
-    //   }
-    // })
+    this.removeListener = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log('auth listener. user logged in')
+        this.setState({
+          user: user.uid,
+          authed: true,
+          loading: false,
+        })
+      } else {
+        console.log('auth listener. user unauthenticated')
+        this.setState({
+          authed: false,
+          loading: false
+        })
+      }
+    })
   }
 
   componentWillUnmount() {
-    // this.removeListener()
+    this.removeListener()
   }
 
   render() {
+
     return (
       <div>
         <MuiThemeProvider>
           <Router routes={routes} onUpdate={logPageView}>
+
               <div>
+                {
+                  this.state.authed &&
+                  <Redirect to={{pathname: previousPath, state: {from: this.props.location}}} />
+                }
                 <NavBar location={this.props.location}/>
                 <Switch>
                 <Route exact path='/' render={(props) => (
@@ -94,10 +105,10 @@ class App extends Component {
                 <Route path="/abilityList" exact component={AbilityList} />
                 <Route path="/ability" exact component={Ability} />
                 <Route path="/login" exact component={Login} />
-                <Route path="/arcanaComposer" exact component={ArcanaComposer} />
+                {/* <Route path="/arcanaComposer" exact component={ArcanaComposer} /> */}
                 <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 
-                {/* <PrivateRoute authed={this.state.authed} path="/arcanaComposer" exact component={ArcanaComposer} /> */}
+                <PrivateRoute authed={this.state.authed} path="/arcanaComposer" exact component={ArcanaComposer} />
                 </Switch>
               </div>
           </Router>
