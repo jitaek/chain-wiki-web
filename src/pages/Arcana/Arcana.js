@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Arcana.css';
-import {ref, ARCANA_REF} from '../../helpers/constants'
+import {ref, ARCANA_REF, firebaseDynamicLink } from '../../helpers/constants'
 
 import {
   Route,
@@ -13,8 +13,14 @@ import logo from '../../logo.png'
 
 import { getParams } from '../../helpers/QueryParameter'
 import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar'
+import LinkIcon from 'material-ui/svg-icons/content/link'
+import {CopyToClipboard} from 'react-copy-to-clipboard'
+import IconButton from 'material-ui/IconButton'
+import Snackbar from 'material-ui/Snackbar'
 
 var arcanaID
+var shareLink
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
@@ -133,6 +139,15 @@ function incrementViewCount(arcanaID) {
   }
 }
 
+function createShareLinkWithArcana(arcanaID) {
+
+  const linkQuery = `?link=${window.location.href}`
+
+  const link = firebaseDynamicLink + linkQuery
+
+  return link
+}
+
 class Arcana extends React.Component {
 
   constructor(props) {
@@ -142,11 +157,13 @@ class Arcana extends React.Component {
       arcanaID: null,
       mainImageLoaded: false,
       iconLoaded: false,
+      linkCopied: false,
     }
     this.openJPWiki = this.openJPWiki.bind(this);
     this.editArcana = this.editArcana.bind(this);
     this.observeArcana = this.observeArcana.bind(this);
     this.createJPLink = this.createJPLink.bind(this)
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -212,7 +229,8 @@ class Arcana extends React.Component {
     const arcanaID = this.state.arcanaID
 
     if (arcanaID) {
-
+      shareLink = createShareLinkWithArcana(arcanaID)
+      
       incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
@@ -452,8 +470,26 @@ class Arcana extends React.Component {
           >아르카나 수정</Link>
         </div> */}
         
+        <Toolbar className={styles.toolbar} style={{backgroundColor:'white'}}>
+          <ToolbarGroup lastChild={true}>
+            <CopyToClipboard text={shareLink} onCopy={() => this.setState({linkCopied:true})}>
+              <IconButton tooltip="퍼가기" tooltipPosition='top-center'>
+                <LinkIcon/>
+              </IconButton>
+            </CopyToClipboard>
+          </ToolbarGroup>
+        </Toolbar>
+
+        <Snackbar
+          open={this.state.linkCopied}
+          message="링크가 복사되었습니다."
+          autoHideDuration={4000}
+          /* onRequestClose={this.handleRequestClose} */
+        />
+
         </div>
-      );
+      )
+
     }
 
     else {
@@ -464,4 +500,4 @@ class Arcana extends React.Component {
 
 }
 
-export default Arcana;
+export default Arcana
