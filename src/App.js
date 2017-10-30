@@ -90,10 +90,6 @@ class App extends Component {
           <Router routes={routes} onUpdate={logPageView}>
 
               <div>
-                {
-                  this.state.authed &&
-                  <Redirect to={{pathname: previousPath, state: {from: this.props.location}}} />
-                }
                 <NavBar location={this.props.location}/>
                 <Switch>
                 <Route exact path='/' render={(props) => (

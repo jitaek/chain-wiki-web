@@ -131,8 +131,17 @@ class Search extends Component {
     arcanaRef.child(arcanaID).once('value', snapshot => {
 
       let arcana = snapshot.val()
-      arcanaArray.push(arcana)
-      this.mergeArcanaArrayWith(arcanaArray)
+
+      if (arcana) {
+        if (arcana.nameKR === searchText) {
+          arcanaArray.unshift(arcana)
+        }
+        else {
+          arcanaArray.push(arcana)          
+        }
+        this.mergeArcanaArrayWith(arcanaArray)
+      }
+
     })
 
   }
