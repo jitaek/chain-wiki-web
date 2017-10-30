@@ -231,7 +231,7 @@ class Arcana extends React.Component {
     if (arcanaID) {
       shareLink = createShareLinkWithArcana(arcanaID)
       
-      incrementViewCount(arcanaID)
+      // incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 
@@ -360,7 +360,7 @@ class Arcana extends React.Component {
 
       return (
 
-        <div ref="homeRoot">
+        <div className={styles.container}>
 
           <div className={styles.mainImageContainer}>
             <img className={mainImageClassNames} src={this.state.imageURL} onLoad={() => this.setState({mainImageLoaded: true})}/>
@@ -461,14 +461,14 @@ class Arcana extends React.Component {
             target="_blank"
             >일첸 위키 가기</a>
         </div>
-        {/* <div style={{margin:'10px'}}>
+        <div style={{margin:'10px'}}>
           <Link 
             to={{
               pathname: '/arcanaComposer',
               state: this.state
             }}
           >아르카나 수정</Link>
-        </div> */}
+        </div>
         
         <Toolbar className={styles.toolbar} style={{backgroundColor:'white'}}>
           <ToolbarGroup lastChild={true}>

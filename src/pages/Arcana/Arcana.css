@@ -1,3 +1,7 @@
+.container {
+  margin-bottom: 56px;
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;

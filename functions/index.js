@@ -23,6 +23,8 @@ const gcs = require('@google-cloud/storage')();
 const exec = require('child-process-promise').exec;
 const LOCAL_TMP_FOLDER = '/tmp/';
 
+const ref = admin.database().ref()
+
 exports.createUser = functions.auth.user().onCreate(event => {
 
   const user = event.data; // The Firebase user.
@@ -33,7 +35,7 @@ exports.createUser = functions.auth.user().onCreate(event => {
   const userID = user.uid;
   console.log(userID);
 
-  admin.database().ref(`/users/${userID}`).set({
+  admin.database().ref(`/user/${userID}`).set({
 
     edit: true,
     editsCount: 0,
@@ -42,24 +44,9 @@ exports.createUser = functions.auth.user().onCreate(event => {
     name: name
 
   });
-
-  // sendWelcomeEmail(email, name);
   
 });
 
-function sendWelcomeEmail(email, displayName) {
-  const mailOptions = {
-    from: '"dtto" <noreply@firebase.com>',
-    to: email
-  };
-
-  // The user unsubscribed to the newsletter.
-  mailOptions.subject = `Welcome to ${APP_NAME}!`;
-  mailOptions.text = `Hey ${displayName}!, Welcome to ${APP_NAME}. I hope you will enjoy our service.`;
-  return mailTransport.sendMail(mailOptions).then(() => {
-    console.log('New welcome email sent to:', email);
-  });
-}
 
 exports.deleteUser = functions.auth.user().onDelete(event => {
 
@@ -69,7 +56,7 @@ exports.deleteUser = functions.auth.user().onDelete(event => {
   const escapedEmail = email.replace(/\./g, ',');
   const name = user.displayName;  // TODO: name vs username.
 
-  admin.database().ref(`/users/${userID}`).remove();
+  admin.database().ref(`/user/${userID}`).remove();
   // admin.database().ref(`/profiles/${userID}`).remove();
   // admin.database().ref(`/userEmails/${escapedEmail}`).remove();
 
@@ -79,9 +66,221 @@ exports.deleteUser = functions.auth.user().onDelete(event => {
 
 });
 
+// function that takes in ability1 or ability 2, and returns the abilityRef if true.
+function abilityType(arcanaID, abilityDesc, isKizuna) {
 
+  var abilityType = 'Ability';
+
+  if (isKizuna) {
+    abilityType = 'Kizuna';
+  }
+  
+  if (abilityDesc.indexOf('서브') !== -1) {
+    abilityRef.child(`sub${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('마나') !== -1 && abilityDesc.indexOf('시작') !== -1) {
+    abilityRef.child(`mana${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('마나 슬롯') !== -1 && abilityDesc.indexOf('속도') !== -1) {
+    abilityRef.child(`manaSlot${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('마나 슬롯 때') !== -1 || (abilityDesc.indexOf('마나') !== -1 && abilityDesc.indexOf('쉽게한다') !== -1)) {
+    abilityRef.child(`manaChance${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('보물') !== -1 || abilityDesc.indexOf('상자') !== -1) {
+    abilityRef.child(`treasure${abilityType}`).child(arcanaID).setValue(true);    
+  }
+
+  if (abilityDesc.indexOf('골드') !== -1) {
+    abilityRef.child(`gold${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('경험치') !== -1) {
+    abilityRef.child(`exp${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('필살기') !== -1) {
+    abilityRef.child(`skillUp${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('AP') !== -1) {
+    abilityRef.child(`apRecover${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('보스') !== -1) {
+    abilityRef.child(`bossWave${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('웨이브') !== -1 && abilityDesc.indexOf('회복한다') !== -1 && abilityDesc.indexOf('아군') !== -1) {
+    abilityRef.child(`partyHeal${abilityType}`).child(arcanaID).setValue(true);
+  }
+
+  if (abilityDesc.indexOf('적에게') !== -1) {
+
+    if (abilityDesc.indexOf('독') !== -1) {
+      abilityRef.child(`poisonAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+    }
+
+    if (abilityDesc.indexOf('암흑') !== -1 || abilityDesc.indexOf('어둠') !== -1) {
+      abilityRef.child(`darkAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+    }
+
+    if (abilityDesc.indexOf('스러운') !== -1 || abilityDesc.indexOf('슬로우') !== -1) {
+      abilityRef.child(`slowAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+    }
+
+    if (abilityDesc.indexOf('저주') !== -1) {
+      abilityRef.child(`curseAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+    }
+
+    if (abilityDesc.indexOf('쇠약') !== -1) {
+      abilityRef.child(`weakAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+    }
+
+    if (abilityDesc.indexOf('백골') !== -1) {
+      abilityRef.child(`skeletonAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+    }
+
+    if (abilityDesc.indexOf('다운') !== -1) {
+      abilityRef.child(`stunAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+    }
+
+    if (abilityDesc.indexOf('동결') !== -1) {
+      abilityRef.child(`frostAttackUp${abilityType}`).child(arcanaID).setValue(true);      
+    }
+
+  }
+
+  if (abilityDesc.indexOf('상태로한다') !== -1 || abilityDesc.indexOf('추가된다') !== -1 || abilityDesc.indexOf('만든다') !== -1) {
+    if (abilityDesc.indexOf('독') !== -1) {
+      abilityRef.child(`poisonStrike${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('슬로우') !== -1 || abilityDesc.indexOf('스러운') !== -1) {
+      abilityRef.child(`slowStrike${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('암흑') !== -1 || abilityDesc.indexOf('어둠') !== -1) {
+      abilityRef.child(`darkStrike${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('동결') !== -1) {
+      abilityRef.child(`frostStrike${abilityType}`).child(arcanaID).setValue(true);            
+    }
+  }
+
+  if (abilityDesc.indexOf('않는다') !== -1 || abilityDesc.indexOf('면역') !== -1) {
+    if (abilityDesc.indexOf('독') !== -1) {
+      abilityRef.child(`poisonImmune${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('슬로우') !== -1 || abilityDesc.indexOf('스러운') !== -1) {
+      abilityRef.child(`slowImmune${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('암흑') !== -1 || abilityDesc.indexOf('어둠') !== -1) {
+      abilityRef.child(`darkImmune${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('동결') !== -1) {
+      abilityRef.child(`frostImmune${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('쇠약') !== -1) {
+      abilityRef.child(`weakImmune${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('백골') !== -1) {
+      abilityRef.child(`skeletonImmune${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('다운') !== -1) {
+      abilityRef.child(`stunImmune${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('봉인') !== -1) {
+      abilityRef.child(`sealImmune${abilityType}`).child(arcanaID).setValue(true);            
+    }
+  }
+
+  if (abilityDesc.indexOf('지형') !== -1) {
+    if (abilityDesc.indexOf('황무지') !== -1) {
+      abilityRef.child(`wastelands${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('숲') !== -1) {
+      abilityRef.child(`forest${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('덩굴') !== -1) {
+      abilityRef.child(`cavern${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('사막') !== -1) {
+      abilityRef.child(`desert${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('설산') !== -1) {
+      abilityRef.child(`snow${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('도시') !== -1) {
+      abilityRef.child(`urban${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('해변') !== -1) {
+      abilityRef.child(`water${abilityType}`).child(arcanaID).setValue(true);            
+    }
+    if (abilityDesc.indexOf('야간') !== -1) {
+      abilityRef.child(`night${abilityType}`).child(arcanaID).setValue(true);            
+    }
+  }
+
+}
+
+exports.updateAbilityRefOnCreate = functions.database.ref('/arcana/{arcanaID}/abilityDesc1').onCreate(event => {
+
+  const arcanaID = event.params.arcanaID;
+  const abilityDesc = event.data.val();
+
+  abilityType(arcanaID, abilityDesc, false);
+
+});
+
+exports.updateAbilityRefOnUpdate = functions.database.ref('/arcana/{arcanaID}/abilityDesc1').onUpdate(event => {
+  
+    const arcanaID = event.params.arcanaID;
+    const abilityDesc = event.data.val();
+  
+    abilityType(arcanaID, abilityDesc, false);
+  
+});
+
+exports.updateAbilityRefOnCreate = functions.database.ref('/arcana/{arcanaID}/abilityDesc2').onCreate(event => {
+  
+    const arcanaID = event.params.arcanaID;
+    const abilityDesc = event.data.val();
+  
+    abilityType(arcanaID, abilityDesc);
+  
+});
+
+exports.updateAbilityRefOnUpdate = functions.database.ref('/arcana/{arcanaID}/abilityDesc2').onUpdate(event => {
+  
+    const arcanaID = event.params.arcanaID;
+    const abilityDesc = event.data.val();
+  
+    abilityType(arcanaID, abilityDesc);
+  
+});
+
+exports.updateKizunaRefOnCreate = functions.database.ref('/arcana/{arcanaID}/kizunaDesc').onCreate(event => {
+  
+    const arcanaID = event.params.arcanaID;
+    const abilityDesc = event.data.val();
+  
+    abilityType(arcanaID, abilityDesc, true);
+  
+});
+
+exports.updateKizunaRefOnUpdate = functions.database.ref('/arcana/{arcanaID}/kizunaDesc').onUpdate(event => {
+  
+    const arcanaID = event.params.arcanaID;
+    const abilityDesc = event.data.val();
+  
+    abilityType(arcanaID, abilityDesc, true);
+  
+});
 // TODO: onwrite on editcount + observe once
-exports.editArcana = functions.database.ref('/arcana/${arcanaID}/editCount').onWrite(event => {
+exports.editArcana = functions.database.ref('/arcana/{arcanaID}/editCount').onWrite(event => {
 
   const arcanaID = event.params.arcanaID;
 
@@ -122,8 +321,14 @@ exports.editArcana = functions.database.ref('/arcana/${arcanaID}/editCount').onW
 //   });
 // });
 
+function updateArcanaName(arcanaID, nameKR, nicknameKR) {
+  
+  const fullName = nicknameKR + " " + nameKR;
+  admin.database().ref(`/name/${arcanaID}`).set(fullName);
+
+}
 // If the arcana's name is changed, update /arcana/name
-exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nicknameKR').onWrite(event => {
+exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nicknameKR').onCreate(event => {
   const nicknameKR = event.data.val();
   const arcanaID = event.params.arcanaID;
 
@@ -132,18 +337,53 @@ exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nicknameKR
     const nameKR = snapshot.val();
     console.log(nicknameKR);
     console.log(nameKR);
-    const fullName = nicknameKR + " " + nameKR;
-    admin.database().ref(`/name/${arcanaID}`).set(fullName);
+    updateArcanaName(arcanaID, nameKR, nicknameKR);
   });
 });
 
-// If the arcana is deleted, remove the arcana's name from /arcana/name
-exports.removeArcanaName = functions.database.ref('/arcana/{arcanaID}').onWrite(event => {
+exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nicknameKR').onUpdate(event => {
+  const nicknameKR = event.data.val();
+  const arcanaID = event.params.arcanaID;
 
-  if (!event.data.exists()) {
+  console.log(arcanaID);
+  return admin.database().ref(`/arcana/${arcanaID}/nameKR`).once('value').then(snapshot => {
+    const nameKR = snapshot.val();
+    console.log(nicknameKR);
+    console.log(nameKR);
+    updateArcanaName(arcanaID, nameKR, nicknameKR);
+  });
+});
+
+exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nameKR').onCreate(event => {
+  const nameKR = event.data.val();
+  const arcanaID = event.params.arcanaID;
+
+  console.log(arcanaID);
+  return admin.database().ref(`/arcana/${arcanaID}/nicknameKR`).once('value').then(snapshot => {
+    const nicknameKR = snapshot.val();
+    console.log(nicknameKR);
+    console.log(nameKR);
+    updateArcanaName(arcanaID, nameKR, nicknameKR);
+  });
+});
+
+exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nameKR').onUpdate(event => {
+  const nameKR = event.data.val();
+  const arcanaID = event.params.arcanaID;
+
+  console.log(arcanaID);
+  return admin.database().ref(`/arcana/${arcanaID}/nicknameKR`).once('value').then(snapshot => {
+    const nicknameKR = snapshot.val();
+    console.log(nicknameKR);
+    console.log(nameKR);
+    updateArcanaName(arcanaID, nameKR, nicknameKR);
+  });
+});
+// If the arcana is deleted, remove the arcana's name from /arcana/name
+exports.removeArcanaName = functions.database.ref('/arcana/{arcanaID}').onDelete(event => {
+
     const arcanaID = event.params.arcanaID;
-    return admin.database().ref(`/arcana/${arcanaID}`).remove();
-  }
+    return admin.database().ref(`/name/${arcanaID}`).remove();
 });
 
 // exports.updateAllArcanaName = functions.database.ref('/loadFunction/{function}').onWrite(event => {

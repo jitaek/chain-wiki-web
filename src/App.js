@@ -104,7 +104,7 @@ class App extends Component {
                 {/* <Route path="/arcanaComposer" exact component={ArcanaComposer} /> */}
                 <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 
-                <PrivateRoute authed={this.state.authed} path="/arcanaComposer" exact component={ArcanaComposer} />
+                <PrivateRoute authed={true} path="/arcanaComposer" exact component={ArcanaComposer} />
                 </Switch>
               </div>
           </Router>

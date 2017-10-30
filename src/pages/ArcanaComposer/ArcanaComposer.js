@@ -217,7 +217,9 @@ class ArcanaComposer extends React.Component {
     delete arcana['hasBuddy']
     delete arcana['iconLoaded']
     delete arcana['mainImageLoaded']
-
+    delete arcana['linkCopied']
+    delete arcana['linkJP']
+    
     let skillCount = 1
     if (arcana.skillDesc3) {
       skillCount = 3
