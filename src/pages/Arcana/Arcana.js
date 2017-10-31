@@ -142,7 +142,7 @@ function RelatedArcana(props) {
         <div style={{fontWeight: 'bold',margin: '10px'}}>관련 아르카나</div>
         {
         relatedArcanaArray.map(arcana => (
-          <Link to={`/arcana?arcana=${arcana.arcanaID}`} style={LinkStyle}>
+          <Link to={`/arcana?arcana=${arcana.arcanaID}`} style={LinkStyle} key={arcana.arcanaID}>
             <div className={styles.headerContainer}>
               {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
               <img className={styles.icon} src={arcana.iconURL || logo}/>
@@ -238,6 +238,7 @@ class Arcana extends React.Component {
     if (this.state.arcanaID !== newArcanaID) {
       // arcanaID = newArcanaID
       this.setState({
+        relatedArcanaArray: [],
         arcanaID: newArcanaID
       }, () => {
         this.observeArcana()          
@@ -295,7 +296,7 @@ class Arcana extends React.Component {
     if (arcanaID) {
       shareLink = createShareLinkWithArcana(arcanaID)
       
-      incrementViewCount(arcanaID)
+      // incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 
