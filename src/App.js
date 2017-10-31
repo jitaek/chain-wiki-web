@@ -18,6 +18,8 @@ import Search from "./pages/Search/Search"
 import Filter from "./pages/Filter/Filter"
 import AbilityList from './pages/AbilityList/AbilityList'
 import Ability from './pages/Ability/Ability'
+import Tavern from './pages/Tavern/Tavern'
+import TavernList from './pages/TavernList/TavernList'
 import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
 import Login from './pages/Login/Login'
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
@@ -114,6 +116,8 @@ class App extends Component {
                 <Route path="/filter" exact component={Filter} />
                 <Route path="/abilityList" exact component={AbilityList} />
                 <Route path="/ability" exact component={Ability} />
+                <Route path="/tavernList" exact component={TavernList} />
+                <Route path="/tavern" exact component={Tavern} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 

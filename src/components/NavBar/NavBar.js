@@ -163,6 +163,11 @@ class NavBar extends React.Component {
             containerElement={<Link to='/abilityList'/>}
             onClick={this.handleClose}
           />
+          <MenuItem
+            primaryText="주점"
+            containerElement={<Link to='/tavernList'/>}
+            onClick={this.handleClose}
+          />
           {/* <MenuItem
             primaryText="아르카나 추가"
             containerElement={<Link to='/arcanaComposer'/>}
