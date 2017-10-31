@@ -21,6 +21,7 @@ import Snackbar from 'material-ui/Snackbar'
 
 var arcanaID
 var shareLink
+var relatedArcana = {}
 
 const LinkStyle = {
   textDecoration:'none',
@@ -221,6 +222,7 @@ class Arcana extends React.Component {
         this.observeArcana()
       })
     }
+    
     this.observeRelatedArcanaWithID = this.observeRelatedArcanaWithID.bind(this)
   }
 
@@ -244,6 +246,7 @@ class Arcana extends React.Component {
         this.observeArcana()          
       })
     }
+    
     // if (arcanaID !== newArcanaID) {
     //   arcanaID = newArcanaID
     //   this.observeArcana()      
@@ -264,29 +267,40 @@ class Arcana extends React.Component {
 
   }
 
-  observeRelatedArcanaWithID(arcanaID) {
+  observeRelatedArcanaWithID() {
       // TODO: call /arcana/key and get profile image and nameKR (nicknameKR?)
+      
+      const relatedArcanaArray = []
 
-      ARCANA_REF.child(arcanaID).child('nameKR').once('value', snapshot => {
+      if (relatedArcana) {
+        console.log(relatedArcana)
+        Object.keys(relatedArcana).forEach(arcanaID => {
+          ARCANA_REF.child(arcanaID).child('nameKR').once('value', snapshot => {
+            
+              const nameKR = snapshot.val()
+      
+              if (nameKR) {
+      
+                ARCANA_REF.child(arcanaID).child('iconURL').once('value', snapshot => {
+      
+                  const iconURL = snapshot.val()
+      
+                  const relatedArcana = {
+                    arcanaID: arcanaID,
+                    nameKR: nameKR,
+                    iconURL: iconURL || logo,
+                  }
 
-        const nameKR = snapshot.val()
-        if (nameKR) {
-          ARCANA_REF.child(arcanaID).child('iconURL').once('value', snapshot => {
-            const iconURL = snapshot.val()
-
-            const relatedArcana = {
-              arcanaID: arcanaID,
-              nameKR: nameKR,
-              iconURL: iconURL || logo,
-            }
-
-            this.setState({
-              relatedArcanaArray: [relatedArcana].concat(this.state.relatedArcanaArray)
+                  relatedArcanaArray.push(relatedArcana)
+      
+                  this.setState({
+                    relatedArcanaArray: relatedArcanaArray
+                  })
+                })
+              }
             })
-          })
-        }
-      })
-
+        })
+      }
   }
   
   observeArcana() {
@@ -296,7 +310,7 @@ class Arcana extends React.Component {
     if (arcanaID) {
       shareLink = createShareLinkWithArcana(arcanaID)
       
-      // incrementViewCount(arcanaID)
+      incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 
@@ -306,12 +320,9 @@ class Arcana extends React.Component {
 
         this.createJPLink(arcana.nicknameJP, arcana.nameJP)
 
-        const relatedArcana = arcana.related
-        if (relatedArcana) {
-          Object.keys(relatedArcana).forEach(arcanaID => {
-            this.observeRelatedArcanaWithID(arcanaID)
-          })
-        }
+        // relatedArcana = {}
+        relatedArcana = Object.assign({}, arcana.related)
+        this.observeRelatedArcanaWithID()
 
         this.setState({
           
@@ -536,14 +547,14 @@ class Arcana extends React.Component {
             target="_blank"
             >일첸 위키 가기</a>
         </div>
-        <div style={{margin:'10px'}}>
+        {/* <div style={{margin:'10px'}}>
           <Link 
             to={{
               pathname: '/arcanaComposer',
               state: this.state
             }}
           >아르카나 수정</Link>
-        </div>
+        </div> */}
         
         <Toolbar className={styles.toolbar} style={{backgroundColor:'white'}}>
           <ToolbarGroup lastChild={true}>
