@@ -169,12 +169,10 @@ class Search extends Component {
   render() {
 
     return (
-        <div key={this.state.searchText}>        
-          <ArcanaList
-            arcanaArray={this.state.arcanaArray}
-            viewType={this.state.viewType}
-          />
-        </div>
+        <ArcanaList
+          arcanaArray={this.state.arcanaArray}
+          viewType={this.state.viewType}
+        />
     );
   }
 
