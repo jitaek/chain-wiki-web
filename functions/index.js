@@ -388,6 +388,14 @@ exports.removeArcanaName = functions.database.ref('/arcana/{arcanaID}').onDelete
     return admin.database().ref(`/name/${arcanaID}`).remove();
 });
 
+// If the arcana is deleted, remove the arcana's name from /arcana/name
+exports.updateBuddyList = functions.database.ref('/arcana/{arcanaID}/buddyNameKR').onCreate(event => {
+  
+      const arcanaID = event.params.arcanaID;
+      admin.database().ref(`list/buddy/${arcanaID}`).set(true);
+      
+});
+
 // exports.updateAllArcanaName = functions.database.ref('/loadFunction/{function}').onWrite(event => {
   
 //   admin.database().ref(`/arcana`).once('value').then(snapshot => {

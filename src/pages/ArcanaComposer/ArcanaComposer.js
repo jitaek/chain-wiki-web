@@ -219,7 +219,7 @@ class ArcanaComposer extends React.Component {
     delete arcana['mainImageLoaded']
     delete arcana['linkCopied']
     delete arcana['linkJP']
-    
+
     let skillCount = 1
     if (arcana.skillDesc3) {
       skillCount = 3
@@ -284,6 +284,17 @@ class ArcanaComposer extends React.Component {
       
     }
 
+  }
+
+  showArcana() {
+    const arcanaID = this.state.uid
+
+    if (arcanaID) {
+      this.props.history.push({
+        pathname: '../arcana',
+        search: '?arcana=' + arcanaID
+      });
+    }
   }
 
   showAlert(error) {
@@ -713,6 +724,8 @@ class ArcanaComposer extends React.Component {
         <Snackbar
           open={this.state.alert}
           message={this.state.confirmationText}
+          action="아르카나 보러 가기"
+          onActionTouchTap={this.showArcana.bind(this)}
           autoHideDuration={4000}
           onRequestClose={this.handleRequestClose}
         />
