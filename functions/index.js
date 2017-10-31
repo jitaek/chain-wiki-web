@@ -281,6 +281,24 @@ exports.updateKizunaRefOnUpdate = functions.database.ref('/arcana/{arcanaID}/kiz
     abilityType(arcanaID, abilityDesc, true);
   
 });
+
+exports.updateAbilityWithBuddyOnCreate = functions.database.ref('/arcana/{arcanaID}/buddyAbilityDesc').onCreate(event => {
+  
+    const arcanaID = event.params.arcanaID;
+    const abilityDesc = event.data.val();
+  
+    abilityType(arcanaID, abilityDesc, false);
+  
+});
+
+exports.updateAbilityWithBuddyOnUpdate = functions.database.ref('/arcana/{arcanaID}/buddyAbilityDesc').onUpdate(event => {
+  
+    const arcanaID = event.params.arcanaID;
+    const abilityDesc = event.data.val();
+  
+    abilityType(arcanaID, abilityDesc, false);
+  
+});
 // TODO: onwrite on editcount + observe once
 exports.editArcana = functions.database.ref('/arcana/{arcanaID}/editCount').onWrite(event => {
 
@@ -400,31 +418,16 @@ exports.updateBuddyList = functions.database.ref('/arcana/{arcanaID}/buddyNameKR
   
 //   admin.database().ref(`/arcana`).once('value').then(snapshot => {
 
+//     const array = []
+
 //     snapshot.forEach(function(child) {
+
 //       const arcanaID = child.key;
 //       // console.log(arcanaID);
-//       var nicknameKR;
-//       if (child.val().nicknameKR) {
-//         nicknameKR = child.val().nicknameKR;
-//       } else if (child.val().nickNameKR) {
-//         nicknameKR = child.val().nickNameKR;
-//       }
+//       const nameKR = child.val().nameKR;
 
-//       var nicknameJP;
-//       if (child.val().nicknameJP) {
-//         nicknameJP = child.val().nicknameJP;
-//       } else if (child.val().nickNameJP) {
-//         nicknameJP = child.val().nickNameJP;
-//       }
-
-//       if (nicknameKR) {
-//         admin.database().ref(`/arcana/${arcanaID}/nicknameKR`).set(nicknameKR);
-//         admin.database().ref(`/arcana/${arcanaID}/nickNameKR`).remove();
-
-//       }
-//       else {
-//         console.log(`no nicknameKR for ${arcanaID}`);
-//       }
+//       array.push()
+      
 //       if (nicknameJP) {
 //         admin.database().ref(`/arcana/${arcanaID}/nicknameJP`).set(nicknameJP);
 //         admin.database().ref(`/arcana/${arcanaID}/nickNameJP`).remove();
