@@ -314,32 +314,70 @@ exports.editArcana = functions.database.ref('/arcana/{arcanaID}/editCount').onWr
   });
 });
 
-// exports.exportArcanaPreview = functions.database.ref('/loadFunction/{function}').onWrite(event => {
+/*
+exports.removeRelatedArcana = functions.database.ref('/remove/{OI}').onWrite(event => {
+
+  return admin.database().ref(`/arcana`).once('value').then(snapshot => {
+    
+    
+        snapshot.forEach(function(child) {
+    
+          const arcanaID = child.key;
+
+          admin.database().ref(`/arcana/${arcanaID}/related/${arcanaID}`).remove();
+              
+        });
+    })
+});
+
+exports.updateRelatedArcana = functions.database.ref('/loadFunction/{function}').onWrite(event => {
   
-//   admin.database().ref(`/arcana`).once('value').then(snapshot => {
+  return admin.database().ref(`/arcana`).once('value').then(snapshot => {
 
-//     snapshot.forEach(function(child) {
-//       const arcanaID = child.key;
-      
-//       admin.database().ref(`arcanaPreview/${arcanaID}`).set({
+    var array = [];
 
-//         nameKR: child.val().nameKR,
-//         nicknameKR: child.val().nicknameKR,
-//         nameJP: child.val().nameJP,
-//         nicknameJP: child.val().nicknameJP,
+    snapshot.forEach(function(child) {
 
-//         rarity: child.val().rarity,
-//         class: child.val().class,
-//         weapon: child.val().weapon,
-//         affiliation: child.val().affiliation,
-
-//         numberOfViews: child.val().numberOfViews,
-
-//       })
+      array.push(child.val());
           
-//     });
-//   });
-// });
+    });
+    console.log('done pushing')
+    
+    // we now have all the arcana in an array.
+
+    for (var i = 0; i < array.length; i++) {
+
+      const arcana = array[i];
+      const arcanaID = arcana.uid;
+      const arcanaNameKR = arcana.nameKR;
+      if (i === 0) {
+        console.log(arcanaID);
+        console.log(arcanaNameKR);
+      }
+
+      for (var j = 0; j < array.length; j++) {
+
+        const arcana2 = array[j];
+        const arcana2ID = arcana2.uid;
+        const arcana2NameKR = arcana2.nameKR;
+
+        if (j === 0) {
+          console.log(arcana2ID);
+          console.log(arcana2NameKR);
+        }
+        if (arcanaNameKR === arcana2NameKR) {
+          
+          admin.database().ref(`/arcana/${arcanaID}/related/${arcana2ID}`).set(true);
+          admin.database().ref(`/arcana/${arcana2ID}/related/${arcanaID}`).set(true);
+
+        }
+      }
+
+    }
+
+  });
+});
+*/
 
 function updateArcanaName(arcanaID, nameKR, nicknameKR) {
   
