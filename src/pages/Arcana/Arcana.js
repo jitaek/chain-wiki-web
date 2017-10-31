@@ -22,6 +22,11 @@ import Snackbar from 'material-ui/Snackbar'
 var arcanaID
 var shareLink
 
+const LinkStyle = {
+  textDecoration:'none',
+  color:'inherit'
+}
+
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
     <Route
@@ -127,6 +132,38 @@ function Tavern(props) {
   return null
 }
 
+function RelatedArcana(props) {
+  
+  const relatedArcanaArray = props.relatedArcanaArray
+
+  if (relatedArcanaArray.length > 0) {
+    return (
+      <div style={{borderBottom:'1px solid lightGray'}}>
+        <div style={{fontWeight: 'bold',margin: '10px'}}>관련 아르카나</div>
+        {
+        relatedArcanaArray.map(arcana => (
+          <Link to={`/arcana?arcana=${arcana.arcanaID}`} style={LinkStyle}>
+            <div className={styles.headerContainer}>
+              {/* <img className={styles.arcanaImageIcon} src={this.state.iconURL} alt="사진"/> */}
+              <img className={styles.icon} src={arcana.iconURL || logo}/>
+              <div className={styles.nameContainer}>
+                <div className={styles.nameKRContainer}>
+                  <div className={styles.nameKRLabel}>{arcana.nameKR}</div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))
+      }
+    </div>
+
+    )
+  }
+
+  return null
+  
+}
+
 function incrementViewCount(arcanaID) {
 
   if (arcanaID) {
@@ -158,6 +195,7 @@ class Arcana extends React.Component {
       mainImageLoaded: false,
       iconLoaded: false,
       linkCopied: false,
+      relatedArcanaArray: [],
     }
     this.openJPWiki = this.openJPWiki.bind(this);
     this.editArcana = this.editArcana.bind(this);
@@ -176,13 +214,14 @@ class Arcana extends React.Component {
     if (this.state.arcanaID !== newArcanaID) {
       // arcanaID = newArcanaID
       this.setState({
+        relatedArcanaArray: [],
         arcanaID: newArcanaID
       }, () => {
-        this.observeArcana()  
-        
+        window.scrollTo(0,0)
+        this.observeArcana()
       })
     }
-
+    this.observeRelatedArcanaWithID = this.observeRelatedArcanaWithID.bind(this)
   }
 
   componentWillMount() {
@@ -223,6 +262,31 @@ class Arcana extends React.Component {
     }
 
   }
+
+  observeRelatedArcanaWithID(arcanaID) {
+      // TODO: call /arcana/key and get profile image and nameKR (nicknameKR?)
+
+      ARCANA_REF.child(arcanaID).child('nameKR').once('value', snapshot => {
+
+        const nameKR = snapshot.val()
+        if (nameKR) {
+          ARCANA_REF.child(arcanaID).child('iconURL').once('value', snapshot => {
+            const iconURL = snapshot.val()
+
+            const relatedArcana = {
+              arcanaID: arcanaID,
+              nameKR: nameKR,
+              iconURL: iconURL || logo,
+            }
+
+            this.setState({
+              relatedArcanaArray: [relatedArcana].concat(this.state.relatedArcanaArray)
+            })
+          })
+        }
+      })
+
+  }
   
   observeArcana() {
 
@@ -231,7 +295,7 @@ class Arcana extends React.Component {
     if (arcanaID) {
       shareLink = createShareLinkWithArcana(arcanaID)
       
-      // incrementViewCount(arcanaID)
+      incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 
@@ -240,6 +304,13 @@ class Arcana extends React.Component {
         let arcana = snapshot.val()
 
         this.createJPLink(arcana.nicknameJP, arcana.nameJP)
+
+        const relatedArcana = arcana.related
+        if (relatedArcana) {
+          Object.keys(relatedArcana).forEach(arcanaID => {
+            this.observeRelatedArcanaWithID(arcanaID)
+          })
+        }
 
         this.setState({
           
@@ -299,6 +370,8 @@ class Arcana extends React.Component {
 
           buddySkillDesc: arcana.buddySkillDesc || null,
           buddyAbilityDesc: arcana.buddyAbilityDesc || null,
+
+          related: arcana.related || null,
 
         });
       })
@@ -455,6 +528,7 @@ class Arcana extends React.Component {
           </div>
           
         }
+        <RelatedArcana relatedArcanaArray={this.state.relatedArcanaArray}/>
 
         <div className={styles.skillAbilityDescCell}>
           <a href={this.state.linkJP}
