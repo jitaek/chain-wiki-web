@@ -273,7 +273,7 @@ class Arcana extends React.Component {
       const relatedArcanaArray = []
 
       if (relatedArcana) {
-        console.log(relatedArcana)
+
         Object.keys(relatedArcana).forEach(arcanaID => {
           ARCANA_REF.child(arcanaID).child('nameKR').once('value', snapshot => {
             
@@ -310,7 +310,7 @@ class Arcana extends React.Component {
     if (arcanaID) {
       shareLink = createShareLinkWithArcana(arcanaID)
       
-      incrementViewCount(arcanaID)
+      // incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 
@@ -345,6 +345,8 @@ class Arcana extends React.Component {
           tavern: arcana.tavern,
           numberOfViews: arcana.numberOfViews,
           
+          skillCount: arcana.skillCount || 1,
+
           skillName1: arcana.skillName1 || null,
           skillMana1: arcana.skillMana1,
           skillDesc1: arcana.skillDesc1,
@@ -423,6 +425,27 @@ class Arcana extends React.Component {
     })
   }
 
+  rarity(rarity) {
+
+    if (rarity === "5") {
+      return "★★★★★ SSR"
+    }
+    else if (rarity === "4") {
+      return "★★★★ SR"
+    }
+    else if (rarity === "3") {
+      return "★★★ SR"
+    }
+    else if (rarity === "2") {
+      return "★★ HN"
+    }
+    else if (rarity === "1") {
+      return "★ N"
+    }
+
+    return ""
+  }
+
   render() {
 
     if (this.state.nameKR !== undefined) {
@@ -464,13 +487,9 @@ class Arcana extends React.Component {
           </div>
           <table className={styles.arcanaDetailTable}>
             <tbody>
-              {/* <tr>
-                  <th className={styles.headerCell}>이름</th>
-                  <td className={styles.bodyCell}>{this.state.nicknameKR + " " + this.state.nameKR} </td>
-              </tr> */}
               <tr>
                   <th className={styles.headerCell}>레어</th>
-                  <td className={styles.bodyCell}>{this.state.rarity + " ★"}</td>
+                  <td className={styles.bodyCell}>{this.rarity(this.state.rarity)}</td>
               </tr>
               <tr>
                   <th className={styles.headerCell}>직업</th>
@@ -519,7 +538,7 @@ class Arcana extends React.Component {
                 </div>
             </div>
             </div>
-            <table className={styles.arcanaDetailTable}>
+            <table className={styles.arcanaDetailTable} style={{margin:'0'}}>
               <tbody>
                 {/* <tr>
                     <th className={styles.headerCell}>이름</th>
@@ -547,14 +566,11 @@ class Arcana extends React.Component {
             target="_blank"
             >일첸 위키 가기</a>
         </div>
-        {/* <div style={{margin:'10px'}}>
-          <Link 
-            to={{
-              pathname: '/arcanaComposer',
-              state: this.state
-            }}
-          >아르카나 수정</Link>
-        </div> */}
+        <div style={{margin:'10px'}}>
+          <Link to={`/arcanaComposer?arcana=${this.state.arcanaID}`}>
+            아르카나 수정
+          </Link>
+        </div>
         
         <Toolbar className={styles.toolbar} style={{backgroundColor:'white'}}>
           <ToolbarGroup lastChild={true}>

@@ -8,7 +8,7 @@ import {
   Redirect,
   routes
 } from 'react-router-dom'
-
+import { storageKey, isAuthenticated } from './helpers/auth'
 import NavBar from './components/NavBar/NavBar'
 // import Nav from "./components/Nav/Nav"
 
@@ -23,7 +23,6 @@ import Login from './pages/Login/Login'
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-var apple = require("./apple-app-site-association");
 
 // var routes = require('./routes')
 var ReactGA = require('react-ga')
@@ -36,15 +35,13 @@ function logPageView() {
   ReactGA.pageview(window.location.pathname + window.location.search);
 }
 
-function PrivateRoute ({component: Component, authed, path, ...rest}) {
-  previousPath = path
-  console.log(previousPath)
+function PrivateRoute ({component: Component, authed, path, user, ...rest}) {
   return (
     <Route
       {...rest}
-      render={(props) => authed === true
+      render={(props) => isAuthenticated()
         ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+      : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
     />
   )
 }
@@ -55,14 +52,17 @@ class App extends Component {
     user: null,
     authed: false,
     loading: true,
+    pathname: '',
+    search: '',
   }
 
   componentDidMount () {
 
-    console.log(apple)
     this.removeListener = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         console.log('auth listener. user logged in')
+        localStorage.setItem(storageKey, user.uid)
+        
         this.setState({
           user: user.uid,
           authed: true,
@@ -70,6 +70,7 @@ class App extends Component {
         })
       } else {
         console.log('auth listener. user unauthenticated')
+        localStorage.removeItem(storageKey)
         this.setState({
           authed: false,
           loading: false
@@ -82,6 +83,19 @@ class App extends Component {
     this.removeListener()
   }
 
+
+  redirect() {
+    
+      const pathname = this.state.pathname
+      const search = this.state.search
+
+      if (pathname) {
+          this.props.history.push({
+              pathname: pathname,
+          })
+      }
+  }
+    
   render() {
 
     return (
@@ -101,10 +115,9 @@ class App extends Component {
                 <Route path="/abilityList" exact component={AbilityList} />
                 <Route path="/ability" exact component={Ability} />
                 <Route path="/login" exact component={Login} />
-                {/* <Route path="/arcanaComposer" exact component={ArcanaComposer} /> */}
                 <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 
-                <PrivateRoute authed={true} path="/arcanaComposer" exact component={ArcanaComposer} />
+                <PrivateRoute path="/arcanaComposer" exact component={ArcanaComposer} />
                 </Switch>
               </div>
           </Router>

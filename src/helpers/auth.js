@@ -31,3 +31,9 @@ export function saveUser (user) {
     })
     .then(() => user)
 }
+
+export const storageKey = 'firebaseAuthKey'
+
+export const isAuthenticated = () => {
+  return !!firebase.auth().currentUser || !!localStorage.getItem(storageKey)
+}

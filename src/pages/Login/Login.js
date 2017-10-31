@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
-import { login, resetPassword, firebaseAuth, googleProvider, facebookProvider } from '../../helpers/auth'
+import { login, resetPassword, firebaseAuth, googleProvider, facebookProvider, storageKey } from '../../helpers/auth'
+import {withRouter, Redirect} from "react-router-dom";
 
 import logo from '../../logo.png'
 import GoogleLoginButton from '../../btn_google_light_normal_ios.svg'
@@ -24,38 +25,36 @@ const logoStyle = {
 const buttonStyle = {
     marginTop: '20px',
 }
-export default class Login extends Component {
+
+class Login extends Component {
 
     constructor(props) {
         super(props)
 
-        this.state = { 
+        if (props.location.state && props.location.state.from) {
+            this.state = {
+                pathname: props.location.state.from.pathname,
+                redirectAfterLogin: false,
+
+                email: '',
+                password: '',
+            }
+        }
+        else {
+            this.state = {
+                redirectAfterLogin: false,
+
+                email: '',
+                password: '',
+            }
         }
 
-        this.handleSubmit = this.handleSubmit.bind(this);    
-        this.handleText = this.handleText.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this) 
+        this.handleText = this.handleText.bind(this)
     }
 
     componentWillMount() {
-        firebase.auth().getRedirectResult().then(function(result) {
-            if (result.credential) {
-              // This gives you a Google Access Token. You can use it to access the Google API.
-              var token = result.credential.accessToken;
-              // ...
-            }
-            // The signed-in user info.
-            var user = result.user;
-            console.log(user.displayName)
-          }).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // ...
-          });
+
     }
 
     handleSubmit(event) {
@@ -83,8 +82,16 @@ export default class Login extends Component {
         const password = this.state.password
 
         firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
-
-            console.log('email login successfull')
+            console.log('email login successful')
+            this.setState({
+                redirectAfterLogin: true,
+            })
+            // const pathname = this.state.pathname
+            // console.log(pathname)
+            // if (pathname) {
+            //     console.log('pushing')
+            //     this.props.history.push(pathname)
+            // }
         }).catch(error => {
             console.log('email login error')
         })
@@ -109,11 +116,18 @@ export default class Login extends Component {
     }
 
     render() {
+
+        console.log(this.state.pathname)
+        if (this.state.redirectAfterLogin) {
+            return (
+                <Redirect to={{pathname: this.state.pathname}} />
+            )
+        }
         return (
             <div style={containerStyle}>
-                <div>
+                <div style={{textAlign:'center', fontSize:'20px', fontWeight:'bold'}}>
                     <img style={logoStyle} src={logo}/><br clear='all'/>
-                    체인크로니클 위키
+                    <div>체인크로니클 위키</div>
                 </div>
                 <div>
                     <ValidatorForm
@@ -170,3 +184,5 @@ export default class Login extends Component {
         );
     }
 }
+
+export default withRouter(Login)

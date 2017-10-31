@@ -24,6 +24,7 @@ const exec = require('child-process-promise').exec;
 const LOCAL_TMP_FOLDER = '/tmp/';
 
 const abilityRef = admin.database().ref('ability')
+const tavernRef = admin.database().ref('tavern')
 
 exports.createUser = functions.auth.user().onCreate(event => {
 
@@ -444,7 +445,6 @@ exports.removeArcanaName = functions.database.ref('/arcana/{arcanaID}').onDelete
     return admin.database().ref(`/name/${arcanaID}`).remove();
 });
 
-// If the arcana is deleted, remove the arcana's name from /arcana/name
 exports.updateBuddyList = functions.database.ref('/arcana/{arcanaID}/buddyNameKR').onCreate(event => {
   
       const arcanaID = event.params.arcanaID;
@@ -452,6 +452,123 @@ exports.updateBuddyList = functions.database.ref('/arcana/{arcanaID}/buddyNameKR
       
 });
 
+
+
+exports.updateLegendList = functions.database.ref('/arcana/{arcanaID}/tavern').onCreate(event => {
+  
+      const arcanaID = event.params.arcanaID;
+      const tavern = event.data.val();
+
+      if (tavern.indexOf('레전드') !== -1) {
+        admin.database().ref(`legend/${arcanaID}`).set(true);        
+      }
+      
+});
+
+function updateLegends(arcanaID, tavern) {
+
+  if (tavern.indexOf('레전드') !== -1) {
+    admin.database().ref(`legend/${arcanaID}`).set(true);        
+  }
+  else if (tavern.indexOf('소용돌이') !== -1 || tavern.indexOf('천마') !== -1) {
+    admin.database().ref(`abyssal/${arcanaID}`).set(true);        
+  }
+  else if (tavern.indexOf('성왕국') !== -1) {
+    tavernRef.child('holyKingdom').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('링가챠') !== -1) {
+    tavernRef.child('ringGacha').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('링교환') !== -1) {
+    tavernRef.child('ringTrade').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('부도') !== -1) {
+    tavernRef.child('capital').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('성도') !== -1) {
+    tavernRef.child('holy').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('현자') !== -1 || tavern.indexOf('현탑') !== -1) {
+    if (tavern.indexOf('3부') !== -1) {
+      tavernRef.child('sage2').child(arcanaID).set(true);       
+    }
+    else {
+      tavernRef.child('sage').child(arcanaID).set(true);
+    }
+  }
+  else if (tavern.indexOf('미궁') !== -1) {
+    tavernRef.child('maze').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('호수') !== -1 || tavern.indexOf('호도') !== -1) {
+    if (tavern.indexOf('3부') !== -1) {
+      tavernRef.child('lake2').child(arcanaID).set(true);
+    }
+    else {
+      tavernRef.child('lake').child(arcanaID).set(true);     
+    }
+  }
+  else if (tavern.indexOf('정령섬') !== -1) {
+    if (tavern.indexOf('3부') !== -1) {
+      tavernRef.child('soul2').child(arcanaID).set(true);
+    }
+    else {
+      tavernRef.child('soul').child(arcanaID).set(true);
+    }
+  }
+  else if (tavern.indexOf('구령') !== -1 || tavern.indexOf('화염') !== -1) {
+    if (tavern.indexOf('3부') !== -1) {
+      tavernRef.child('fire2').child(arcanaID).set(true);       
+    }
+    else {
+      tavernRef.child('fire').child(arcanaID).set(true);          
+    } 
+  }
+  else if (tavern.indexOf('해풍') !== -1) {
+    tavernRef.child('seaBreeze').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('대해') !== -1) {
+    tavernRef.child('daybreakOcean').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('수인') !== -1) {
+    tavernRef.child('beast').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('죄') !== -1) {
+    tavernRef.child('sin').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('박명') !== -1) {
+    tavernRef.child('ephemerality').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('철연') !== -1) {
+    tavernRef.child('iron').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('연대기') !== -1) {
+    tavernRef.child('chronicle').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('서가') !== -1) {
+    tavernRef.child('book').child(arcanaID).set(true);
+  }
+  else if (tavern.indexOf('레무') !== -1) {
+    tavernRef.child('lemures').child(arcanaID).set(true);
+  }
+}
+
+exports.updateLegendListOnCreate = functions.database.ref('/arcana/{arcanaID}/tavern').onCreate(event => {
+  
+      const arcanaID = event.params.arcanaID;
+      const tavern = event.data.val();
+  
+      updateLegends(arcanaID, tavern)
+
+});
+
+exports.updateLegendListOnUpdate = functions.database.ref('/arcana/{arcanaID}/tavern').onUpdate(event => {
+  
+      const arcanaID = event.params.arcanaID;
+      const tavern = event.data.val();
+
+      updateLegends(arcanaID, tavern)
+
+});
 // exports.updateAllArcanaName = functions.database.ref('/loadFunction/{function}').onWrite(event => {
   
 //   admin.database().ref(`/arcana`).once('value').then(snapshot => {
