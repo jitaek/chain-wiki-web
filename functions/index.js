@@ -216,7 +216,7 @@ function abilityType(arcanaID, abilityDesc, isKizuna) {
     if (abilityDesc.indexOf('설산') !== -1) {
       abilityRef.child(`snow${abilityType}`).child(arcanaID).set(true);            
     }
-    if (abilityDesc.indexOf('도시') !== -1) {
+    if (abilityDesc.indexOf('도시') !== -1 || abilityDesc.indexOf('거리') !== -1) {
       abilityRef.child(`urban${abilityType}`).child(arcanaID).set(true);            
     }
     if (abilityDesc.indexOf('해변') !== -1) {

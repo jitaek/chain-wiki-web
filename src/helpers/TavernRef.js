@@ -21,7 +21,7 @@ export function getTavernKR(tavernEN) {
         return '해풍의항구'
     case 'ringGacha':
         return '링가챠'
-    case 'ringTrade':
+    case 'ringChange':
         return '링교환'
     case 'daybreakOcean':
         return '새벽대해'

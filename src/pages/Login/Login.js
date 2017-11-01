@@ -33,7 +33,7 @@ class Login extends Component {
 
         if (props.location.state && props.location.state.from) {
             this.state = {
-                pathname: props.location.state.from.pathname,
+                from: props.location.state.from,
                 redirectAfterLogin: false,
 
                 email: '',
@@ -54,7 +54,28 @@ class Login extends Component {
     }
 
     componentWillMount() {
-
+        firebase.auth().getRedirectResult().then(function(result) {
+            if (result.credential) {
+              // This gives you a Google Access Token. You can use it to access the Google API.
+              var token = result.credential.accessToken;
+              // ...
+            }
+            // The signed-in user info.
+            var user = result.user;
+            console.log("redirect successful")
+            this.setState({
+                redirectAfterLogin: true,
+            })
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
     }
 
     handleSubmit(event) {
@@ -86,19 +107,13 @@ class Login extends Component {
             this.setState({
                 redirectAfterLogin: true,
             })
-            // const pathname = this.state.pathname
-            // console.log(pathname)
-            // if (pathname) {
-            //     console.log('pushing')
-            //     this.props.history.push(pathname)
-            // }
         }).catch(error => {
             console.log('email login error')
         })
     }
 
     googleLogin() {
-        firebaseAuth.signInWithPopup(googleProvider)
+        firebaseAuth.signInWithRedirect(googleProvider)
     }
 
     facebookLogin() {
@@ -117,11 +132,18 @@ class Login extends Component {
 
     render() {
 
-        console.log(this.state.pathname)
         if (this.state.redirectAfterLogin) {
-            return (
-                <Redirect to={{pathname: this.state.pathname}} />
-            )
+            const pathname = this.state.from.pathname
+            const search = this.state.from.search || ''
+            console.log(pathname)
+            if (!!pathname && pathname !== '/login') {
+                return
+                <Redirect to ={{pathname: pathname, search: search}} />
+            } 
+            else {
+                return
+                <Redirect to ={{pathname: '/', search: ''}} />
+            }
         }
         return (
             <div style={containerStyle}>

@@ -45,13 +45,13 @@ const tavern1Array = [
     kr: '해풍의항구',
     en: 'seaBreeze'
   },
-  {
-    kr: '링가챠',
-    en: 'ringGacha'
-  },
+  // {
+  //   kr: '링가챠',
+  //   en: 'ringGacha'
+  // },
   {
     kr: '링교환',
-    en: 'ringTrade'
+    en: 'ringChange'
   },
 ]
 
