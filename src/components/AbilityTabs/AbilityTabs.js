@@ -12,6 +12,8 @@ const TabBarStyle = {
 
 const TabButtonStyle = {
     color: 'black',
+    fontWeight: '600',
+    fontSize: '18px',
 }
 
 const InkBarStyle = {
