@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './Filter.css';
 import {ref} from '../../helpers/constants'
 import ArcanaList from '../../components/ArcanaList/ArcanaList'
+import { getViewType, setViewType } from '../../helpers/ArcanaViewType'
 
 import { forceCheck } from 'react-lazyload'
 import IconButton from 'material-ui/IconButton';
@@ -10,7 +11,8 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Dashboard from 'material-ui/svg-icons/action/dashboard';
 import FilterButton from '../../components/FilterButton/FilterButton'
-import { getViewType, setViewType } from '../../helpers/ArcanaViewType'
+import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
+
 
 var _ = require('lodash');
 
@@ -27,6 +29,7 @@ class Filter extends Component {
     super(props);
 
     this.state = {
+      loaded: false,
       showFilter: true,
       viewType: 'list',
       rarityTypes: {},
@@ -106,6 +109,7 @@ class Filter extends Component {
       originalArray = array
 
       this.setState({
+        loaded: true,
         arcanaArray: array,
       })
 
@@ -246,6 +250,9 @@ class Filter extends Component {
         if (affiliation === "현탑" && originalArray[j].affiliation === "현자의탑") {
           affiliationArray.push(originalArray[j])          
         }
+        else if (affiliation === "호도" && originalArray[j].affiliation === "호수도시") {
+          affiliationArray.push(originalArray[j])          
+        }
         else if (originalArray[j].affiliation.includes(affiliation)) {
           affiliationArray.push(originalArray[j])
         }
@@ -280,108 +287,111 @@ class Filter extends Component {
 
   render() {
 
-    var arcanaGridClass;
-    if (this.state.showFilter) {
-      arcanaGridClass = styles.arcanaGrid
-    }
-    else {
-      arcanaGridClass = styles.arcanaGridFull
-    }
-    return (
-        <div style={{position:'relative'}}>
-            <IconButton
-              style={{float:'right'}}
-              onClick={this.toggleFilterView}
-            >
-              <FilterIcon color={'d3d3d3'}/>
-            </IconButton>
-            <IconMenu
-              style={{float:'right'}}
-              iconButtonElement={<IconButton>
-                <Dashboard color={'d3d3d3'}/>
-              </IconButton>}
-              onItemTouchTap={this.setViewType}
-              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-              targetOrigin={{horizontal: 'right', vertical: 'top'}}
+    if (this.state.loaded) {
+      var arcanaGridClass;
+      if (this.state.showFilter) {
+        arcanaGridClass = styles.arcanaGrid
+      }
+      else {
+        arcanaGridClass = styles.arcanaGridFull
+      }
+      return (
+          <div style={{position:'relative'}}>
+              <IconButton
+                style={{float:'right'}}
+                onClick={this.toggleFilterView}
               >
-                <MenuItem primaryText="카드 뷰" value="grid"/>
-                <MenuItem primaryText="리스트 뷰" value="list"/>
-            </IconMenu>
+                <FilterIcon color={'d3d3d3'}/>
+              </IconButton>
+              <IconMenu
+                style={{float:'right'}}
+                iconButtonElement={<IconButton>
+                  <Dashboard color={'d3d3d3'}/>
+                </IconButton>}
+                onItemTouchTap={this.setViewType}
+                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+                  <MenuItem primaryText="카드 뷰" value="grid"/>
+                  <MenuItem primaryText="리스트 뷰" value="list"/>
+              </IconMenu>
 
-            <br style={{clear:'both'}}/>
-            <div style={{display:'flex'}}>
-            <div className={arcanaGridClass}>
-              <ArcanaList
-                arcanaArray={this.state.arcanaArray}
-                viewType={this.state.viewType}
-              />
-            </div>
-            {this.state.showFilter &&
-            <div className={styles.filterContainer}>
+              <br style={{clear:'both'}}/>
+              <div style={{display:'flex'}}>
+              <div className={arcanaGridClass}>
+                <ArcanaList
+                  arcanaArray={this.state.arcanaArray}
+                  viewType={this.state.viewType}
+                />
+              </div>
+              {this.state.showFilter &&
+              <div className={styles.filterContainer}>
 
-            <div className={styles.filterGrid}>
-              <FilterButton label='5' selected={this.state.rarityTypes['5']} filter='rarity' onClick={this.updateFilter}/>
-              <FilterButton label='4' selected={this.state.rarityTypes['4']} filter='rarity' onClick={this.updateFilter}/>
-              <FilterButton label='3' selected={this.state.rarityTypes['3']} filter='rarity' onClick={this.updateFilter}/>
-              <FilterButton label='2' selected={this.state.rarityTypes['2']} filter='rarity' onClick={this.updateFilter}/>
-              <FilterButton label='1' selected={this.state.rarityTypes['1']} filter='rarity' onClick={this.updateFilter}/>
-            </div>
-            <div className={styles.filterGrid} style={gridStyle}>
-              <FilterButton label='전사' selected={this.state.groupTypes['전사']} filter='class' onClick={this.updateFilter}/>
-              <FilterButton label='기사' selected={this.state.groupTypes['기사']} filter='class' onClick={this.updateFilter}/>
-              <FilterButton label='궁수' selected={this.state.groupTypes['궁수']} filter='class' onClick={this.updateFilter}/>
-              <FilterButton label='법사' selected={this.state.groupTypes['법사']} filter='class' onClick={this.updateFilter}/>
-              <FilterButton label='승려' selected={this.state.groupTypes['승려']} filter='class' onClick={this.updateFilter}/>
-            </div>
-            <div className={styles.filterGrid} style={gridStyle}>
-              <FilterButton label='검' selected={this.state.weaponTypes['검']} filter='weapon' onClick={this.updateFilter}/>
-              <FilterButton label='봉' selected={this.state.weaponTypes['봉']} filter='weapon' onClick={this.updateFilter}/>
-              <FilterButton label='창' selected={this.state.weaponTypes['창']} filter='weapon' onClick={this.updateFilter}/>
-              <FilterButton label='마' selected={this.state.weaponTypes['마']} filter='weapon' onClick={this.updateFilter}/>
-              <FilterButton label='궁' selected={this.state.weaponTypes['궁']} filter='weapon' onClick={this.updateFilter}/>
-              <FilterButton label='성' selected={this.state.weaponTypes['성']} filter='weapon' onClick={this.updateFilter}/>
-              <FilterButton label='권' selected={this.state.weaponTypes['권']} filter='weapon' onClick={this.updateFilter}/>
-              <FilterButton label='총' selected={this.state.weaponTypes['총']} filter='weapon' onClick={this.updateFilter}/>
-              <FilterButton label='저' selected={this.state.weaponTypes['저']} filter='weapon' onClick={this.updateFilter}/>
-            </div>
-            <div className={styles.filterGrid} style={gridStyle}>
-              <FilterButton label='여행자' selected={this.state.affiliationTypes['여행자']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='마신' selected={this.state.affiliationTypes['마신']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='부도' selected={this.state.affiliationTypes['부도']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='성도' selected={this.state.affiliationTypes['성도']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='현탑' selected={this.state.affiliationTypes['현탑']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='미궁' selected={this.state.affiliationTypes['미궁']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='호도' selected={this.state.affiliationTypes['호도']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='정령섬' selected={this.state.affiliationTypes['정령섬']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='구령' selected={this.state.affiliationTypes['구령']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='대해' selected={this.state.affiliationTypes['대해']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='수인' selected={this.state.affiliationTypes['수인']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='죄' selected={this.state.affiliationTypes['죄']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='박명' selected={this.state.affiliationTypes['박명']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='철연' selected={this.state.affiliationTypes['철연']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='연대기' selected={this.state.affiliationTypes['연대기']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='레무' selected={this.state.affiliationTypes['레무']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='의용군' selected={this.state.affiliationTypes['의용군']} filter='affiliation' onClick={this.updateFilter}/>
-              <FilterButton label='화격단' selected={this.state.affiliationTypes['화격단']} filter='affiliation' onClick={this.updateFilter}/>
-            </div>
+              <div className={styles.filterGrid}>
+                <FilterButton label='5' selected={this.state.rarityTypes['5']} filter='rarity' onClick={this.updateFilter}/>
+                <FilterButton label='4' selected={this.state.rarityTypes['4']} filter='rarity' onClick={this.updateFilter}/>
+                <FilterButton label='3' selected={this.state.rarityTypes['3']} filter='rarity' onClick={this.updateFilter}/>
+                <FilterButton label='2' selected={this.state.rarityTypes['2']} filter='rarity' onClick={this.updateFilter}/>
+                <FilterButton label='1' selected={this.state.rarityTypes['1']} filter='rarity' onClick={this.updateFilter}/>
+              </div>
+              <div className={styles.filterGrid} style={gridStyle}>
+                <FilterButton label='전사' selected={this.state.groupTypes['전사']} filter='class' onClick={this.updateFilter}/>
+                <FilterButton label='기사' selected={this.state.groupTypes['기사']} filter='class' onClick={this.updateFilter}/>
+                <FilterButton label='궁수' selected={this.state.groupTypes['궁수']} filter='class' onClick={this.updateFilter}/>
+                <FilterButton label='법사' selected={this.state.groupTypes['법사']} filter='class' onClick={this.updateFilter}/>
+                <FilterButton label='승려' selected={this.state.groupTypes['승려']} filter='class' onClick={this.updateFilter}/>
+              </div>
+              <div className={styles.filterGrid} style={gridStyle}>
+                <FilterButton label='검' selected={this.state.weaponTypes['검']} filter='weapon' onClick={this.updateFilter}/>
+                <FilterButton label='봉' selected={this.state.weaponTypes['봉']} filter='weapon' onClick={this.updateFilter}/>
+                <FilterButton label='창' selected={this.state.weaponTypes['창']} filter='weapon' onClick={this.updateFilter}/>
+                <FilterButton label='마' selected={this.state.weaponTypes['마']} filter='weapon' onClick={this.updateFilter}/>
+                <FilterButton label='궁' selected={this.state.weaponTypes['궁']} filter='weapon' onClick={this.updateFilter}/>
+                <FilterButton label='성' selected={this.state.weaponTypes['성']} filter='weapon' onClick={this.updateFilter}/>
+                <FilterButton label='권' selected={this.state.weaponTypes['권']} filter='weapon' onClick={this.updateFilter}/>
+                <FilterButton label='총' selected={this.state.weaponTypes['총']} filter='weapon' onClick={this.updateFilter}/>
+                <FilterButton label='저' selected={this.state.weaponTypes['저']} filter='weapon' onClick={this.updateFilter}/>
+              </div>
+              <div className={styles.filterGrid} style={gridStyle}>
+                <FilterButton label='여행자' selected={this.state.affiliationTypes['여행자']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='마신' selected={this.state.affiliationTypes['마신']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='부도' selected={this.state.affiliationTypes['부도']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='성도' selected={this.state.affiliationTypes['성도']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='현탑' selected={this.state.affiliationTypes['현탑']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='미궁' selected={this.state.affiliationTypes['미궁']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='호도' selected={this.state.affiliationTypes['호도']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='정령섬' selected={this.state.affiliationTypes['정령섬']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='구령' selected={this.state.affiliationTypes['구령']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='대해' selected={this.state.affiliationTypes['대해']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='수인' selected={this.state.affiliationTypes['수인']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='죄' selected={this.state.affiliationTypes['죄']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='박명' selected={this.state.affiliationTypes['박명']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='철연' selected={this.state.affiliationTypes['철연']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='연대기' selected={this.state.affiliationTypes['연대기']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='레무' selected={this.state.affiliationTypes['레무']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='의용군' selected={this.state.affiliationTypes['의용군']} filter='affiliation' onClick={this.updateFilter}/>
+                <FilterButton label='화격단' selected={this.state.affiliationTypes['화격단']} filter='affiliation' onClick={this.updateFilter}/>
+              </div>
 
-            <div style={{margin:'10px', marginTop:'20px'}}>
-              <FilterButton label="모두 지우기" onClick={this.clearFilter}/>
-            </div>
+              <div style={{margin:'10px', marginTop:'20px'}}>
+                <FilterButton label="모두 지우기" onClick={this.clearFilter}/>
+              </div>
 
-        </div>
-        }
-        {/* <Toolbar className={styles.toolbar}>
-          <ToolbarGroup lastChild={true}>
-            <ToolbarTitle text="필터" />
-            <IconButton onClick={this.toggleFilterView}>
-              <FilterIcon />
-            </IconButton>
-          </ToolbarGroup>
-        </Toolbar> */}
-        </div>
-        </div>
-    );
+          </div>
+          }
+          {/* <Toolbar className={styles.toolbar}>
+            <ToolbarGroup lastChild={true}>
+              <ToolbarTitle text="필터" />
+              <IconButton onClick={this.toggleFilterView}>
+                <FilterIcon />
+              </IconButton>
+            </ToolbarGroup>
+          </Toolbar> */}
+          </div>
+          </div>
+      )
+    }
+    return <LoadingIndicator/>
   }
 
 }

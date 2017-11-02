@@ -8,7 +8,21 @@
     "headers": [
       {
         "source": "build/apple-app-site-association",
-        "headers": [{"key": "Content-Type", "value": "application/json"}]
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      {
+        "source":"/service-worker.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
       }
     ],
     "ignore": [

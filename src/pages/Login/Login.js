@@ -10,6 +10,7 @@ import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator, SelectValidator } from 'react-material-ui-form-validator'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
+import Snackbar from 'material-ui/Snackbar'
 
 const containerStyle = {
     display: 'flex',
@@ -35,6 +36,7 @@ class Login extends Component {
             this.state = {
                 from: props.location.state.from,
                 redirectAfterLogin: false,
+                loginError: false,
 
                 email: '',
                 password: '',
@@ -43,6 +45,7 @@ class Login extends Component {
         else {
             this.state = {
                 redirectAfterLogin: false,
+                loginError: false,
 
                 email: '',
                 password: '',
@@ -51,22 +54,25 @@ class Login extends Component {
 
         this.handleSubmit = this.handleSubmit.bind(this) 
         this.handleText = this.handleText.bind(this)
+        this.getRedirectResult = this.getRedirectResult.bind(this)
     }
 
     componentWillMount() {
-        firebase.auth().getRedirectResult().then(function(result) {
+        this.getRedirectResult()
+    }
+
+    getRedirectResult() {
+        firebase.auth().getRedirectResult().then(result => {
+
             if (result.credential) {
-              // This gives you a Google Access Token. You can use it to access the Google API.
-              var token = result.credential.accessToken;
-              // ...
+                var user = result.user;
+                console.log(`redirect successful for user ${user}`)
+                this.setState({
+                    redirectAfterLogin: true,
+                })
             }
-            // The signed-in user info.
-            var user = result.user;
-            console.log("redirect successful")
-            this.setState({
-                redirectAfterLogin: true,
-            })
-          }).catch(function(error) {
+
+          }).catch(error => {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -75,6 +81,15 @@ class Login extends Component {
             // The firebase.auth.AuthCredential type that was used.
             var credential = error.credential;
             // ...
+
+            // show snackbar
+            if (error) {
+                console.log(error)
+                this.setState({
+                    loginError: true,
+                })
+            }
+
           });
     }
 
@@ -120,29 +135,24 @@ class Login extends Component {
         firebaseAuth.signInWithRedirect(facebookProvider)
     }
 
-    logout() {
-        firebase.auth().signOut().then(function() {
-            // Sign-out successful.
-            console.log('logout successful')
-          }).catch(function(error) {
-            // An error happened.
-            console.log('logout error')
-          });
-    }
-
     render() {
 
         if (this.state.redirectAfterLogin) {
-            const pathname = this.state.from.pathname
-            const search = this.state.from.search || ''
-            console.log(pathname)
-            if (!!pathname && pathname !== '/login') {
-                return
-                <Redirect to ={{pathname: pathname, search: search}} />
-            } 
+            const from = this.state.from
+            if (from) {
+                const pathname = this.state.from.pathname
+                const search = this.state.from.search || ''
+                console.log(pathname)
+                if (!!pathname && pathname !== '/login') {
+                    return (
+                        <Redirect to ={{pathname: pathname, search: search}} />
+                    )
+                } 
+            }
             else {
-                return
-                <Redirect to ={{pathname: '/', search: ''}} />
+                return (
+                    <Redirect to ={{pathname: '/', search: ''}} />
+                )
             }
         }
         return (
@@ -196,14 +206,15 @@ class Login extends Component {
                         onClick={this.facebookLogin.bind(this)}
                     /><br/>
 
-                    <RaisedButton
-                        label="로그아웃"
-                        style={buttonStyle}
-                        onClick={this.logout.bind(this)}
-                    /><br/>
                 </div>
+                <Snackbar
+                    open={this.state.loginError}
+                    message="로그인 실패."
+                    autoHideDuration={4000}
+                    /* onRequestClose={this.handleRequestClose} */
+                />
             </div>
-        );
+        )
     }
 }
 

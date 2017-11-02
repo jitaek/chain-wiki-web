@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import firebase from 'firebase'
 
 import {
@@ -21,6 +21,7 @@ import Ability from './pages/Ability/Ability'
 import Tavern from './pages/Tavern/Tavern'
 import TavernList from './pages/TavernList/TavernList'
 import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
+import Account from "./pages/Account/Account"
 import Login from './pages/Login/Login'
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
 
@@ -106,7 +107,7 @@ class App extends Component {
           <Router routes={routes} onUpdate={logPageView}>
 
               <div>
-                <NavBar location={this.props.location}/>
+                <NavBar auth={this.state.authed} location={this.props.location}/>
                 <Switch>
                 <Route exact path='/' render={(props) => (
                   <Home {...props}/>
@@ -122,6 +123,7 @@ class App extends Component {
                 <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 
                 <PrivateRoute path="/arcanaComposer" exact component={ArcanaComposer} />
+                <PrivateRoute path="/account" exact component={Account} />
                 </Switch>
               </div>
           </Router>

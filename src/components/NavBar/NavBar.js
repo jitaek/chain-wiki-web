@@ -1,13 +1,13 @@
-import React from 'react';
-import { Link, withRouter } from "react-router-dom";
+import React from 'react'
+import { Link, withRouter } from "react-router-dom"
 import { ref } from '../../helpers/constants'
-
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
+import { isAuthenticated } from '../../helpers/auth'
+import Drawer from 'material-ui/Drawer'
+import MenuItem from 'material-ui/MenuItem'
+import IconButton from 'material-ui/IconButton'
 import AppBar from 'material-ui/AppBar'
-import logo from '../../logo.png';
-import AutoComplete from 'material-ui/AutoComplete';
+import logo from '../../logo.png'
+import AutoComplete from 'material-ui/AutoComplete'
 import Menu from 'material-ui/svg-icons/navigation/menu'
 
 const NavBarStyle = {
@@ -25,7 +25,7 @@ class NavBar extends React.Component {
     this.state = {
       open: false,
       nameArray: [],
-    };
+    }
 
   }
 
@@ -39,7 +39,7 @@ class NavBar extends React.Component {
 
     nameRef.on('value', snapshot => {
 
-      var array = [];
+      var array = []
       
       snapshot.forEach(child => {
 
@@ -168,7 +168,7 @@ class NavBar extends React.Component {
             containerElement={<Link to='/tavernList'/>}
             onClick={this.handleClose}
           />
-          {/* <MenuItem
+          <MenuItem
             primaryText="아르카나 추가"
             containerElement={<Link to='/arcanaComposer'/>}
             onClick={this.handleClose}
@@ -177,7 +177,12 @@ class NavBar extends React.Component {
             primaryText="목록 업데이트"
             containerElement={<Link to='/updateArcanaRefs'/>}
             onClick={this.handleClose}
-          /> */}
+          />
+          <MenuItem
+            primaryText={this.props.auth ? '계정' : '로그인'}
+            containerElement={this.props.auth ? <Link to='/account'/> : <Link to ='/login'/>}
+            onClick={this.handleClose}
+          />
         </Drawer>
         </AppBar>
       </div>

@@ -1,137 +1,173 @@
 {
   "rules": {
+    "review": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
     "ability": {
       ".read": true,
       ".write": "auth != null"
     },
     "abyssal": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": true
+      // ".write": "auth != null"
+    },
+    "reward": {
+      ".read": true,
+      ".write": true
+      // ".write": "auth != null"
     },
     "arcana": {
-      "$arcanaID": {
+      // "$arcanaID": {
         ".read": true,
-        "abilityDesc1": {
-          ".write": "auth != null"
-        },
-        "abilityDesc2": {
-          ".write": "auth != null"
-        },
-        "abilityDesc3": {
-          ".write": "auth != null"
-        },
-        "abilityName1": {
-          ".write": "auth != null"
-        },
-        "abilityName2": {
-          ".write": "auth != null"
-        },
-        "abilityName3": {
-          ".write": "auth != null"
-        },
-        "affiliation": {
-          ".write": "auth != null"
-        },
-        "chainStone": {
-          ".write": "auth != null"
-        },
-        "chainStory": {
-          ".write": "auth != null"
-        },
-        "class": {
-          ".write": "auth != null"
-        },
-        "cost": {
-          ".write": "auth != null"
-        },
-        "dateAdded": {
-          ".write": "auth != null"
-        },
-        "iconURL": {
-          ".write": "auth != null"
-        },
-        "imageURL": {
-          ".write": "auth != null"
-        },
-        "kizunaCost": {
-          ".write": "auth != null"
-        },
-        "kizunaDesc": {
-          ".write": "auth != null"
-        },
-        "kizunaName": {
-          ".write": "auth != null"
-        },
-        "nameJP": {
-          ".write": "auth != null"
-        },
-        "nicknameJP": {
-          ".write": "auth != null"
-        },
-        "nickNameJP": {
-          ".write": "auth != null"
-        },
-        "nameKR": {
-          ".write": "auth != null"
-        },
-        "nicknameKR": {
-          ".write": "auth != null"
-        },
-        "nickNameKR": {
-          ".write": "auth != null"
-        },
-        "numberOfLikes": {
-          ".write": "auth != null"
-        },
-        "numberOfViews": {
           ".write": true
-        },
-        "partyAbility": {
-          ".write": "auth != null"
-        },
-        "rarity": {
-          ".write": "auth != null"
-        },
-        "skillCount": {
-          ".write": "auth != null"
-        },
-        "skillDesc1": {
-          ".write": "auth != null"
-        },
-        "skillDesc2": {
-          ".write": "auth != null"
-        },
-        "skillDesc3": {
-          ".write": "auth != null"
-        },
-        "skillMana1": {
-          ".write": "auth != null"
-        },
-        "skillMana2": {
-          ".write": "auth != null"
-        },
-        "skillMana3": {
-          ".write": "auth != null"
-        },
-        "skillName1": {
-          ".write": "auth != null"
-        },
-        "skillName2": {
-          ".write": "auth != null"
-        },
-        "skillName3": {
-          ".write": "auth != null"
-        },
-        "tavern": {
-          ".write": "auth != null"
-        },
-        "uid": {
-          ".write": "auth != null"
-        },
-        "weapon": {
-          ".write": "auth != null"
-        }
-      }
+          
+      //   "abilityDesc1": {
+      //     ".write": "auth != null"
+      //   },
+      //   "abilityDesc2": {
+      //     ".write": "auth != null"
+      //   },
+      //   "abilityDesc3": {
+      //     ".write": "auth != null"
+      //   },
+      //   "abilityName1": {
+      //     ".write": "auth != null"
+      //   },
+      //   "abilityName2": {
+      //     ".write": "auth != null"
+      //   },
+      //   "abilityName3": {
+      //     ".write": "auth != null"
+      //   },
+      //   "affiliation": {
+      //     ".write": "auth != null"
+      //   },
+      //   "buddyNameKR": {
+      //     ".write": "auth != null"
+      //   },
+      //   "buddyNameJP": {
+      //     ".write": "auth != null"
+      //   },
+      //   "buddyIconURL": {
+      //     ".write": "auth != null"
+      //   },
+      //   "buddyGroup": {
+      //     ".write": "auth != null"
+      //   },
+      //   "buddyWeapon": {
+      //     ".write": "auth != null"
+      //   },
+      //   "buddySkillDesc": {
+      //     ".write": "auth != null"
+      //   },
+      //   "buddyAbilityDesc": {
+      //     ".write": "auth != null"
+      //   },
+      //   "chainStone": {
+      //     ".write": "auth != null"
+      //   },
+      //   "chainStory": {
+      //     ".write": "auth != null"
+      //   },
+      //   "class": {
+      //     ".write": "auth != null"
+      //   },
+      //   "cost": {
+      //     ".write": "auth != null"
+      //   },
+      //   "dateAdded": {
+      //     ".write": "auth != null"
+      //   },
+      //   "iconURL": {
+      //     ".write": "auth != null"
+      //   },
+      //   "imageURL": {
+      //     ".write": "auth != null"
+      //   },
+      //   "kizunaCost": {
+      //     ".write": "auth != null"
+      //   },
+      //   "kizunaDesc": {
+      //     ".write": "auth != null"
+      //   },
+      //   "kizunaName": {
+      //     ".write": "auth != null"
+      //   },
+      //   "nameJP": {
+      //     ".write": "auth != null"
+      //   },
+      //   "nicknameJP": {
+      //     ".write": "auth != null"
+      //   },
+      //   "nickNameJP": {
+      //     ".write": "auth != null"
+      //   },
+      //   "nameKR": {
+      //     ".write": "auth != null"
+      //   },
+      //   "nicknameKR": {
+      //     ".write": "auth != null"
+      //   },
+      //   "nickNameKR": {
+      //     ".write": "auth != null"
+      //   },
+      //   "numberOfLikes": {
+      //     ".write": "auth != null"
+      //   },
+      //   "numberOfViews": {
+      //     ".write": true
+      //   },
+      //   "partyAbility": {
+      //     ".write": "auth != null"
+      //   },
+      //   "rarity": {
+      //     ".write": "auth != null"
+      //   },
+      //   "related": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillCount": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillDesc1": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillDesc2": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillDesc3": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillMana1": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillMana2": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillMana3": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillName1": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillName2": {
+      //     ".write": "auth != null"
+      //   },
+      //   "skillName3": {
+      //     ".write": "auth != null"
+      //   },
+      //   "tavern": {
+      //     ".write": "auth != null"
+      //   },
+      //   "uid": {
+      //     ".write": "auth != null"
+      //   },
+      //   "weapon": {
+      //     ".write": "auth != null"
+      //   }
+      // }
     },
     "arcanaEdit": {
       ".read": true,
@@ -143,11 +179,13 @@
     },
     "festival": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": true
+      // ".write": "auth != null"
     },
     "legend": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": true
+      // ".write": "auth != null"
     },
     "links": {
       ".read": true,

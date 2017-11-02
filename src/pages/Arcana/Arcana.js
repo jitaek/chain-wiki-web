@@ -140,7 +140,7 @@ function RelatedArcana(props) {
   if (relatedArcanaArray.length > 0) {
     return (
       <div style={{borderBottom:'1px solid lightGray'}}>
-        <div style={{fontWeight: 'bold',margin: '10px'}}>관련 아르카나</div>
+        <div style={{fontWeight: 'bold',margin: '10px'}}>같은 아르카나</div>
         {
         relatedArcanaArray.map(arcana => (
           <Link to={`/arcana?arcana=${arcana.arcanaID}`} style={LinkStyle} key={arcana.arcanaID}>
@@ -310,7 +310,7 @@ class Arcana extends React.Component {
     if (arcanaID) {
       shareLink = createShareLinkWithArcana(arcanaID)
       
-      // incrementViewCount(arcanaID)
+      incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 
@@ -566,11 +566,11 @@ class Arcana extends React.Component {
             target="_blank"
             >일첸 위키 가기</a>
         </div>
-        <div style={{margin:'10px'}}>
+        {/* <div style={{margin:'10px'}}>
           <Link to={`/arcanaComposer?arcana=${this.state.arcanaID}`}>
             아르카나 수정
           </Link>
-        </div>
+        </div> */}
         
         <Toolbar className={styles.toolbar} style={{backgroundColor:'white'}}>
           <ToolbarGroup lastChild={true}>
