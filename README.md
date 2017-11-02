@@ -1,6 +1,6 @@
-Website built after iOS app
-https://github.com/jitaek/ChainWiki-ios
-
-Website URL: https://q623s.app.goo.gl/3nq9
+Website URL: https://chainchronicle-ea233.firebaseapp.com
 
 Built using React & Firebase
+
+Website built after iOS app
+https://github.com/jitaek/ChainWiki-ios
