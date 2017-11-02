@@ -19,7 +19,7 @@ export default class Account extends Component {
 
     render() {
         return (
-            <div style={{margin:'20px'}}>
+        <div style={{margin:'20px'}}>
                 <div>
                     업데이트 예정..
                 </div>

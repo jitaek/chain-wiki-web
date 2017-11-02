@@ -53,17 +53,10 @@ exports.deleteUser = functions.auth.user().onDelete(event => {
 
   const user = event.data;
   const userID = user.uid;
-  const email = user.email;
-  const escapedEmail = email.replace(/\./g, ',');
-  const name = user.displayName;  // TODO: name vs username.
+
+  const name = user.displayName;
 
   admin.database().ref(`/user/${userID}`).remove();
-  // admin.database().ref(`/profiles/${userID}`).remove();
-  // admin.database().ref(`/userEmails/${escapedEmail}`).remove();
-
-  // TODO: Handle posts + comments
-
-  // sendGoodbyEmail(email, name);
 
 });
 
@@ -387,54 +380,43 @@ function updateArcanaName(arcanaID, nameKR, nicknameKR) {
 
 }
 // If the arcana's name is changed, update /arcana/name
-exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nicknameKR').onCreate(event => {
+exports.updateArcanaNameOnNicknameKRCreate = functions.database.ref('/arcana/{arcanaID}/nicknameKR').onCreate(event => {
+  const nicknameKR = event.data.val();
+  const arcanaID = event.params.arcanaID;
+
+  return admin.database().ref(`/arcana/${arcanaID}/nameKR`).once('value').then(snapshot => {
+    const nameKR = snapshot.val();
+    updateArcanaName(arcanaID, nameKR, nicknameKR);
+  });
+});
+
+exports.updateArcanaNameOnNicknameKRUpdate = functions.database.ref('/arcana/{arcanaID}/nicknameKR').onUpdate(event => {
   const nicknameKR = event.data.val();
   const arcanaID = event.params.arcanaID;
 
   console.log(arcanaID);
   return admin.database().ref(`/arcana/${arcanaID}/nameKR`).once('value').then(snapshot => {
     const nameKR = snapshot.val();
-    console.log(nicknameKR);
-    console.log(nameKR);
     updateArcanaName(arcanaID, nameKR, nicknameKR);
   });
 });
 
-exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nicknameKR').onUpdate(event => {
-  const nicknameKR = event.data.val();
-  const arcanaID = event.params.arcanaID;
-
-  console.log(arcanaID);
-  return admin.database().ref(`/arcana/${arcanaID}/nameKR`).once('value').then(snapshot => {
-    const nameKR = snapshot.val();
-    console.log(nicknameKR);
-    console.log(nameKR);
-    updateArcanaName(arcanaID, nameKR, nicknameKR);
-  });
-});
-
-exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nameKR').onCreate(event => {
+exports.updateArcanaNameOnNameKRCreate = functions.database.ref('/arcana/{arcanaID}/nameKR').onCreate(event => {
   const nameKR = event.data.val();
   const arcanaID = event.params.arcanaID;
 
-  console.log(arcanaID);
   return admin.database().ref(`/arcana/${arcanaID}/nicknameKR`).once('value').then(snapshot => {
     const nicknameKR = snapshot.val();
-    console.log(nicknameKR);
-    console.log(nameKR);
     updateArcanaName(arcanaID, nameKR, nicknameKR);
   });
 });
 
-exports.updateArcanaName = functions.database.ref('/arcana/{arcanaID}/nameKR').onUpdate(event => {
+exports.updateArcanaNameOnNameKRUpdate = functions.database.ref('/arcana/{arcanaID}/nameKR').onUpdate(event => {
   const nameKR = event.data.val();
   const arcanaID = event.params.arcanaID;
 
-  console.log(arcanaID);
   return admin.database().ref(`/arcana/${arcanaID}/nicknameKR`).once('value').then(snapshot => {
     const nicknameKR = snapshot.val();
-    console.log(nicknameKR);
-    console.log(nameKR);
     updateArcanaName(arcanaID, nameKR, nicknameKR);
   });
 });
@@ -449,19 +431,6 @@ exports.updateBuddyList = functions.database.ref('/arcana/{arcanaID}/buddyNameKR
   
       const arcanaID = event.params.arcanaID;
       admin.database().ref(`list/buddy/${arcanaID}`).set(true);
-      
-});
-
-
-
-exports.updateLegendList = functions.database.ref('/arcana/{arcanaID}/tavern').onCreate(event => {
-  
-      const arcanaID = event.params.arcanaID;
-      const tavern = event.data.val();
-
-      if (tavern.indexOf('레전드') !== -1) {
-        admin.database().ref(`legend/${arcanaID}`).set(true);        
-      }
       
 });
 

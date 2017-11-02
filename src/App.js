@@ -120,7 +120,7 @@ class App extends Component {
                 <Route path="/tavernList" exact component={TavernList} />
                 <Route path="/tavern" exact component={Tavern} />
                 <Route path="/login" exact component={Login} />
-                <Route path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
+                <PrivateRoute path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 
                 <PrivateRoute path="/arcanaComposer" exact component={ArcanaComposer} />
                 <PrivateRoute path="/account" exact component={Account} />
