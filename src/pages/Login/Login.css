@@ -1,0 +1,30 @@
+.containerStyle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logoStyle {
+    width: 100px;
+    display: block;
+    margin: auto;
+}
+
+.logoContainerStyle {
+    text-align: center;
+}
+
+.loginContainer {
+    width: 90%;
+    margin: auto;
+}
+
+@media (min-width: 400px) {
+    .logoStyle {
+        width: 200px;
+    }
+    .loginContainer {
+        width: 300px;
+    }
+}
+

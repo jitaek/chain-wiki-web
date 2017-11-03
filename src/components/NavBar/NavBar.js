@@ -174,7 +174,7 @@ class NavBar extends React.Component {
             onClick={this.handleClose}
           />
           <MenuItem
-            primaryText="목록 업데이트"
+            primaryText="목록 업데이트 (베타)"
             containerElement={<Link to='/updateArcanaRefs'/>}
             onClick={this.handleClose}
           />

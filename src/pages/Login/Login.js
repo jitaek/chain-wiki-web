@@ -1,27 +1,17 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import { login, resetPassword, firebaseAuth, googleProvider, facebookProvider, storageKey } from '../../helpers/auth'
-import {withRouter, Redirect} from "react-router-dom";
-
+import { Link, withRouter, Redirect} from "react-router-dom";
+import styles from './Login.css'
 import logo from '../../logo.png'
-import GoogleLoginButton from '../../btn_google_light_normal_ios.svg'
+import { greenColor } from '../../helpers/constants'
+
 import RaisedButton from 'material-ui/RaisedButton'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator, SelectValidator } from 'react-material-ui-form-validator'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import Snackbar from 'material-ui/Snackbar'
-
-const containerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-}
-
-const logoStyle = {
-    width: '250px',
-    display: 'block',
-}
 
 const buttonStyle = {
     marginTop: '20px',
@@ -156,12 +146,12 @@ class Login extends Component {
             }
         }
         return (
-            <div style={containerStyle}>
-                <div style={{textAlign:'center', fontSize:'20px', fontWeight:'bold'}}>
-                    <img style={logoStyle} src={logo}/><br clear='all'/>
-                    <div>체인크로니클 위키</div>
+            <div>
+                <div className={styles.logoContainerStyle}>
+                    <img className={styles.logoStyle} src={logo}/>
+                    <h3 style={{margin:'0px'}}>체인크로니클 위키</h3>
                 </div>
-                <div>
+                <div className={styles.loginContainer}>
                     <ValidatorForm
                         ref="form"
                         onSubmit={this.handleSubmit}
@@ -170,13 +160,15 @@ class Login extends Component {
                         <TextValidator
                         name="email"
                         floatingLabelText="이메일"
+                        fullWidth={true}
                         value={this.state.email}
                         onChange={this.handleText}
-                        /><br />
+                        />
 
                         <TextValidator
                         name="password"
                         type="password"
+                        fullWidth={true}
                         floatingLabelText="비밀번호"
                         value={this.state.password}
                         onChange={this.handleText}
@@ -184,6 +176,7 @@ class Login extends Component {
 
                         <RaisedButton
                             label="로그인"
+                            fullWidth={true}
                             style={buttonStyle}
                             onClick={this.emailLogin.bind(this)}
                         /><br/>
@@ -193,6 +186,7 @@ class Login extends Component {
                         label="구글 로그인"
                         labelColor={"#ffffff"}
                         backgroundColor="#dd4b39"
+                        fullWidth={true}
                         style={buttonStyle}
                         icon={<FontIcon className="fa fa-google-plus"/>}
                         onClick={this.googleLogin.bind(this)}
@@ -201,10 +195,23 @@ class Login extends Component {
                         label="페이스북 로그인"
                         labelColor={"#ffffff"}
                         backgroundColor="#3b5998"
+                        fullWidth={true}
                         style={buttonStyle}
                         icon={<FontIcon className="fa fa-google-plus"/>}
                         onClick={this.facebookLogin.bind(this)}
                     /><br/>
+                    <RaisedButton
+                        label="이메일 계정 생성"
+                        labelColor={"#ffffff"}
+                        backgroundColor={greenColor}
+                        fullWidth={true}
+                        style={buttonStyle}
+                        icon={<FontIcon className="fa fa-google-plus"/>}
+                        onClick={this.facebookLogin.bind(this)}
+                    /><br/>
+                    <div style={{marginTop:'20px',textAlign:'center'}}>
+                        계정 관리는 <a href='https://firebase.google.com/' target='_blank'>구글 파이어베이스</a>가 지원합니다.
+                    </div>
 
                 </div>
                 <Snackbar
