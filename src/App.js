@@ -20,10 +20,12 @@ import AbilityList from './pages/AbilityList/AbilityList'
 import Ability from './pages/Ability/Ability'
 import Tavern from './pages/Tavern/Tavern'
 import TavernList from './pages/TavernList/TavernList'
-import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
-import Account from "./pages/Account/Account"
 import Login from './pages/Login/Login'
+import Register from './pages/Register/Register'
+
+import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
+import Account from "./pages/Account/Account"
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -67,7 +69,7 @@ class App extends Component {
         localStorage.setItem(storageKey, user.uid)
         
         this.setState({
-          user: user.uid,
+          user: user,
           authed: true,
           loading: false,
         })
@@ -75,6 +77,7 @@ class App extends Component {
         console.log('auth listener. user unauthenticated')
         localStorage.removeItem(storageKey)
         this.setState({
+          user: null,
           authed: false,
           loading: false
         })
@@ -120,10 +123,11 @@ class App extends Component {
                 <Route path="/tavernList" exact component={TavernList} />
                 <Route path="/tavern" exact component={Tavern} />
                 <Route path="/login" exact component={Login} />
+                <Route path="/register" exact component={Register} />
 
                 <PrivateRoute path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 <PrivateRoute path="/arcanaComposer" exact component={ArcanaComposer} />
-                <PrivateRoute path="/account" exact component={Account} />
+                <PrivateRoute path="/account" user='wefwe' exact component={Account} />
                 </Switch>
               </div>
           </Router>

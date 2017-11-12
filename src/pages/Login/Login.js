@@ -5,7 +5,6 @@ import { Link, withRouter, Redirect} from "react-router-dom";
 import styles from './Login.css'
 import logo from '../../logo.png'
 import { greenColor } from '../../helpers/constants'
-
 import RaisedButton from 'material-ui/RaisedButton'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator, SelectValidator } from 'react-material-ui-form-validator'
@@ -141,7 +140,7 @@ class Login extends Component {
             }
             else {
                 return (
-                    <Redirect to ={{pathname: '/', search: ''}} />
+                    <Redirect to ={{pathname: '/'}} />
                 )
             }
         }
@@ -200,15 +199,17 @@ class Login extends Component {
                         icon={<FontIcon className="fa fa-google-plus"/>}
                         onClick={this.facebookLogin.bind(this)}
                     /><br/>
-                    <RaisedButton
-                        label="이메일 계정 생성"
-                        labelColor={"#ffffff"}
-                        backgroundColor={greenColor}
-                        fullWidth={true}
-                        style={buttonStyle}
-                        icon={<FontIcon className="fa fa-google-plus"/>}
-                        onClick={this.facebookLogin.bind(this)}
-                    /><br/>
+                    
+                    <Link to='/register'>
+                        <RaisedButton
+                            label="이메일 계정 생성"
+                            labelColor={"#ffffff"}
+                            backgroundColor={greenColor}
+                            fullWidth={true}
+                            style={buttonStyle}
+                        /><br/>
+                    </Link>
+                    
                     <div style={{marginTop:'20px',textAlign:'center'}}>
                         계정 관리는 <a href='https://firebase.google.com/' target='_blank'>구글 파이어베이스</a>가 지원합니다.
                     </div>

@@ -7,8 +7,19 @@ const buttonStyle = {
     marginTop: '20px',
 }
 
+
+function currentUser() {
+    const user = firebase.auth().currentUser
+    if (user) {
+        return user.displayName
+    }
+}
+
 export default class Account extends Component {
 
+    constructor(props) {
+        super(props)
+    }
     logout() {
         firebase.auth().signOut().then(function() {
             console.log('logout successful')
@@ -17,11 +28,14 @@ export default class Account extends Component {
           });
     }
 
+
     render() {
         return (
         <div style={{margin:'20px'}}>
                 <div>
-                    업데이트 예정..
+                    닉네임: {
+                        this.props.user
+                        }
                 </div>
                 <RaisedButton
                     label="로그아웃"

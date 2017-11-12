@@ -42,7 +42,7 @@ exports.createUser = functions.auth.user().onCreate(event => {
     editsCount: 0,
     email: email,
     joined: admin.database.ServerValue.TIMESTAMP,
-    name: name
+    name: name || null,
 
   });
   
