@@ -362,20 +362,36 @@ class ArcanaComposer extends React.Component {
 
         let previousArcana = snapshot.val()
 
-        let newEditRef = ref.child('arcanaEdit').child(arcanaID).push()
-        newEditRef.set(previousArcana)
+        const user = firebase.auth().currentUser
 
-        const arcana = this.arcanaForState()
-
-        ARCANA_REF.child(arcanaID).update(arcana, error => {
-          if (error) {
-            this.showAlert(error)
-          }
-          else {
-            this.showArcana()            
-          }
-        })
-      });
+        if (user) {
+          const editorUID = user.uid
+          const editorName = user.displayName
+          
+          const arcana = this.arcanaForState()
+  
+          const timestamp = firebase.database.ServerValue.TIMESTAMP;
+          arcana.editDate = timestamp;        
+  
+          let newEditRef = ref.child('arcanaEdit').child(arcanaID).push()
+          newEditRef.set({
+            date: timestamp,
+            editorUID: editorUID,
+            nickname: editorName,
+            previous: previousArcana,
+            update: arcana,
+          })
+  
+          ARCANA_REF.child(arcanaID).update(arcana, error => {
+            if (error) {
+              this.showAlert(error)
+            }
+            else {
+              this.showArcana()            
+            }
+          })
+        }
+      })
     }
     else {
       // uploading new.
@@ -389,7 +405,9 @@ class ArcanaComposer extends React.Component {
 
         const arcana = this.arcanaForState()
         arcana.uid = arcanaID
-  
+        const timestamp = firebase.database.ServerValue.TIMESTAMP;
+        arcana.uploadDate = timestamp;     
+
         this.setState({
           uid: arcanaID
         }, () => {

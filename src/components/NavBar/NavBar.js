@@ -168,7 +168,7 @@ class NavBar extends React.Component {
             containerElement={<Link to='/tavernList'/>}
             onClick={this.handleClose}
           />
-          {/* <MenuItem
+          <MenuItem
             primaryText="아르카나 추가"
             containerElement={<Link to='/arcanaComposer'/>}
             onClick={this.handleClose}
@@ -182,7 +182,7 @@ class NavBar extends React.Component {
             primaryText={this.props.auth ? '계정' : '로그인'}
             containerElement={this.props.auth ? <Link to='/account'/> : <Link to ='/login'/>}
             onClick={this.handleClose}
-          /> */}
+          />
         </Drawer>
         </AppBar>
       </div>
