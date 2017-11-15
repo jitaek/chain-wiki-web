@@ -307,7 +307,7 @@ class UpdateArcanaRefs extends React.Component {
                 label="페스티벌"
                 style={RadioButtonStyle}
               />
-              <RadioButton
+              {/* <RadioButton
                 value="legend"
                 label="레전드"
                 style={RadioButtonStyle}
@@ -316,7 +316,7 @@ class UpdateArcanaRefs extends React.Component {
                 value="abyssal"
                 label="천마"
                 style={RadioButtonStyle}
-              />
+              /> */}
             </RadioButtonGroup>
           </div>
         </div>

@@ -370,8 +370,9 @@ class ArcanaComposer extends React.Component {
           
           const arcana = this.arcanaForState()
   
-          const timestamp = firebase.database.ServerValue.TIMESTAMP;
-          arcana.editDate = timestamp;        
+          const timestamp = firebase.database.ServerValue.TIMESTAMP
+          arcana.editDate = timestamp
+          arcana.editorName = editorName
   
           let newEditRef = ref.child('arcanaEdit').child(arcanaID).push()
           newEditRef.set({

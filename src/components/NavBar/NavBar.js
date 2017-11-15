@@ -169,7 +169,7 @@ class NavBar extends React.Component {
             onClick={this.handleClose}
           />
           <MenuItem
-            primaryText="아르카나 추가"
+            primaryText="아르카나 추가 (베타)"
             containerElement={<Link to='/arcanaComposer'/>}
             onClick={this.handleClose}
           />

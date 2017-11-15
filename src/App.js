@@ -45,7 +45,7 @@ function PrivateRoute ({component: Component, authed, path, user, ...rest}) {
     <Route
       {...rest}
       render={(props) => isAuthenticated()
-        ? <Component {...props} />
+        ? <Component {...props} user={user}/>
       : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
     />
   )
@@ -124,10 +124,11 @@ class App extends Component {
                 <Route path="/tavern" exact component={Tavern} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/register" exact component={Register} />
+                {/* <Route path='/account' render={routeProps => <Account {...routeProps} user="WEFEWF"/>} /> */}
 
                 <PrivateRoute path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 <PrivateRoute path="/arcanaComposer" exact component={ArcanaComposer} />
-                <PrivateRoute path="/account" user='wefwe' exact component={Account} />
+                <PrivateRoute path="/account" user={this.state.user} exact component={Account} />
                 </Switch>
               </div>
           </Router>
