@@ -183,6 +183,11 @@ class NavBar extends React.Component {
             containerElement={this.props.auth ? <Link to='/account'/> : <Link to ='/login'/>}
             onClick={this.handleClose}
           />
+          <MenuItem
+            primaryText='앱 정보'
+            containerElement={<Link to='/about'/>}
+            onClick={this.handleClose}
+          />
         </Drawer>
         </AppBar>
       </div>

@@ -26,6 +26,7 @@ import Register from './pages/Register/Register'
 import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
 import Account from "./pages/Account/Account"
+import About from "./pages/About/About"
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -124,6 +125,7 @@ class App extends Component {
                 <Route path="/tavern" exact component={Tavern} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/register" exact component={Register} />
+                <Route path="/about" exact component={About} />
                 {/* <Route path='/account' render={routeProps => <Account {...routeProps} user="WEFEWF"/>} /> */}
 
                 <PrivateRoute path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
