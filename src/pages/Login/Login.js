@@ -132,7 +132,7 @@ class Login extends Component {
                 const pathname = this.state.from.pathname
                 const search = this.state.from.search || ''
                 console.log(pathname)
-                if (!!pathname && pathname !== '/login') {
+                if (!!pathname && pathname !== '/login' && pathname !== '/account') {
                     return (
                         <Redirect to ={{pathname: pathname, search: search}} />
                     )

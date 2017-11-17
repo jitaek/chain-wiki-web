@@ -26,10 +26,16 @@ export default class Account extends Component {
     constructor(props) {
         super(props)
 
-        this.state = {
+        const initialState = {
             openNicknameAlert: false,
             nicknameUpdated: false,
         }
+
+        if (props.user && props.user.displayName) {
+            initialState.nickname = props.user.displayName
+        }
+
+        this.state = initialState
 
         console.log(`props is ${props.user}`)
         this.handleText = this.handleText.bind(this)

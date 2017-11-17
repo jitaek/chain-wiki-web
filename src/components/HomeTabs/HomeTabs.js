@@ -61,7 +61,7 @@ export default class HomeTabs extends React.Component {
 
     render() {
         return (
-        <Tabs onChange={this.props.onChange} inkBarStyle={InkBarStyle} initialSelectedIndex={this.calculateIndex(this.props.index)}>
+        <Tabs onChange={this.props.onChange} tabItemContainerStyle={{backgroundColor:'white'}} inkBarStyle={InkBarStyle} initialSelectedIndex={this.calculateIndex(this.props.index)}>
             {this.props.rewardArray.length > 0 &&
             <Tab
                 label="보상"
