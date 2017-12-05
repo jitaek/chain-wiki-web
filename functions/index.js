@@ -309,6 +309,62 @@ exports.editArcana = functions.database.ref('/arcana/{arcanaID}/editCount').onWr
 });
 
 /*
+exports.createNameKRRef = functions.database.ref('/loadFunction/{function}').onWrite(event => {
+
+  return admin.database().ref(`/arcana`).once('value').then(snapshot => {
+    
+      var array = [];
+      
+      snapshot.forEach(function(child) {
+  
+        array.push(child.val());
+            
+      });
+
+      for (var i = 0; i < array.length; i++) {
+        const arcana = array[i];
+        const arcanaID = arcana.uid;
+        const arcanaNameKR = arcana.nameKR;
+        
+        admin.database().ref(`/nameKR/${arcanaNameKR}/${arcanaID}`).set(true);
+        
+      } 
+  });    
+
+});
+  */
+/*
+Example data at /nameKR
+  {
+    소냐: {
+      ID1: true,
+      ID2: true
+    },
+    오료: {
+      ID3: true
+    }
+  }
+*/
+exports.updateRelatedArcanaOnCreate = functions.database.ref('/arcana/{arcanaID}/nameKR').onCreate(event => {
+
+  const nameKR = event.data.val();
+
+  return admin.database().ref(`/arcana/nameKR/${nameKR}`).once('value').then(snapshot => {
+
+    const relatedArcanaNameKR = snapshot.val();
+    if (relatedArcanaNameKR) {
+      Object.keys(relatedArcanaNameKR).forEach(relatedArcanaID => {
+        // Found related arcana, now update /arcanaID/related.
+        const arcanaID = event.params.arcanaID;
+        if (arcanaID !== relatedArcanaID) {
+          admin.database().ref(`/arcana/${arcanaID}/related/${relatedArcanaID}`).set(true);          
+        }
+      });
+    }
+  });
+
+});
+/*
 exports.removeRelatedArcana = functions.database.ref('/remove/{OI}').onWrite(event => {
 
   return admin.database().ref(`/arcana`).once('value').then(snapshot => {

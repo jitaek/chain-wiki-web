@@ -168,8 +168,8 @@ function RelatedArcana(props) {
 function incrementViewCount(arcanaID) {
 
   if (arcanaID) {
-    ref.child(`arcana/${arcanaID}/numberOfViews`).transaction(function(count) {
-      if (count) {
+    ref.child(`arcana/${arcanaID}/numberOfViews`).transaction(count => {
+      if (count !== null) {
         count++;
       }
       return count;
@@ -267,40 +267,39 @@ class Arcana extends React.Component {
 
   }
 
-  observeRelatedArcanaWithID() {
+  observeRelatedArcanaWithID(arcanaID, nameKR) {
       // TODO: call /arcana/key and get profile image and nameKR (nicknameKR?)
       
       const relatedArcanaArray = []
+      const nameKRRef = ref.child(`nameKR/${nameKR}`)
 
-      if (relatedArcana) {
+      nameKRRef.once('value', snapshot => {
 
-        Object.keys(relatedArcana).forEach(arcanaID => {
-          ARCANA_REF.child(arcanaID).child('nameKR').once('value', snapshot => {
+        const relatedArcana = snapshot.val()
+        if (relatedArcana) {
+          Object.keys(relatedArcana).forEach(relatedArcanaID => {
             
-              const nameKR = snapshot.val()
-      
-              if (nameKR) {
-      
-                ARCANA_REF.child(arcanaID).child('iconURL').once('value', snapshot => {
-      
-                  const iconURL = snapshot.val()
-      
-                  const relatedArcana = {
-                    arcanaID: arcanaID,
-                    nameKR: nameKR,
-                    iconURL: iconURL || logo,
-                  }
-
-                  relatedArcanaArray.push(relatedArcana)
-      
-                  this.setState({
-                    relatedArcanaArray: relatedArcanaArray
-                  })
+            if (relatedArcanaID !== arcanaID) {
+              ARCANA_REF.child(relatedArcanaID).child('iconURL').once('value', snapshot => {
+                
+                const iconURL = snapshot.val()
+                const relatedArcana = {
+                  arcanaID: relatedArcanaID,
+                  nameKR: nameKR,
+                  iconURL: iconURL || logo,
+                }
+    
+                relatedArcanaArray.push(relatedArcana)
+    
+                this.setState({
+                  relatedArcanaArray: relatedArcanaArray
                 })
-              }
-            })
+              })
+            }
+          
         })
       }
+    })
   }
   
   observeArcana() {
@@ -310,7 +309,7 @@ class Arcana extends React.Component {
     if (arcanaID) {
       shareLink = createShareLinkWithArcana(arcanaID)
       
-      incrementViewCount(arcanaID)
+      // incrementViewCount(arcanaID)
       
       let arcanaRef = ARCANA_REF.child(arcanaID)
 
@@ -321,8 +320,8 @@ class Arcana extends React.Component {
         this.createJPLink(arcana.nicknameJP, arcana.nameJP)
 
         // relatedArcana = {}
-        relatedArcana = Object.assign({}, arcana.related)
-        this.observeRelatedArcanaWithID()
+        // relatedArcana = Object.assign({}, arcana.related)
+        this.observeRelatedArcanaWithID(arcana.uid, arcana.nameKR)
 
         this.setState({
           
