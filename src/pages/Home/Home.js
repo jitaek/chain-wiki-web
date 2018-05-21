@@ -137,7 +137,7 @@ class Home extends Component {
   observeArcana() {
 
     let initialKey = true;
-    const count = Number(Math.max(fetchedArcanaCount, 30))
+    const count = Number(Math.max(fetchedArcanaCount, 40))
     console.log(`fetching ${count} arcana`)
 
     ARCANA_REF.orderByKey().limitToLast(count).on('child_added', snapshot => {
