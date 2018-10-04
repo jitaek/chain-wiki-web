@@ -31,15 +31,14 @@ import About from "./pages/About/About"
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // var routes = require('./routes')
-var ReactGA = require('react-ga')
-ReactGA.initialize('UA-73091430-2')
+import { initializeAnalytics, logPageView } from './helpers/Analytics';
+import createHistory from 'history/createBrowserHistory'
+const history = createHistory()
+history.listen((location, action) => {
+  logPageView();
+});
 
-var previousPath
-
-function logPageView() {
-  ReactGA.set({ page: window.location.pathname + window.location.search });
-  ReactGA.pageview(window.location.pathname + window.location.search);
-}
+var previousPath;
 
 function PrivateRoute ({component: Component, authed, path, user, ...rest}) {
   return (
@@ -64,6 +63,7 @@ class App extends Component {
 
   componentDidMount () {
 
+    initializeAnalytics();
     this.removeListener = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         console.log('auth listener. user logged in')
@@ -108,7 +108,7 @@ class App extends Component {
     return (
       <div>
         <MuiThemeProvider>
-          <Router routes={routes} onUpdate={logPageView}>
+          <Router routes={routes}>
 
               <div>
                 <NavBar auth={this.state.authed} location={this.props.location}/>
