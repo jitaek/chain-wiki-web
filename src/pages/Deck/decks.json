@@ -1,0 +1,70 @@
+[
+    {
+        "deckID": "deck1",
+        "index": 0,
+        "arcana": {
+            "main": [
+                {
+                    "nameKR": "츠루",
+                    "cost": 20,
+                    "iconURL": "https://firebasestorage.googleapis.com/v0/b/chainchronicle-ea233.appspot.com/o/image%2Farcana%2F-KlU9xNr8LuBkkH-rSZu%2Ficon.jpg?alt=media&token=1fc949a1-b0bd-4a31-b10b-f057a90c325a"
+                },
+                {
+                    "nameKR": "슈자",
+                    "cost": 22,
+                    "iconURL": "https://firebasestorage.googleapis.com/v0/b/chainchronicle-ea233.appspot.com/o/image%2Farcana%2F-LIl8-hT1392SFPARxDs%2Ficon.jpg?alt=media&token=ae0b9a5b-7299-4bbb-b731-daaf87465766"
+                },
+                {
+                    "iconURL": "logo.png"
+                },
+                {
+                    "iconURL": "logo.png"
+                }
+            ],
+            "sub": [
+                {
+                    "nameKR": "아이작",
+                    "cost": 20,
+                    "iconURL": "http://att.koncoo.com/cc/small/1297_s.jpg"
+                },
+                {
+                    "nameKR": "팔린",
+                    "cost": 20,
+                    "iconURL": "https://firebasestorage.googleapis.com/v0/b/chainchronicle-ea233.appspot.com/o/image%2Farcana%2F-KgQK0t-hGT2ZOKrbAV1%2Ficon.jpg?alt=media&token=70b7456e-0eee-442d-99cd-6e9b72c0feab"
+                }
+            ]
+        }
+    },
+    {
+        "deckID": "deck2",
+        "index": 1,
+        "arcana": {
+            "main": [
+                {
+                    "iconURL": "logo.png"
+                },
+                {
+                    "iconURL": "logo.png"
+                },
+                {
+                    "iconURL": "logo.png"
+                },
+                {
+                    "iconURL": "logo.png"
+                }
+            ],
+            "sub": [
+                {
+                    "nameKR": "무지카",
+                    "cost": 10,
+                    "iconURL": "https://firebasestorage.googleapis.com/v0/b/chainchronicle-ea233.appspot.com/o/image%2Farcana%2F-KvIZ3wuQW3E6JPIjGe9%2Ficon.jpg?alt=media&token=e18762a4-939b-46bc-9b9a-5dc2b06beb8c"
+                },
+                {
+                    "nameKR": "록사나",
+                    "cost": 12,
+                    "iconURL": "https://firebasestorage.googleapis.com/v0/b/chainchronicle-ea233.appspot.com/o/image%2Farcana%2F-KTIBUsJu_BuQlqJ84Kg%2Ficon.jpg?alt=media&token=7d064d5d-e3d2-482a-9ba9-3316b06b97ec"
+                }
+            ]
+        }
+    }
+]

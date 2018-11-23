@@ -1,0 +1,37 @@
+@supports (display: grid) {
+    .gridMain, .gridSub {
+      display: flex;
+      display: grid;
+      justify-content: center;
+  
+      margin: 10px;
+      
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(auto-fill, 1fr);
+  
+      grid-column-gap: 10px;
+      grid-row-gap: 10px;
+    }
+  
+    @media (min-width: 550px) {
+      .gridMain, .gridSub {    
+          
+        grid-column-gap: 10px;
+        grid-row-gap: 20px;
+      }
+      .gridMain {
+        grid-template-columns: repeat(4, 66px);
+      }
+      .gridSub {
+        grid-template-columns: repeat(4, 66px);
+      }
+    }
+  }
+  
+  @supports not (display: grid) {
+    
+      .grid {
+        display: block;
+      }
+  
+  }

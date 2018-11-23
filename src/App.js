@@ -23,6 +23,7 @@ import TavernList from './pages/TavernList/TavernList'
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
 
+import DeckList from "./pages/Deck/DeckList.js"
 import ArcanaComposer from "./pages/ArcanaComposer/ArcanaComposer"
 import UpdateArcanaRefs from "./pages/UpdateArcanaRefs/UpdateArcanaRefs"
 import Account from "./pages/Account/Account"
@@ -128,6 +129,7 @@ class App extends Component {
                 <Route path="/about" exact component={About} />
                 {/* <Route path='/account' render={routeProps => <Account {...routeProps} user="WEFEWF"/>} /> */}
 
+                <PrivateRoute path="/deck" exact component={DeckList} />
                 <PrivateRoute path="/updateArcanaRefs" exact component={UpdateArcanaRefs} />
                 <PrivateRoute path="/arcanaComposer" exact component={ArcanaComposer} />
                 <PrivateRoute path="/account" user={this.state.user} exact component={Account} />
