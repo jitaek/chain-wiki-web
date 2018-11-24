@@ -316,7 +316,7 @@ class Arcana extends React.Component {
       arcanaRef.on('value', snapshot => {
 
         let arcana = snapshot.val()
-
+        console.log(JSON.stringify(arcana));
         this.createJPLink(arcana.nicknameJP, arcana.nameJP)
 
         // relatedArcana = {}

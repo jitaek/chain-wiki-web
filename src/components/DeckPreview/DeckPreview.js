@@ -9,7 +9,7 @@ const LinkStyle = {
 
 export const DeckPreview = (props) => {
     return (
-        <Link to={`/deck?deck=${props.deck.deckID}`} style={LinkStyle}>
+        <Link to={`/deck?d=${props.deck.deckID}`} style={LinkStyle}>
             <div style={{
                 display: 'flex'
             }}>

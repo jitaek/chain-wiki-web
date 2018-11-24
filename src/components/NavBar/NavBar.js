@@ -170,7 +170,7 @@ class NavBar extends React.Component {
           />
           <MenuItem
             primaryText="덱 목록"
-            containerElement={this.props.auth ? <Link to='/deck'/> : <Link to ='/login'/>}
+            containerElement={this.props.auth ? <Link to='/deckList'/> : <Link to ='/login'/>}
             onClick={this.handleClose}
           />
           <MenuItem
